@@ -2,3 +2,5 @@
 gen
 bin
 .DS_Store
+android/tmp
+Test/tmp

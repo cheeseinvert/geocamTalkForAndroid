@@ -1,5 +1,5 @@
 =========================================
-GeoCam Talk for Android
+GeoCam Memo for Android
 =========================================
 
 .. sectnum::
@@ -13,12 +13,13 @@ The GeoCam Project helps people better understand and respond to disasters.
 GeoCam consists of a GPS-enabled camera (or cell phone) and a web app for
 sharing geotagged photos and other geospatial data.
 
-GeoCam Talk For Android is the android component of a communication application 
-intended to aid in communication during a search mission. Members can send text 
-and audio messages to any subset of their team members while on the field from 
-their mobile devices. All messages are sent through a central server which 
-catalogs them for later analysis. Just as in Memo, all messages are geotagged 
-to provide instant awareness of team member location.
+GeoCam Memo For Android is the android component of a scribing and 
+note-taking application intended for use by search team members as they 
+canvas the scene of a disaster. Notes can be recorded using text or audio 
+and various forms of attachments (including but not limited to images) can 
+be attached for transmission to a central server. All messages can be 
+geotagged and categorized before saving to provide proper context when 
+analyzing them via a web interface at a later time.
 
 News
 ~~~~

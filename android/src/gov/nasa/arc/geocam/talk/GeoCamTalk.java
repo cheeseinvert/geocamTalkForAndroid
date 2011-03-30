@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk;
 
+import gov.nasa.arc.geocam.memo.R;
 import android.app.Activity;
 import android.os.Bundle;
 
