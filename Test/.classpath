@@ -7,9 +7,9 @@
 	<classpathentry kind="lib" path="lib/android.jar"/>
 	<classpathentry kind="lib" path="lib/maps.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-core-1.8.5.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/GeoCamTalkoForAndroid"/>
-	<classpathentry kind="lib" path="/GeoCamTalkoForAndroid/lib/gson-1.6.jar"/>
-	<classpathentry kind="lib" path="/GeoCamTalkoForAndroid/lib/guice-2.0-no_aop.jar"/>
-	<classpathentry kind="lib" path="/GeoCamTalkoForAndroid/lib/roboguice-1.1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GeoCamTalkForAndroid"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/gson-1.6.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/guice-2.0-no_aop.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/roboguice-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
