@@ -10,6 +10,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -26,8 +27,14 @@ public class GeoCamTalkActivity extends RoboActivity {
         setContentView(R.layout.main);
         
         List<GeoCamTalkMessage> talkMessages = djangoTalk.getTalkMessages();
-        adapter.setTalkMessages(talkMessages);
+        if (talkMessages != null)
+        {
+        	adapter.setTalkMessages(talkMessages); 
+            talkListView.setAdapter(adapter);
+        } else {
+        	Toast.makeText(this.getApplicationContext(), "Communication Error with Server", Toast.LENGTH_SHORT).show();
+        }
         
-        talkListView.setAdapter(adapter);
+        
     }
 }

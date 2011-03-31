@@ -21,6 +21,7 @@ public class GeoCamTalkMessageTest extends TestCase {
 		message1.setAuthorUsername("rhornsby");
 		message1.setAuthorFullname("Rufus Hornsby");
 		message1.setLongitude(-122.057954);
+		//message1.setRecipients();
 		message1.setContent("Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.");
 		message1.setContentTimestamp(sdf.parse("03/13/11 10:48:44"));
 		message1.setLatitude(37.411629);
