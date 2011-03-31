@@ -18,7 +18,7 @@ public class DjangoTalkJsonConverterImplementation
 
 	@Override
 	public List<GeoCamTalkMessage> deserializeList(String jsonString) {
-		Pattern jsonList = Pattern.compile("^.*\"ms\":\\s+(.*)\\]$");
+		Pattern jsonList = Pattern.compile("^.*\"ms\":\\s+(.*)\\}$");
 		Matcher m = jsonList.matcher(jsonString);
 
 		if  (m.find()){
