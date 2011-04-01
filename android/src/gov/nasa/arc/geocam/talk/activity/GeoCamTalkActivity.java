@@ -8,7 +8,12 @@ import java.util.List;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,4 +42,35 @@ public class GeoCamTalkActivity extends RoboActivity {
         
         
     }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.default_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case R.id.settings_menu_button:
+        	Log.i("Talk", "Settings Button");
+        	Intent intent = new Intent(this,
+        			GeoCamTalkSettings.class);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.startActivity(intent);
+            return true;
+        case R.id.create_message_menu_button:
+        	Log.i("Talk", "Create Button");
+        	return false;
+        case R.id.message_list_menu_button:
+        	Log.i("Talk", "Message List Button");
+        	return false;
+        default:
+        	Log.i("Talk", "NO BUTTON!!!");        	
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

@@ -19,7 +19,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class DjangoTalkImplementation implements DjangoTalkInterface{
-
+// TODO: Review as to whether we should be binding a class or an instance of this class
 	@Inject DjangoTalkJsonConverterInterface jsonConverter;
 	@InjectResource(R.string.talk_url) String talkUrl;
 	@InjectResource(R.string.talk_messages) String talkMessagesJson;
@@ -45,4 +45,6 @@ public class DjangoTalkImplementation implements DjangoTalkInterface{
         
 		return jsonConverter.deserializeList(jsonString);
 	}
+	
+	
 }
