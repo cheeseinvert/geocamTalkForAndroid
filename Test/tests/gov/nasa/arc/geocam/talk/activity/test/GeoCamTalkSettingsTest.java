@@ -1,6 +1,7 @@
 package gov.nasa.arc.geocam.talk.activity.test;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkSettings;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
@@ -23,7 +24,7 @@ public class GeoCamTalkSettingsTest extends GeoCamTestCase {
 	@Test
 	public void testDefaultValuesSetWhenNull()
 	{
-		GeoCamTalkSettings activity = new GeoCamTalkSettings();
+		GeoCamTalkActivity activity = new GeoCamTalkActivity();
 		
 		SharedPreferences sharedPrefs = 
 			PreferenceManager.getDefaultSharedPreferences(Robolectric.application.getApplicationContext());
@@ -33,6 +34,9 @@ public class GeoCamTalkSettingsTest extends GeoCamTestCase {
 		assertNull(sharedPrefs.getString("webapp_password", null));
 		
 		activity.onCreate(null);
+
+		sharedPrefs = 
+			PreferenceManager.getDefaultSharedPreferences(Robolectric.application.getApplicationContext());		
 		
 		assertEquals(
 				defaultUsername,

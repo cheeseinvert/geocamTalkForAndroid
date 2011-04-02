@@ -6,34 +6,33 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import roboguice.inject.InjectResource;
+import android.util.Log;
 
 public class SiteAuthCookieImplementation implements SiteAuthInterface {
 
 	@InjectResource(R.string.url_server_root) String serverRootUrl;
 	@InjectResource(R.string.url_relative_app) String appPath;
 	
-	private HttpClient httpClient;
-	private HttpCookie sessionIdCookie;
+	private DefaultHttpClient httpClient;
+	private Cookie sessionIdCookie;
 	
 	private String username;
 	private String password;
@@ -71,7 +70,8 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		
 		post.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
 		
-		post.setHeader("Cookie", sessionIdCookie.toString());
+		httpClient.getCookieStore().addCookie(sessionIdCookie);
+		//post.setHeader("Cookie", sessionIdCookie.toString());
 
 		HttpResponse r = httpClient.execute(post);
 	    // TODO: check for redirect to login and call login if is the case
@@ -101,7 +101,8 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		
 		// TODO: add param parsing and query string construction as necessary
 		
-		get.setHeader("Cookie", sessionIdCookie.toString());
+		httpClient.getCookieStore().addCookie(sessionIdCookie);
+		//get.setHeader("Cookie", sessionIdCookie.toString());
 
 		HttpResponse r = httpClient.execute(get);
 		// TODO: check for redirect to login and call login if is the case
@@ -129,7 +130,7 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		else
 		{
 			Date now = new Date();
-			if(sessionIdCookie == null || sessionIdCookie.hasExpired())
+			if(sessionIdCookie == null || sessionIdCookie.isExpired(now))
 			{
 				// we're not logged in (at least we think. Let's log in)
 				login();				
@@ -143,6 +144,8 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		HttpParams params = httpClient.getParams();
 		HttpClientParams.setRedirecting(params, false);
 		//params.setParameter("http.protocol.handle-redirects",false);
+
+		Log.i("Talk", "Username:" + username);
 		
 		HttpPost p = new HttpPost(serverRootUrl + "/accounts/login/");
 		p.setParams(params);
@@ -156,15 +159,14 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		HttpResponse r = httpClient.execute(p);
 		if(302 == r.getStatusLine().getStatusCode())
 		{
-			for(Header h:r.getHeaders("Set-Cookie"))
+			for(Cookie c:httpClient.getCookieStore().getCookies())
 			{
-				HttpCookie temp = HttpCookie.parse(h.toString()).get(0);
-				if(temp.getName().contentEquals("sessionid"))
+				if(c.getName().contains("sessionid"))
 				{
-					sessionIdCookie = temp;
+					sessionIdCookie = c;
 					return;
 				}
-			}
+			}	
 			throw new AuthorizationFailedException();
 		}
 		else
