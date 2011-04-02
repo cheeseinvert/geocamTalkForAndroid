@@ -54,9 +54,40 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 			throws AuthorizationFailedException, IOException,
 			ClientProtocolException {
 		ensureAuthenticated();
-		httpClient = new DefaultHttpClient();
 
-		return null;
+		httpClient = new DefaultHttpClient();
+		//HttpParams params = httpClient.getParams();
+		//HttpClientParams.setRedirecting(params, false);
+		//params.setParameter("http.protocol.handle-redirects",false);
+		
+		HttpPost post = new HttpPost(this.serverRootUrl + "/" + appPath + "/" + relativePath);
+		//p.setParams(params);
+		
+		List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+		for(String key:params.keySet())
+		{
+			nameValuePairs.add(new BasicNameValuePair(key, params.get(key)));			
+		}
+		
+		post.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
+		
+		post.setHeader("Cookie", sessionIdCookie.toString());
+
+		HttpResponse r = httpClient.execute(post);
+	    // TODO: check for redirect to login and call login if is the case
+
+		InputStream content = r.getEntity().getContent();
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(content));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+
+		while ((line = br.readLine()) != null) {
+			sb.append(line + "\n");
+		}
+
+		br.close();
+		return sb.toString();
 	}
 
 	@Override
@@ -73,7 +104,8 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		get.setHeader("Cookie", sessionIdCookie.toString());
 
 		HttpResponse r = httpClient.execute(get);
-
+		// TODO: check for redirect to login and call login if is the case
+		
 		InputStream content = r.getEntity().getContent();
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(content));
