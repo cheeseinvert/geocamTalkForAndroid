@@ -1,8 +1,9 @@
 package gov.nasa.arc.geocam.talk;
-import roboguice.application.RoboApplication;
-import com.google.inject.Module;
-
 import java.util.List;
+
+import roboguice.application.RoboApplication;
+
+import com.google.inject.Module;
 
 public class GeoCamTalkRoboApplication extends RoboApplication{
     private Module module = new GeoCamTalkModule();

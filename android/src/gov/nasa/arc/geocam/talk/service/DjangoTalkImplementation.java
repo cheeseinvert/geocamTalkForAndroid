@@ -21,10 +21,11 @@ import com.google.inject.Provider;
 public class DjangoTalkImplementation implements DjangoTalkInterface{
 // TODO: Review as to whether we should be binding a class or an instance of this class
 	@Inject DjangoTalkJsonConverterInterface jsonConverter;
-	@InjectResource(R.string.talk_url) String talkUrl;
-	@InjectResource(R.string.talk_messages) String talkMessagesJson;
+	@InjectResource(R.string.url_server_root) String serverRootUrl;
+	@InjectResource(R.string.url_relative_app) String appPath;
+	@InjectResource(R.string.url_message_list) String talkMessagesJson;
 	@Inject protected static Provider<Context> contextProvider;
-	@Inject HttpClient httpClient;
+	@Inject HttpClient httpClient;	
 	
 	@Override
 	public List<GeoCamTalkMessage> getTalkMessages() {
@@ -33,7 +34,7 @@ public class DjangoTalkImplementation implements DjangoTalkInterface{
 		String jsonString = null;
 		
 		try {
-			HttpGet httpGet = new HttpGet(talkUrl + talkMessagesJson);
+			HttpGet httpGet = new HttpGet(getTalkUrl() + "/" + talkMessagesJson);
 			HttpResponse response = httpClient.execute(httpGet);
 			
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
@@ -46,5 +47,9 @@ public class DjangoTalkImplementation implements DjangoTalkInterface{
 		return jsonConverter.deserializeList(jsonString);
 	}
 	
+	private String getTalkUrl()
+	{
+		return serverRootUrl + "/" + appPath;
+	}
 	
 }

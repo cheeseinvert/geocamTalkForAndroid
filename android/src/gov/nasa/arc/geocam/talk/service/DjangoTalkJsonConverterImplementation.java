@@ -4,10 +4,6 @@ import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

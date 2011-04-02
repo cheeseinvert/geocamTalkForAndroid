@@ -1,10 +1,9 @@
 package gov.nasa.arc.geocam.talk.activity;
 
-import roboguice.activity.RoboPreferenceActivity;
 import gov.nasa.arc.geocam.talk.R;
+import roboguice.activity.RoboPreferenceActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 public class GeoCamTalkSettings extends RoboPreferenceActivity {

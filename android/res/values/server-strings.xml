@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="talk_url">http://10.0.2.2:8080/talk/</string>
-    <string name="talk_messages">messages.json</string>
+    <string name="url_server_root">http://10.0.2.2:8080/talk/</string>
+    <string name="url_message_list">/messages.json</string>
+    <string name="url_relative_app">talk</string>
 </resources>
