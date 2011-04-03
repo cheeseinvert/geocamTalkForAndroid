@@ -1,6 +1,7 @@
 package gov.nasa.arc.geocam.talk.activity;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,7 +36,7 @@ public class GeoCamTalkActivity extends RoboActivity {
         setContentView(R.layout.main);
 
         setDefaultSettings();
-        
+        djangoTalk.setAuth("root", "geocam");
         
         List<GeoCamTalkMessage> talkMessages = djangoTalk.getTalkMessages();
         if (talkMessages != null)
@@ -90,6 +92,10 @@ public class GeoCamTalkActivity extends RoboActivity {
         		prefs.getString("webapp_username", null),
         		prefs.getString("webapp_password", null)        		
         );
+    }
+    
+    public void onCreateTalkClick(View v) {
+    	UIUtils.createTalkMessage(this);
     }
 
 }
