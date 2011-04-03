@@ -1,6 +1,7 @@
 package gov.nasa.arc.geocam.talk.activity;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -81,4 +83,26 @@ public class GeoCamTalkActivity extends RoboActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+<<<<<<< HEAD
+=======
+
+    
+    private void setDefaultSettings() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if(null == prefs.getString("webapp_username", null))
+            prefs.edit().putString("webapp_username", getString(R.string.default_username));
+        if(null == prefs.getString("webapp_password", null))
+            prefs.edit().putString("webapp_password", getString(R.string.default_password));
+        djangoTalk.setAuth(
+        		prefs.getString("webapp_username", null),
+        		prefs.getString("webapp_password", null)        		
+        );
+    }
+    
+    public void onCreateTalkClick(View v) {
+    	UIUtils.createTalkMessage(this);
+    }
+
+>>>>>>> 567c227625960de5c933849d5e2424fc89df89ee
 }

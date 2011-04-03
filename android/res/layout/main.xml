@@ -22,7 +22,7 @@
         		android:layout_alignParentRight="true"
         		android:layout_alignParentTop="true"
         		android:layout_alignParentBottom="true"             
-        		android:onClick="onCreateMemoClick" />
+        		android:onClick="onCreateTalkClick" />
     </LinearLayout>
 	
 	<ListView android:id="@+id/TalkListView" android:layout_width="wrap_content"
