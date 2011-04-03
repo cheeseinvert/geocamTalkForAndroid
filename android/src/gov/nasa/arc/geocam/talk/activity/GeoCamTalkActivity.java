@@ -1,7 +1,6 @@
 package gov.nasa.arc.geocam.talk.activity;
 
 import gov.nasa.arc.geocam.talk.R;
-import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,10 +31,14 @@ public class GeoCamTalkActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
-        setDefaultSettings();
-        djangoTalk.setAuth("root", "geocam");
+        setContentView(R.layout.main);        
+        
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		String username = prefs.getString("webapp_username", null);
+		String password = prefs.getString("webapp_password", null);
+		
+		djangoTalk.setAuth(username, password);        
         
         List<GeoCamTalkMessage> talkMessages = djangoTalk.getTalkMessages();
         if (talkMessages != null)
@@ -79,23 +81,4 @@ public class GeoCamTalkActivity extends RoboActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    
-    private void setDefaultSettings() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if(null == prefs.getString("webapp_username", null))
-            prefs.edit().putString("webapp_username", getString(R.string.default_username));
-        if(null == prefs.getString("webapp_password", null))
-            prefs.edit().putString("webapp_password", getString(R.string.default_password));
-        djangoTalk.setAuth(
-        		prefs.getString("webapp_username", null),
-        		prefs.getString("webapp_password", null)        		
-        );
-    }
-    
-    public void onCreateTalkClick(View v) {
-    	UIUtils.createTalkMessage(this);
-    }
-
 }
