@@ -29,12 +29,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 	}
 	
 	public void onRecordClick(View v){
-		if  (isRecording) {
-			
-		}
-		else {
-			
-		}
+        // TODO: add this to call the Audio service
 	}
 	
 	public void onSendClick(View v){

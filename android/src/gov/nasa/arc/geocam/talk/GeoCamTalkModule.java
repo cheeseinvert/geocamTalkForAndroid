@@ -1,6 +1,7 @@
 package gov.nasa.arc.geocam.talk;
 
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkMessageArrayAdapter;
+import gov.nasa.arc.geocam.talk.service.AudioRecorderImplementation;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkImplementation;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverterImplementation;
@@ -23,6 +24,7 @@ public class GeoCamTalkModule extends AbstractAndroidModule{
 		bind(DjangoTalkJsonConverterInterface.class)
 		    .to(DjangoTalkJsonConverterImplementation.class);
 		bind(SiteAuthInterface.class).toInstance(new SiteAuthCookieImplementation());
+		
 		//bind(HttpClient.class).toInstance(new DefaultHttpClient());
 	}
 	
