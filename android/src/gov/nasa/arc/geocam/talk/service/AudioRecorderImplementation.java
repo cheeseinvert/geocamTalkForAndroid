@@ -8,20 +8,21 @@ import android.widget.Toast;
 import android.app.Activity;
 import android.content.Context;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public class AudioRecorderImplementation implements AudioRecorderInterface {
 
-	private Context context = new Activity();
-
-	@Inject
-	public AudioRecorderImplementation(Context context) {
-		this.context = context;
-	}
+	@Inject protected static Provider<Context> contextProvider;
 	
 	boolean isRecording = false;
 	MediaRecorder recorder = new MediaRecorder();
-	private final String filename = context.getFilesDir().toString() + "/audiofile.mp4";
-
+	//private final String filename = contextProvider.get().getFilesDir().toString() + "/audiofile.mp4";
+    
+	private String getFilename() {
+		return contextProvider.get().getFilesDir().toString() + "/audiofile.mp4";
+		
+	}
+	
 	@Override
 	public void startRecording() {
 		if (!isRecording) {
@@ -30,14 +31,14 @@ public class AudioRecorderImplementation implements AudioRecorderInterface {
 			recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 			recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 			recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-			recorder.setOutputFile(filename);
+			recorder.setOutputFile(getFilename());
 			try {
 				recorder.prepare();
 				recorder.start();
 				isRecording = true;
-				Toast.makeText(context, "Recording started", Toast.LENGTH_SHORT).show();
+				Toast.makeText(contextProvider.get(), "Recording started", Toast.LENGTH_SHORT).show();
 			} catch (Exception e) {
-				Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(contextProvider.get(), e.getMessage(), Toast.LENGTH_SHORT).show();
 				recorder.stop();
 				recorder.reset();
 			}
@@ -52,14 +53,14 @@ public class AudioRecorderImplementation implements AudioRecorderInterface {
 			recorder.reset();
 			isRecording = false;
 			try {
-				FileInputStream f = new FileInputStream(filename);
+				FileInputStream f = new FileInputStream(getFilename());
 				// TODO: call player to replay the file here?
-				Toast.makeText(context, "Recording stopped", Toast.LENGTH_SHORT).show();
+				Toast.makeText(contextProvider.get(), "Recording stopped", Toast.LENGTH_SHORT).show();
 			} catch (Exception e) {
-				Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(contextProvider.get(), e.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		}
-		return filename;
+		return getFilename();
 	}
 
 	@Override

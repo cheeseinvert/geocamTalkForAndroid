@@ -24,7 +24,7 @@
         android:maxLines="4"
         android:maxLength="1024" android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textShortMessage"/>
     <Button android:id="@+id/record_button"
-    	android:text="Send"
+    	android:text="Record Audio"
      	android:layout_width="@dimen/logo_title_width"
      	android:layout_height="@dimen/send_button_height"
      	android:layout_alignWithParentIfMissing="true"

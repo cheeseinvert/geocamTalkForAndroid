@@ -5,5 +5,6 @@
     <item type="id" name="title_button" />
     <item type="id" name="title_create_button" />
     <item type="id" name="newTalkTextInput" />
+    <item type="id" name="record_button" />
     <item type="id" name="send_button" />
 </resources>
