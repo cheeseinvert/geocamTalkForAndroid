@@ -39,6 +39,21 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 		UIUtils.goHome(this);
 	}
 	
+	public void onPlaybackClick(View v){
+        // TODO: add this to call the Audio service
+
+		Log.i("TALKCREATE", "Playback recording now.");
+		try {
+			Toast.makeText(this, "Recording playback", Toast.LENGTH_SHORT).show();
+			player.startPlaying(this.getFilesDir().toString() + "/audio_recording.mp4");
+			//recorder.toggleRecordingStatus();
+		} 
+		catch (Exception e) {
+			Log.e("TALKCREATE", "Exception: " + e.getMessage());
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	public void onRecordClick(View v){
         // TODO: add this to call the Audio service
 

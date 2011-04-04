@@ -32,6 +32,15 @@
      	android:layout_alignParentTop="true"
      	android:layout_alignParentBottom="true"     		           
      	android:onClick="onRecordClick" />  
+     <Button android:id="@+id/playback_button"
+    	android:text="Playback Audio"
+     	android:layout_width="@dimen/logo_title_width"
+     	android:layout_height="@dimen/send_button_height"
+     	android:layout_alignWithParentIfMissing="true"
+     	android:layout_alignParentLeft="true"
+     	android:layout_alignParentTop="true"
+     	android:layout_alignParentBottom="true"     		           
+     	android:onClick="onPlaybackClick" /> 
     <Button android:id="@+id/send_button"
     	android:text="Send"
      	android:layout_width="@dimen/logo_title_width"
