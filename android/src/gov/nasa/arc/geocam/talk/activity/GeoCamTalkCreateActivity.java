@@ -43,13 +43,31 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
         // TODO: add this to call the Audio service
 
 		if (recorder.isRecording()) {
-			Log.i("TALKCREATE", "stop recording now.");
-			player.startPlaying(recorder.stopRecording());
+			Log.i("TALKCREATE", "STOP recording now.");
+			try {
+				player.playBeep();
+				String filename = recorder.stopRecording();
+				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
+				player.startPlaying(filename);
+				//recorder.toggleRecordingStatus();
+			} 
+			catch (Exception e) {
+				Log.e("TALKCREATE", "Exception: " + e.getMessage());
+				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+			}
 		}
-		else {
-			player.playBeep();
-			Log.i("TALKCREATE", "start recording now.");
-			recorder.startRecording();
+		else {	
+			Log.i("TALKCREATE", "START recording now.");
+			try {
+				player.playBeep();
+				recorder.startRecording(this.getFilesDir().toString() + "/audio_recording.mp4");
+				//recorder.toggleRecordingStatus();
+				Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				Log.e("TALKCREATE", "Exception: " + e.getMessage());
+				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+				recorder.stopRecording();
+			}
 		}
 	}
 	

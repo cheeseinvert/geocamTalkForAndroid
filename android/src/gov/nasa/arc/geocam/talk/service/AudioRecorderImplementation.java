@@ -1,68 +1,51 @@
 package gov.nasa.arc.geocam.talk.service;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import android.media.MediaRecorder;
 import android.util.Log;
-import android.widget.Toast;
-import android.app.Activity;
-import android.content.Context;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 public class AudioRecorderImplementation implements AudioRecorderInterface {
 
-	@Inject protected static Provider<Context> contextProvider;
-	
-	boolean isRecording = false;
-	MediaRecorder recorder = new MediaRecorder();
-	//private final String filename = contextProvider.get().getFilesDir().toString() + "/audiofile.mp4";
-    
-	private String getFilename() {
-		return contextProvider.get().getFilesDir().toString() + "/audiofile.mp4";
-		
-	}
-	
+	public boolean isRecording = false;
+	private MediaRecorder recorder;
+	public String filename;
+ 
 	@Override
-	public void startRecording() {
-		if (!isRecording) {
-			Log.i("RECORDER", "Entered into start recording");
-			recorder.reset();
-			recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-			recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-			recorder.setOutputFile(getFilename());
-			try {
-				recorder.prepare();
-				recorder.start();
-				isRecording = true;
-				Toast.makeText(contextProvider.get(), "Recording started", Toast.LENGTH_SHORT).show();
-			} catch (Exception e) {
-				Toast.makeText(contextProvider.get(), e.getMessage(), Toast.LENGTH_SHORT).show();
-				recorder.stop();
-				recorder.reset();
-			}
-		}
+	public void startRecording(String filename) throws IllegalStateException, IOException {
+		this.filename = filename;
+		recorder = new MediaRecorder();
+		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+		recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+		recorder.setOutputFile(filename);
+		recorder.prepare();
+		recorder.start();
+		isRecording = true;
 	}
 
 	@Override
 	public String stopRecording() {
-		if (isRecording) {
-			Log.i("RECORDER", "Entered into stop recording");
-			recorder.stop();
-			recorder.reset();
-			isRecording = false;
-			Toast.makeText(contextProvider.get(), "Recording stopped", Toast.LENGTH_SHORT).show();
-		}
-		return getFilename();
+		recorder.stop();
+		//recorder.reset();
+		isRecording = false;
+		return filename;
 	}
 
 	@Override
 	public boolean isRecording() {
 		return isRecording;
+	}
+
+	@Override
+	public void toggleRecordingStatus() {
+		// TODO Auto-generated method stub
+		if (isRecording) {
+			isRecording = false;
+		}
+		else {
+			isRecording = true;
+		}
 	}
 	
 
