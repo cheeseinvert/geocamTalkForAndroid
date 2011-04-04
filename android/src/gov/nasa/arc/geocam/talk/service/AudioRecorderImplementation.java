@@ -1,6 +1,9 @@
 package gov.nasa.arc.geocam.talk.service;
 
+import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import android.media.MediaRecorder;
 import android.util.Log;
@@ -52,13 +55,7 @@ public class AudioRecorderImplementation implements AudioRecorderInterface {
 			recorder.stop();
 			recorder.reset();
 			isRecording = false;
-			try {
-				FileInputStream f = new FileInputStream(getFilename());
-				// TODO: call player to replay the file here?
-				Toast.makeText(contextProvider.get(), "Recording stopped", Toast.LENGTH_SHORT).show();
-			} catch (Exception e) {
-				Toast.makeText(contextProvider.get(), e.getMessage(), Toast.LENGTH_SHORT).show();
-			}
+			Toast.makeText(contextProvider.get(), "Recording stopped", Toast.LENGTH_SHORT).show();
 		}
 		return getFilename();
 	}

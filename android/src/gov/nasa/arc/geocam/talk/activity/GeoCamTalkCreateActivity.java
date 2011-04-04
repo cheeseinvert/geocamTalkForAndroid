@@ -1,17 +1,22 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import com.google.inject.Inject;
 
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
+import gov.nasa.arc.geocam.talk.service.AudioPlayerInterface;
 import gov.nasa.arc.geocam.talk.service.AudioRecorderInterface;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,7 +25,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 	
 	@InjectView(R.id.newTalkTextInput)EditText newTalkTextView;
     @Inject AudioRecorderInterface recorder;
-    MediaPlayer player = new MediaPlayer();
+    @Inject AudioPlayerInterface player;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -36,19 +41,14 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 	
 	public void onRecordClick(View v){
         // TODO: add this to call the Audio service
+
 		if (recorder.isRecording()) {
-			try {
-				FileInputStream f = new FileInputStream(recorder.stopRecording());
-			    player.setDataSource(f.getFD());
-                player.prepare();
-                player.start();
-			} 
-			catch(Exception e) {
-				Toast.makeText(v.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-	            player.reset();
-			}
+			Log.i("TALKCREATE", "stop recording now.");
+			player.startPlaying(recorder.stopRecording());
 		}
 		else {
+			player.playBeep();
+			Log.i("TALKCREATE", "start recording now.");
 			recorder.startRecording();
 		}
 	}
