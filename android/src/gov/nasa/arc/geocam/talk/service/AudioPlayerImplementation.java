@@ -1,5 +1,8 @@
 package gov.nasa.arc.geocam.talk.service;
 
+
+import gov.nasa.arc.geocam.talk.R;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -8,8 +11,6 @@ import com.google.inject.Provider;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.widget.Toast;
 
 public class AudioPlayerImplementation implements AudioPlayerInterface {
 
@@ -35,13 +36,14 @@ public class AudioPlayerImplementation implements AudioPlayerInterface {
 	}
 	
 	@Override
-	public void playBeep() throws IllegalStateException, IOException {
-		player.reset();
-		player.setDataSource(contextProvider.get().getAssets().openFd("beep.mp3").getFileDescriptor());
-		player.prepare();
-		player.start();
+	public void playBeepA() {
+		MediaPlayer mp = MediaPlayer.create(contextProvider.get(), R.raw.beep_a);
+	    mp.start();
+	}
 
-	}	
-
-
+	@Override
+	public void playBeepB() {
+		MediaPlayer mp = MediaPlayer.create(contextProvider.get(), R.raw.beep_b);
+	    mp.start();
+	}
 }

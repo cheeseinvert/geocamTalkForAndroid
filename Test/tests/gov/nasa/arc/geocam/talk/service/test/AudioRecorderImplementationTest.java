@@ -25,15 +25,14 @@ public class AudioRecorderImplementationTest extends GeoCamTestCase {
 		// act:
 		// Start Recording 
 		Log.i("RECORDER", "Testing start recording");
-		recorderImpl.startRecording();
-		Thread.sleep(1000);
+
+		recorderImpl.startRecording("test_audio_recording.mp4");
 		// Stop Recording
 		Log.i("RECORDER", "Testing stop recording");
 		
 		// assert:
 		// Test audio file
-		FileInputStream f = new FileInputStream(recorderImpl.stopRecording());
-		assertNotNull(f);
+		assertNotNull(recorderImpl.stopRecording());
 		
 	}
 

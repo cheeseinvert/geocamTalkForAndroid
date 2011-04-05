@@ -1,9 +1,5 @@
 package gov.nasa.arc.geocam.talk.activity;
 
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import com.google.inject.Inject;
 
 import gov.nasa.arc.geocam.talk.R;
@@ -12,9 +8,6 @@ import gov.nasa.arc.geocam.talk.service.AudioPlayerInterface;
 import gov.nasa.arc.geocam.talk.service.AudioRecorderInterface;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -60,7 +53,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 		if (recorder.isRecording()) {
 			Log.i("TALKCREATE", "STOP recording now.");
 			try {
-				player.playBeep();
+				player.playBeepB();
 				String filename = recorder.stopRecording();
 				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
 				player.startPlaying(filename);
@@ -74,7 +67,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 		else {	
 			Log.i("TALKCREATE", "START recording now.");
 			try {
-				player.playBeep();
+				player.playBeepA();
 				recorder.startRecording(this.getFilesDir().toString() + "/audio_recording.mp4");
 				//recorder.toggleRecordingStatus();
 				Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
