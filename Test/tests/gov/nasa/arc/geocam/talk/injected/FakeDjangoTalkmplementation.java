@@ -46,4 +46,10 @@ public class FakeDjangoTalkmplementation implements DjangoTalkInterface{
 		
 		return testList;
 	}
+
+	@Override
+	public void setAuth(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
 }

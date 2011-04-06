@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import roboguice.inject.InjectResource;
 import android.content.Context;
@@ -19,12 +20,13 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class DjangoTalkImplementation implements DjangoTalkInterface{
-
+// TODO: Review as to whether we should be binding a class or an instance of this class
 	@Inject DjangoTalkJsonConverterInterface jsonConverter;
-	@InjectResource(R.string.talk_url) String talkUrl;
-	@InjectResource(R.string.talk_messages) String talkMessagesJson;
+	@InjectResource(R.string.url_server_root) String serverRootUrl;
+	@InjectResource(R.string.url_relative_app) String appPath;
+	@InjectResource(R.string.url_message_list) String talkMessagesJson;
 	@Inject protected static Provider<Context> contextProvider;
-	@Inject HttpClient httpClient;
+	@Inject SiteAuthInterface siteAuthImplementation;
 	
 	@Override
 	public List<GeoCamTalkMessage> getTalkMessages() {
@@ -33,16 +35,16 @@ public class DjangoTalkImplementation implements DjangoTalkInterface{
 		String jsonString = null;
 		
 		try {
-			HttpGet httpGet = new HttpGet(talkUrl + talkMessagesJson);
-			HttpResponse response = httpClient.execute(httpGet);
-			
-			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			response.getEntity().writeTo(ostream);
-	        jsonString = ostream.toString();
+			jsonString = siteAuthImplementation.get(talkMessagesJson, null);
 		} catch (Exception e) {
 			Toast.makeText(contextProvider.get(), "Cannot access Talk Web", Toast.LENGTH_SHORT).show();			
 		}
         
 		return jsonConverter.deserializeList(jsonString);
+	}
+
+	@Override
+	public void setAuth(String username, String password) {
+		siteAuthImplementation.setAuth(username, password);		
 	}
 }
