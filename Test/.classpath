@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/gson-1.6.jar"/>
 	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/guice-2.0-no_aop.jar"/>
 	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/roboguice-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/ormlite-core-4.18.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/ormlite-android-4.18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

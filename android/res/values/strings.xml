@@ -9,4 +9,6 @@
     <string name="settings_menu_button_title">Settings</string>
     <string name="message_list_button_title">Messages</string>
     <string name="create_message_button_title">New</string>
+    <string name="sqlite_database_name">geocamTalk.db</string>
+    
 </resources>

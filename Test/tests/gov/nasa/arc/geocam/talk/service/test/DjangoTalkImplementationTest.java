@@ -16,12 +16,19 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.j256.ormlite.dao.Dao;
+
 
 public class DjangoTalkImplementationTest extends GeoCamTestCase {
 
 	@Test
 	public void shouldEnsureGetTalkMessagesReturnsMessages() throws Exception {
+		Dao<GeoCamTalkMessage, Integer> dao = mock(Dao.class);
+		
+		when(dao.queryForAll()).thenReturn(new ArrayList<GeoCamTalkMessage>());
+		
 		DjangoTalkImplementation talkImpl = new DjangoTalkImplementation();
+		setHiddenField(talkImpl, "dao", dao);
 		
 		DjangoTalkJsonConverterInterface jsonConv = 
 			mock(DjangoTalkJsonConverterInterface.class);

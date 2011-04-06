@@ -2,24 +2,35 @@ package gov.nasa.arc.geocam.talk.bean;
 
 import java.util.Date;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 
 @DatabaseTable(tableName = "talkMessages")
-public class GeoCamTalkMessage {
+public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 
 	@DatabaseField(index = true)
 	private int 		messageId;
+	@DatabaseField
 	private Integer  	authorId;
+	@DatabaseField
 	private String 		authorUsername;
+	@DatabaseField
 	private String		authorFullname;
+	@DatabaseField
 	private String 		content;
+	@DatabaseField
 	private Date 		contentTimestamp;
+	@DatabaseField
 	private Double 		latitude;
+	@DatabaseField
 	private Double 		longitude;
+	@DatabaseField
 	private Integer 	accuracy;
+	@DatabaseField
 	private boolean		hasGeolocation;
+	@DatabaseField(dataType=DataType.BYTE_ARRAY)
 	private byte[]		audio;
 	
 	public int getMessageId() {
@@ -102,6 +113,13 @@ public class GeoCamTalkMessage {
 		this.hasGeolocation == other.hasGeolocation;
 	}
 	
+	@Override
+	public int hashCode() {
+		return this.messageId;		
+	}
+	
+	
+	
 	// TODO: Revisit this if we need other helper methods. Maybe move to global helper function?
 	// Jakarta Commons library may provide some additional methods that would be useful
 	public static boolean equalOrBothNull(Object a, Object b)
@@ -125,5 +143,18 @@ public class GeoCamTalkMessage {
 	public void setAudio(byte[] audio) {
 		this.audio = audio;
 	}
-	
+	@Override
+	public int compareTo(GeoCamTalkMessage another) {
+		if(this.equals(another)) {
+			return 0;
+		} else if(this.contentTimestamp == null) {
+			return -1;
+		} else if(another.getContentTimestamp() == null) {
+			return 1;
+		} else if(this.contentTimestamp.after(another.getContentTimestamp())) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
 }

@@ -43,7 +43,15 @@ public class GeoCamTalkActivity extends RoboActivity {
 		
 		djangoTalk.setAuth(username, password);        
         
-        List<GeoCamTalkMessage> talkMessages = djangoTalk.getTalkMessages();
+		List<GeoCamTalkMessage> talkMessages = null;
+		
+        try{		
+        	talkMessages = djangoTalk.getTalkMessages();
+        } catch (Exception e)
+        {
+        	Log.i("Talk", "Error:" + e.getMessage());
+        }
+        
         if (talkMessages != null)
         {
         	adapter.setTalkMessages(talkMessages); 
