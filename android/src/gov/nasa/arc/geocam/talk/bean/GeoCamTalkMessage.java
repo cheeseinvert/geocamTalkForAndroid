@@ -14,6 +14,7 @@ public class GeoCamTalkMessage {
 	private Double 		longitude;
 	private Integer 	accuracy;
 	private boolean		hasGeolocation;
+	private byte[]		audio;
 	
 	public int getMessageId() {
 		return messageId;
@@ -111,6 +112,12 @@ public class GeoCamTalkMessage {
 		{
 			return false;
 		}
+	}
+	public byte[] getAudio() {
+		return audio;
+	}
+	public void setAudio(byte[] audio) {
+		this.audio = audio;
 	}
 	
 }
