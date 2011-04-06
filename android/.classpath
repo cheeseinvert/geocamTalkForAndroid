@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ormlite-android-4.18.jar"/>
+	<classpathentry kind="lib" path="lib/ormlite-core-4.18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

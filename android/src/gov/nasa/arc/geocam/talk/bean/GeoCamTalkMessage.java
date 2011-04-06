@@ -2,8 +2,14 @@ package gov.nasa.arc.geocam.talk.bean;
 
 import java.util.Date;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "talkMessages")
 public class GeoCamTalkMessage {
 
+	@DatabaseField(index = true)
 	private int 		messageId;
 	private Integer  	authorId;
 	private String 		authorUsername;
