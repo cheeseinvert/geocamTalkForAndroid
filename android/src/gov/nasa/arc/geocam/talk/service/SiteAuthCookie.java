@@ -59,9 +59,6 @@ public class SiteAuthCookie implements ISiteAuth {
 		ensureAuthenticated();
 
 		httpClient = new DefaultHttpClient();
-		//HttpParams params = httpClient.getParams();
-		//HttpClientParams.setRedirecting(params, false);
-		//params.setParameter("http.protocol.handle-redirects",false);
 		
 		HttpPost post = new HttpPost(this.serverRootUrl + "/" + appPath + "/" + relativePath);
 		//p.setParams(params);
@@ -142,6 +139,7 @@ public class SiteAuthCookie implements ISiteAuth {
 			if(sessionIdCookie == null || sessionIdCookie.isExpired(now))
 			{
 				// we're not logged in (at least we think. Let's log in)
+				login(username, password);						
 			}
 		}
 	}

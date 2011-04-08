@@ -14,12 +14,21 @@ import gov.nasa.arc.geocam.talk.service.IMessageStore;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.service.MessageStore;
 import gov.nasa.arc.geocam.talk.service.SiteAuthCookie;
+import roboguice.application.RoboApplication;
 import roboguice.config.AbstractAndroidModule;
 
 public class GeoCamTalkModule extends AbstractAndroidModule{
 
+	private RoboApplication application;
+	
+	public GeoCamTalkModule(final RoboApplication applicaiton)
+	{
+		this.application = applicaiton;
+	}
+	
 	@Override
 	protected void configure() {
+		
 		bind(IDjangoTalk.class).to(DjangoTalk.class);
 		bind(IDatabaseHelper.class).to(DatabaseHelper.class);
 		bind(IMessageStore.class).to(MessageStore.class);
@@ -27,7 +36,7 @@ public class GeoCamTalkModule extends AbstractAndroidModule{
 		bind(IAudioPlayer.class).to(AudioPlayer.class);
 		bind(IDjangoTalkJsonConverter.class)
 		    .to(DjangoTalkJsonConverter.class);
-		bind(ISiteAuth.class).to(SiteAuthCookie.class);
+		bind(ISiteAuth.class).toInstance(new SiteAuthCookie(application.getApplicationContext()));
 	}
 	
 	

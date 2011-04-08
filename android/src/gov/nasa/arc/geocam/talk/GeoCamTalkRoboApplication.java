@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 import com.google.inject.Module;
 
 public class GeoCamTalkRoboApplication extends RoboApplication{
-    private Module module = new GeoCamTalkModule();
+    private Module module = new GeoCamTalkModule(this);
 
 	@Override
 	public void onCreate() {
