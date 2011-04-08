@@ -58,7 +58,7 @@ public class FakeDjangoTalkmplementation implements DjangoTalkInterface{
 	}
 
 	@Override
-	public void createTalkMessage(GeoCamTalkMessage message)
+	public void createTalkMessage(GeoCamTalkMessage message, String filename)
 			throws ClientProtocolException, AuthenticationFailedException,
 			IOException {
 		// TODO Auto-generated method stub

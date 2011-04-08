@@ -4,6 +4,7 @@ import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.R;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -19,6 +21,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
@@ -50,7 +56,7 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 	}
 
 	@Override
-	public int post(String relativePath, Map<String, String> params)
+	public int post(String relativePath, Map<String, String> params, String filename)
 			throws AuthenticationFailedException, IOException,
 			ClientProtocolException {
 		ensureAuthenticated();
@@ -65,13 +71,21 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		
 		if(params != null)
 		{
-			List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 			for(String key:params.keySet())
 			{
-				nameValuePairs.add(new BasicNameValuePair(key, params.get(key)));			
+				entity.addPart(key, new StringBody(params.get(key)));			
+			}
+			if (filename != null)
+			{
+				File audioFile = new File(filename);
+	            FileBody audioBin = new FileBody(audioFile);
+	            entity.addPart("audio", audioBin);
 			}
 			
-			post.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
+			post.setEntity(entity);
+			
+			
 		}
 		
 		httpClient.getCookieStore().addCookie(sessionIdCookie);

@@ -11,6 +11,7 @@ import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverterInterface;
 import gov.nasa.arc.geocam.talk.service.SiteAuthInterface;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,23 +47,23 @@ public class DjangoTalkImplementationTest extends GeoCamTestCase {
 	@Test
 	public void shouldEnsureCreateTalkMessagePostsTalkMessage() throws Exception
 	{
-		DjangoTalkImplementation memoImpl = new DjangoTalkImplementation();
+		DjangoTalkImplementation talkImpl = new DjangoTalkImplementation();
 
 		DjangoTalkJsonConverterInterface jsonConv = 
 			mock(DjangoTalkJsonConverterInterface.class);
-
+		
 		SiteAuthInterface siteauth =
 			mock(SiteAuthInterface.class);
-		when(siteauth.post(anyString(), anyMap())).thenReturn(200);
-		setHiddenField(memoImpl, "siteAuthImplementation", siteauth);
+		when(siteauth.post(anyString(), anyMap(), anyString())).thenReturn(200);
+		setHiddenField(talkImpl, "siteAuthImplementation", siteauth);
 
 		when(jsonConv.serialize((GeoCamTalkMessage)anyObject())).thenReturn("");
-		setHiddenField(memoImpl, "jsonConverter", jsonConv);
+		setHiddenField(talkImpl, "jsonConverter", jsonConv);
 
 		// act
-		memoImpl.createTalkMessage(new GeoCamTalkMessage());
+		talkImpl.createTalkMessage(new GeoCamTalkMessage(), null);
 
 		// assert
-		verify(siteauth).post(anyString(), anyMap());
+		verify(siteauth).post(anyString(), anyMap(), anyString());
 	}
 }

@@ -1,13 +1,20 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import java.util.Date;
+
 import com.google.inject.Inject;
 
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
+import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
+import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.AudioPlayerInterface;
 import gov.nasa.arc.geocam.talk.service.AudioRecorderInterface;
+import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +26,10 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 	@InjectView(R.id.newTalkTextInput)EditText newTalkTextView;
     @Inject AudioRecorderInterface recorder;
     @Inject AudioPlayerInterface player;
-	
+    @Inject DjangoTalkInterface djangoTalkInterface;
+    
+    private String filename = null;
+    
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +64,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 			Log.i("TALKCREATE", "STOP recording now.");
 			try {
 				player.playBeepB();
-				String filename = recorder.stopRecording();
+				filename = recorder.stopRecording();
 				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
 				player.startPlaying(filename);
 				//recorder.toggleRecordingStatus();
@@ -82,6 +92,21 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 	public void onSendClick(View v){
 		CharSequence text = newTalkTextView.getText();
 		int duration = Toast.LENGTH_SHORT;
-		Toast.makeText(this, text, duration).show();		
+		Toast.makeText(this, text, duration).show();
+
+		GeoCamTalkMessage message = new GeoCamTalkMessage();
+		message.setContent(text.toString());
+		message.setContentTimestamp(new Date());
+
+		//filename = "this.mp4";
+		
+		try {
+			djangoTalkInterface.createTalkMessage(message, filename);
+			UIUtils.goHome(this);
+		} catch (AuthenticationFailedException e) {
+			UIUtils.displayException(this, e, "Could not authenticate with the server");
+		} catch (Exception e) {
+			UIUtils.displayException(this, e, "Communication with the server failed");
+		}
 	}
 }

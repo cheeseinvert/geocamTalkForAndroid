@@ -51,10 +51,10 @@ public class DjangoTalkImplementation implements DjangoTalkInterface{
 	}
 	
 	@Override
-	public void createTalkMessage(GeoCamTalkMessage message) throws ClientProtocolException, AuthenticationFailedException, IOException {
+	public void createTalkMessage(GeoCamTalkMessage message, String filename) throws ClientProtocolException, AuthenticationFailedException, IOException {
 		HashMap<String,String>map = new HashMap<String,String>();
 		map.put("message", jsonConverter.serialize(message));
-		int responseCode = siteAuthImplementation.post(createTalkMessageJson, map);
+		int responseCode = siteAuthImplementation.post(createTalkMessageJson, map, filename);
 		if(responseCode != 200)
 		{
 			throw new ClientProtocolException("Message could not be created (HTTP error "+responseCode+")");

@@ -11,7 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 public interface DjangoTalkInterface {
 	public List<GeoCamTalkMessage> getTalkMessages();
 	public void setAuth(String username, String password);
-	void createTalkMessage(GeoCamTalkMessage message)
+	void createTalkMessage(GeoCamTalkMessage message, String filename)
 			throws ClientProtocolException, AuthenticationFailedException,
 			IOException;
 }
