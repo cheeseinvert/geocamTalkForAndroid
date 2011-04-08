@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-public class FakeDjangoTalkmplementation implements IDjangoTalk{
+public class FakeDjangoTalk implements IDjangoTalk{
 
 	@Inject IDjangoTalkJsonConverter jsonConverter;
 	

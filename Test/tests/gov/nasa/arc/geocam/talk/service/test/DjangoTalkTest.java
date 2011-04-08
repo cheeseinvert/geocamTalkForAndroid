@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkImplementation;
+import gov.nasa.arc.geocam.talk.service.DjangoTalk;
 import gov.nasa.arc.geocam.talk.service.IDjangoTalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
@@ -20,7 +20,7 @@ import com.j256.ormlite.dao.Dao;
 import com.xtremelabs.robolectric.Robolectric;
 
 
-public class DjangoTalkImplementationTest extends GeoCamTestCase {
+public class DjangoTalkTest extends GeoCamTestCase {
 
 	@Test
 	public void shouldEnsureGetTalkMessagesReturnsMessages() throws Exception {
@@ -28,7 +28,7 @@ public class DjangoTalkImplementationTest extends GeoCamTestCase {
 		
 		when(dao.queryForAll()).thenReturn(new ArrayList<GeoCamTalkMessage>());
 		
-		DjangoTalkImplementation talkImpl = new DjangoTalkImplementation(
+		DjangoTalk talkImpl = new DjangoTalk(
 				Robolectric.application.getApplicationContext());
 		setHiddenField(talkImpl, "dao", dao);
 		

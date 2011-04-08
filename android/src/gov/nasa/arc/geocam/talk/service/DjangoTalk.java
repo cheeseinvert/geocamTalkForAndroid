@@ -22,21 +22,21 @@ import android.util.Log;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.Dao;
 
-public class DjangoTalkImplementation implements IDjangoTalk{
+public class DjangoTalk implements IDjangoTalk{
 // TODO: Review as to whether we should be binding a class or an instance of this class
 	@Inject IDjangoTalkJsonConverter jsonConverter;
 	@InjectResource(R.string.url_server_root) String serverRootUrl;
 	@InjectResource(R.string.url_relative_app) String appPath;
 	@InjectResource(R.string.url_message_list) String talkMessagesJson;
 	@Inject ISiteAuth siteAuthImplementation;
-	DatabaseHelperImplementation databaseHelper;
+	DatabaseHelper databaseHelper;
 	Dao<GeoCamTalkMessage, Integer> dao;
 	
 	@Inject
-	public DjangoTalkImplementation(Context context)
+	public DjangoTalk(Context context)
 	{
 		//super("DjangoTalkImplementation");
-		databaseHelper = new DatabaseHelperImplementation(context);
+		databaseHelper = new DatabaseHelper(context);
 		try {
 			dao = databaseHelper.getGeoCamTalkMessageDao();
 		} catch (SQLException e) {

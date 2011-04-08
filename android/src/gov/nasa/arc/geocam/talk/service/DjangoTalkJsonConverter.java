@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-public class DjangoTalkJsonConverterImplementation
+public class DjangoTalkJsonConverter
     implements IDjangoTalkJsonConverter {
 
 	@Override

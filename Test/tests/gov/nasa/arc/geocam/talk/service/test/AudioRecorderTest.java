@@ -9,13 +9,13 @@ import com.google.inject.Inject;
 import android.content.Context;
 import android.util.Log;
 
-import gov.nasa.arc.geocam.talk.service.AudioRecorderImplementation;
+import gov.nasa.arc.geocam.talk.service.AudioRecorder;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 
-public class AudioRecorderImplementationTest extends GeoCamTestCase {
+public class AudioRecorderTest extends GeoCamTestCase {
 	@Inject Context context;
-	@Inject AudioRecorderImplementation recorderImpl;
+	@Inject AudioRecorder recorderImpl;
 	
 	@Test
 	public void shouldGetAudioFileWhenRecorded() throws Exception {

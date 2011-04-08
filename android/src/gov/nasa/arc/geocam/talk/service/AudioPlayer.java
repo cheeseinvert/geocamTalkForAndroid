@@ -12,13 +12,13 @@ import com.google.inject.Provider;
 import android.content.Context;
 import android.media.MediaPlayer;
 
-public class AudioPlayerImplementation implements IAudioPlayer {
+public class AudioPlayer implements IAudioPlayer {
 
 	Context context;
 	MediaPlayer player = new MediaPlayer();
 	
 	@Inject
-	public AudioPlayerImplementation(Context context)
+	public AudioPlayer(Context context)
 	{
 		this.context = context;
 	}

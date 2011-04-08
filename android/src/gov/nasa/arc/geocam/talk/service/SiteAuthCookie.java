@@ -26,7 +26,7 @@ import org.apache.http.protocol.HTTP;
 import roboguice.inject.InjectResource;
 import android.util.Log;
 
-public class SiteAuthCookieImplementation implements ISiteAuth {
+public class SiteAuthCookie implements ISiteAuth {
 
 	@InjectResource(R.string.url_server_root) String serverRootUrl;
 	@InjectResource(R.string.url_relative_app) String appPath;
