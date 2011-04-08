@@ -37,4 +37,14 @@ public class DjangoTalkJsonConverterImplementation
 		Gson gson = builder.create();
 		return gson.fromJson(jsonString, GeoCamTalkMessage.class);
 	}
+	
+	@Override
+	public String serialize(GeoCamTalkMessage message) {
+		GsonBuilder builder = new GsonBuilder();
+		builder.setDateFormat("MM/dd/yy HH:mm:ss");
+		
+		Gson gson = builder.create();
+		String ret= gson.toJson(message);
+		return ret;
+	}
 }

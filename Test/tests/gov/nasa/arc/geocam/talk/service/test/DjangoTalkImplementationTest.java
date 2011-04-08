@@ -1,6 +1,6 @@
 package gov.nasa.arc.geocam.talk.service.test;
 
-import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -41,5 +41,28 @@ public class DjangoTalkImplementationTest extends GeoCamTestCase {
 		// assert
 		assertEquals(expectedList, talkMessages);
 		verify(jsonConv).deserializeList(anyString());
+	}
+	
+	@Test
+	public void shouldEnsureCreateTalkMessagePostsTalkMessage() throws Exception
+	{
+		DjangoTalkImplementation memoImpl = new DjangoTalkImplementation();
+
+		DjangoTalkJsonConverterInterface jsonConv = 
+			mock(DjangoTalkJsonConverterInterface.class);
+
+		SiteAuthInterface siteauth =
+			mock(SiteAuthInterface.class);
+		when(siteauth.post(anyString(), anyMap())).thenReturn(200);
+		setHiddenField(memoImpl, "siteAuthImplementation", siteauth);
+
+		when(jsonConv.serialize((GeoCamTalkMessage)anyObject())).thenReturn("");
+		setHiddenField(memoImpl, "jsonConverter", jsonConv);
+
+		// act
+		memoImpl.createTalkMessage(new GeoCamTalkMessage());
+
+		// assert
+		verify(siteauth).post(anyString(), anyMap());
 	}
 }

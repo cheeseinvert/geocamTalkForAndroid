@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.service;
 
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.R;
 
 import java.io.BufferedReader;
@@ -49,26 +50,29 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 	}
 
 	@Override
-	public String post(String relativePath, Map<String, String> params)
-			throws AuthorizationFailedException, IOException,
+	public int post(String relativePath, Map<String, String> params)
+			throws AuthenticationFailedException, IOException,
 			ClientProtocolException {
 		ensureAuthenticated();
 
 		httpClient = new DefaultHttpClient();
-		//HttpParams params = httpClient.getParams();
-		//HttpClientParams.setRedirecting(params, false);
-		//params.setParameter("http.protocol.handle-redirects",false);
+		HttpParams httpParams = httpClient.getParams();
+		HttpClientParams.setRedirecting(httpParams, false);
+		httpParams.setParameter("http.protocol.handle-redirects",false);
 		
 		HttpPost post = new HttpPost(this.serverRootUrl + "/" + appPath + "/" + relativePath);
-		//p.setParams(params);
+		post.setParams(httpParams);
 		
-		List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-		for(String key:params.keySet())
+		if(params != null)
 		{
-			nameValuePairs.add(new BasicNameValuePair(key, params.get(key)));			
+			List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+			for(String key:params.keySet())
+			{
+				nameValuePairs.add(new BasicNameValuePair(key, params.get(key)));			
+			}
+			
+			post.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
 		}
-		
-		post.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
 		
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
 		//post.setHeader("Cookie", sessionIdCookie.toString());
@@ -76,23 +80,12 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		HttpResponse r = httpClient.execute(post);
 	    // TODO: check for redirect to login and call login if is the case
 
-		InputStream content = r.getEntity().getContent();
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(content));
-		StringBuilder sb = new StringBuilder();
-		String line = null;
-
-		while ((line = br.readLine()) != null) {
-			sb.append(line + "\n");
-		}
-
-		br.close();
-		return sb.toString();
+		return r.getStatusLine().getStatusCode();
 	}
 
 	@Override
 	public String get(String relativePath, Map<String, String> params)
-			throws AuthorizationFailedException, IOException,
+			throws AuthenticationFailedException, IOException,
 			ClientProtocolException {
 		ensureAuthenticated();
 		httpClient = new DefaultHttpClient();
@@ -121,11 +114,11 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		return sb.toString();
 	}
 	
-	private void ensureAuthenticated() throws AuthorizationFailedException, ClientProtocolException, IOException
+	private void ensureAuthenticated() throws AuthenticationFailedException, ClientProtocolException, IOException
 	{
 		if(username == null || password == null)
 		{
-			throw new AuthorizationFailedException();
+			throw new AuthenticationFailedException("Username and/or password not set.");
 		} 
 		else
 		{
@@ -138,7 +131,7 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 		}
 	}
 	
-	private void login() throws ClientProtocolException, IOException, AuthorizationFailedException
+	private void login() throws ClientProtocolException, IOException, AuthenticationFailedException
 	{
 		httpClient = new DefaultHttpClient();
 		HttpParams params = httpClient.getParams();
@@ -167,11 +160,11 @@ public class SiteAuthCookieImplementation implements SiteAuthInterface {
 					return;
 				}
 			}	
-			throw new AuthorizationFailedException();
+			throw new AuthenticationFailedException("Session cookie was missing from server login response.");
 		}
 		else
 		{
-			throw new AuthorizationFailedException();
+			throw new AuthenticationFailedException("Got unexpected response code from server: " + r.getStatusLine().getStatusCode());
 		}
 	}
 }

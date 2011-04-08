@@ -1,12 +1,16 @@
 package gov.nasa.arc.geocam.talk.injected;
 
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverterInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.google.inject.Inject;
 
@@ -49,6 +53,14 @@ public class FakeDjangoTalkmplementation implements DjangoTalkInterface{
 
 	@Override
 	public void setAuth(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createTalkMessage(GeoCamTalkMessage message)
+			throws ClientProtocolException, AuthenticationFailedException,
+			IOException {
 		// TODO Auto-generated method stub
 		
 	}
