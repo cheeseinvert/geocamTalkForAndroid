@@ -18,14 +18,17 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.j256.ormlite.dao.Dao;
+import com.xtremelabs.robolectric.Robolectric;
 
 
 public class DjangoTalkTest extends GeoCamTestCase {
 
 	@Test
 	public void shouldEnsureGetTalkMessagesReturnsMessages() throws Exception {
-		DjangoTalk talkImpl = new DjangoTalk("testService");
+		DjangoTalk talkImpl = 
+			new DjangoTalk(
+					Robolectric.application.getApplicationContext(),
+					"testService");
 		
 		IDjangoTalkJsonConverter jsonConv = 
 			mock(IDjangoTalkJsonConverter.class);
@@ -36,6 +39,7 @@ public class DjangoTalkTest extends GeoCamTestCase {
 		setHiddenField(talkImpl, "siteAuth", siteauth);
 		
 		List<GeoCamTalkMessage> expectedList = new ArrayList<GeoCamTalkMessage>();
+		expectedList.add(new GeoCamTalkMessage());
 		when(jsonConv.deserializeList(anyString())).thenReturn(expectedList);
 		setHiddenField(talkImpl, "jsonConverter", jsonConv);
 		

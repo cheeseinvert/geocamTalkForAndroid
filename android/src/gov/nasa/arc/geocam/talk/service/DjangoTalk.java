@@ -2,6 +2,7 @@ package gov.nasa.arc.geocam.talk.service;
 
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.bean.DjangoTalkIntent;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 
 import java.io.IOException;
@@ -12,7 +13,9 @@ import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -23,9 +26,12 @@ public class DjangoTalk extends IntentService implements IDjangoTalk {
 	@Inject ISiteAuth siteAuth;
 	@Inject IMessageStore messageStore;
 	
+	private Context context;
+	
 	@Inject
-	public DjangoTalk(@InjectResource(R.string.django_talk_service_name) String serviceName) {
+	public DjangoTalk(Context context, @InjectResource(R.string.django_talk_service_name) String serviceName) {
 		super(serviceName);
+		this.context = context;
 	}
 	
 	@Override
@@ -37,11 +43,24 @@ public class DjangoTalk extends IntentService implements IDjangoTalk {
 		jsonString = siteAuth.get(talkMessagesJson, null);
 		List<GeoCamTalkMessage> newMessages =  jsonConverter.deserializeList(jsonString);
 		
-		messageStore.addMessage(newMessages);
+		if(newMessages.size() > 0)
+		{
+			messageStore.addMessage(newMessages);
+			Intent newMsgIntent = new Intent(DjangoTalkIntent.NEW_MESSAGES.toString());
+			context.sendBroadcast(newMsgIntent);
+		}
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-				
+		if(intent.getAction().equals(DjangoTalkIntent.SYNCHRONIZE))
+		{
+			try{
+				this.getTalkMessages();
+			} catch (Exception e) {
+				Log.e("GeoCam Talk", "Comm Error", e);
+				// TODO: Display this to the user (Toast or notification bar)
+			}
+		}
 	}
 }
