@@ -11,15 +11,22 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
+import android.app.IntentService;
+import android.content.Intent;
 
 import com.google.inject.Inject;
 
-public class DjangoTalk implements IDjangoTalk{
-// TODO: Review as to whether we should be binding a class or an instance of this class
+public class DjangoTalk extends IntentService implements IDjangoTalk {
+	
 	@Inject IDjangoTalkJsonConverter jsonConverter;
 	@InjectResource(R.string.url_message_list) String talkMessagesJson;
 	@Inject ISiteAuth siteAuth;
 	@Inject IMessageStore messageStore;
+	
+	@Inject
+	public DjangoTalk(@InjectResource(R.string.django_talk_service_name) String serviceName) {
+		super(serviceName);
+	}
 	
 	@Override
 	public void getTalkMessages() throws SQLException, ClientProtocolException, AuthorizationFailedException, IOException {
@@ -31,5 +38,10 @@ public class DjangoTalk implements IDjangoTalk{
 		List<GeoCamTalkMessage> newMessages =  jsonConverter.deserializeList(jsonString);
 		
 		messageStore.addMessage(newMessages);
+	}
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+				
 	}
 }
