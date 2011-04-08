@@ -12,7 +12,7 @@ import com.google.inject.Provider;
 import android.content.Context;
 import android.media.MediaPlayer;
 
-public class AudioPlayerImplementation implements AudioPlayerInterface {
+public class AudioPlayerImplementation implements IAudioPlayer {
 
 	Context context;
 	MediaPlayer player = new MediaPlayer();

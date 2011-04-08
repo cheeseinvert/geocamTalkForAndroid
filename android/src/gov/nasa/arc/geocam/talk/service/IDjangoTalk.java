@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 
-public interface DjangoTalkInterface {
+public interface IDjangoTalk {
 	public List<GeoCamTalkMessage> getTalkMessages() throws SQLException, ClientProtocolException, AuthorizationFailedException, IOException;
 	public void setAuth(String username, String password);
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import android.media.MediaRecorder;
 import android.util.Log;
 
-public class AudioRecorderImplementation implements AudioRecorderInterface {
+public class AudioRecorderImplementation implements IAudioRecorder {
 
 	public boolean isRecording = false;
 	private MediaRecorder recorder;

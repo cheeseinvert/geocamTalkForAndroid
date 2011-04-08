@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
-public interface SiteAuthInterface {
+public interface ISiteAuth {
     public void setRoot(String siteRoot);
     public void setAuth(String username, String password);
     public String post(String relativePath, Map<String, String> params) 

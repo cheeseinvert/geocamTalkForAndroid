@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
-import gov.nasa.arc.geocam.talk.service.AudioPlayerInterface;
-import gov.nasa.arc.geocam.talk.service.AudioRecorderInterface;
+import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
+import gov.nasa.arc.geocam.talk.service.IAudioRecorder;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 public class GeoCamTalkCreateActivity extends RoboActivity{
 	
 	@InjectView(R.id.newTalkTextInput)EditText newTalkTextView;
-    @Inject AudioRecorderInterface recorder;
-    @Inject AudioPlayerInterface player;
+    @Inject IAudioRecorder recorder;
+    @Inject IAudioPlayer player;
 	
 	/** Called when the activity is first created. */
 	@Override

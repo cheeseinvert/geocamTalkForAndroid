@@ -7,8 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkImplementation;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverterInterface;
-import gov.nasa.arc.geocam.talk.service.SiteAuthInterface;
+import gov.nasa.arc.geocam.talk.service.IDjangoTalkJsonConverter;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 import java.util.ArrayList;
@@ -32,11 +32,11 @@ public class DjangoTalkImplementationTest extends GeoCamTestCase {
 				Robolectric.application.getApplicationContext());
 		setHiddenField(talkImpl, "dao", dao);
 		
-		DjangoTalkJsonConverterInterface jsonConv = 
-			mock(DjangoTalkJsonConverterInterface.class);
+		IDjangoTalkJsonConverter jsonConv = 
+			mock(IDjangoTalkJsonConverter.class);
 		
-		SiteAuthInterface siteauth =
-			mock(SiteAuthInterface.class);
+		ISiteAuth siteauth =
+			mock(ISiteAuth.class);
 		when(siteauth.get(anyString(), anyMap())).thenReturn("");
 		setHiddenField(talkImpl, "siteAuthImplementation", siteauth);
 		

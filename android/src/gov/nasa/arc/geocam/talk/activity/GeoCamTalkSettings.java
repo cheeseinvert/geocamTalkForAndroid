@@ -3,14 +3,14 @@ package gov.nasa.arc.geocam.talk.activity;
 import com.google.inject.Inject;
 
 import gov.nasa.arc.geocam.talk.R;
-import gov.nasa.arc.geocam.talk.service.SiteAuthInterface;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import roboguice.activity.RoboPreferenceActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 public class GeoCamTalkSettings extends RoboPreferenceActivity {
-    @Inject SiteAuthInterface siteAuthInterface;
+    @Inject ISiteAuth siteAuthInterface;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,8 +1,8 @@
 package gov.nasa.arc.geocam.talk.injected;
 
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverterInterface;
+import gov.nasa.arc.geocam.talk.service.IDjangoTalk;
+import gov.nasa.arc.geocam.talk.service.IDjangoTalkJsonConverter;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -10,9 +10,9 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-public class FakeDjangoTalkmplementation implements DjangoTalkInterface{
+public class FakeDjangoTalkmplementation implements IDjangoTalk{
 
-	@Inject DjangoTalkJsonConverterInterface jsonConverter;
+	@Inject IDjangoTalkJsonConverter jsonConverter;
 	
 	@Override
 	public List<GeoCamTalkMessage> getTalkMessages() {
