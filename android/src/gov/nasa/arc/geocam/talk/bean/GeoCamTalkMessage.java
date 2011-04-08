@@ -42,7 +42,7 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	@DatabaseField
 	private boolean		hasGeolocation;
 	
-	@DatabaseField(dataType=DataType.BYTE_ARRAY)
+	@DatabaseField(dataType = DataType.BYTE_ARRAY)
 	private byte[]		audio;
 	
 	

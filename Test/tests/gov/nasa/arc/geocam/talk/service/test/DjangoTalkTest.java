@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.service.test;
 
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -9,6 +10,7 @@ import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.DjangoTalk;
 import gov.nasa.arc.geocam.talk.service.IDjangoTalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
+import gov.nasa.arc.geocam.talk.service.MessageStore;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 import java.util.ArrayList;
@@ -17,20 +19,13 @@ import java.util.List;
 import org.junit.Test;
 
 import com.j256.ormlite.dao.Dao;
-import com.xtremelabs.robolectric.Robolectric;
 
 
 public class DjangoTalkTest extends GeoCamTestCase {
 
 	@Test
 	public void shouldEnsureGetTalkMessagesReturnsMessages() throws Exception {
-		Dao<GeoCamTalkMessage, Integer> dao = mock(Dao.class);
-		
-		when(dao.queryForAll()).thenReturn(new ArrayList<GeoCamTalkMessage>());
-		
-		DjangoTalk talkImpl = new DjangoTalk(
-				Robolectric.application.getApplicationContext());
-		setHiddenField(talkImpl, "dao", dao);
+		DjangoTalk talkImpl = new DjangoTalk();
 		
 		IDjangoTalkJsonConverter jsonConv = 
 			mock(IDjangoTalkJsonConverter.class);
@@ -38,17 +33,22 @@ public class DjangoTalkTest extends GeoCamTestCase {
 		ISiteAuth siteauth =
 			mock(ISiteAuth.class);
 		when(siteauth.get(anyString(), anyMap())).thenReturn("");
-		setHiddenField(talkImpl, "siteAuthImplementation", siteauth);
+		setHiddenField(talkImpl, "siteAuth", siteauth);
 		
 		List<GeoCamTalkMessage> expectedList = new ArrayList<GeoCamTalkMessage>();
 		when(jsonConv.deserializeList(anyString())).thenReturn(expectedList);
 		setHiddenField(talkImpl, "jsonConverter", jsonConv);
 		
+		MessageStore ms = mock(MessageStore.class);
+		setHiddenField(talkImpl, "messageStore", ms);
+		
 		// act
-		List<GeoCamTalkMessage> talkMessages = talkImpl.getTalkMessages();
+		talkImpl.getTalkMessages();
+		
+		
 		
 		// assert
-		assertEquals(expectedList, talkMessages);
+		verify(ms).addMessage(anyList());
 		verify(jsonConv).deserializeList(anyString());
 	}
 }

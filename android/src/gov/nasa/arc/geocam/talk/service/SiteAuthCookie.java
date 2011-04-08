@@ -24,7 +24,12 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import roboguice.inject.InjectResource;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.google.inject.Inject;
 
 public class SiteAuthCookie implements ISiteAuth {
 
@@ -34,18 +39,17 @@ public class SiteAuthCookie implements ISiteAuth {
 	private DefaultHttpClient httpClient;
 	private Cookie sessionIdCookie;
 	
-	private String username;
-	private String password;
+	private Context context;
+	
+	@Inject
+	public SiteAuthCookie(Context context)
+	{
+		this.context = context;
+	}
 	
 	@Override
 	public void setRoot(String siteRoot) {
 		serverRootUrl = siteRoot;	
-	}
-
-	@Override
-	public void setAuth(String username, String password) {
-		this.username = username;
-		this.password = password;
 	}
 
 	@Override
@@ -123,6 +127,11 @@ public class SiteAuthCookie implements ISiteAuth {
 	
 	private void ensureAuthenticated() throws AuthorizationFailedException, ClientProtocolException, IOException
 	{
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		String username = prefs.getString("webapp_username", null);
+		String password = prefs.getString("webapp_password", null);
+		
 		if(username == null || password == null)
 		{
 			throw new AuthorizationFailedException();
@@ -133,12 +142,11 @@ public class SiteAuthCookie implements ISiteAuth {
 			if(sessionIdCookie == null || sessionIdCookie.isExpired(now))
 			{
 				// we're not logged in (at least we think. Let's log in)
-				login();				
 			}
 		}
 	}
 	
-	private void login() throws ClientProtocolException, IOException, AuthorizationFailedException
+	private void login(String username, String password) throws ClientProtocolException, IOException, AuthorizationFailedException
 	{
 		httpClient = new DefaultHttpClient();
 		HttpParams params = httpClient.getParams();

@@ -35,7 +35,7 @@ public class MessageStore implements IMessageStore {
 	
 	@Override
 	public void synchronize() {
-				
+			
 	}
 
 	@Override

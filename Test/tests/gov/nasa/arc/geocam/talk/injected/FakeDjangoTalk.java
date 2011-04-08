@@ -15,7 +15,7 @@ public class FakeDjangoTalk implements IDjangoTalk{
 	@Inject IDjangoTalkJsonConverter jsonConverter;
 	
 	@Override
-	public List<GeoCamTalkMessage> getTalkMessages() {
+	public void getTalkMessages() {
 		// TODO Auto-generated method stub
 		List<GeoCamTalkMessage>testList = new ArrayList<GeoCamTalkMessage>();
 		
@@ -43,13 +43,5 @@ public class FakeDjangoTalk implements IDjangoTalk{
 						"Ted Johnson", 
 						true)
 		);		
-		
-		return testList;
-	}
-
-	@Override
-	public void setAuth(String username, String password) {
-		// TODO Auto-generated method stub
-		
 	}
 }

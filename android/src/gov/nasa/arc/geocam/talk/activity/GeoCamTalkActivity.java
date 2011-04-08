@@ -41,12 +41,10 @@ public class GeoCamTalkActivity extends RoboActivity {
 		String username = prefs.getString("webapp_username", null);
 		String password = prefs.getString("webapp_password", null);
 		
-		djangoTalk.setAuth(username, password);        
-        
 		List<GeoCamTalkMessage> talkMessages = null;
 		
         try{		
-        	talkMessages = djangoTalk.getTalkMessages();
+        	//talkMessages = djangoTalk.getTalkMessages();
         } catch (Exception e)
         {
         	Log.i("Talk", "Error:" + e.getMessage());
