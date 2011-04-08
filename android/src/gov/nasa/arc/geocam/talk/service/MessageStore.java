@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.service;
 
+import gov.nasa.arc.geocam.talk.bean.DjangoTalkIntent;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 
 import java.sql.SQLException;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.inject.Inject;
@@ -19,13 +22,13 @@ import com.j256.ormlite.stmt.SelectArg;
 
 public class MessageStore implements IMessageStore {
 
-	IDatabaseHelper databaseHelper;
-	Dao<GeoCamTalkMessage, Integer> dao;
+	private Dao<GeoCamTalkMessage, Integer> dao;
+	private Context context;
 	
 	@Inject
-	public MessageStore(IDatabaseHelper dbHelper)
+	public MessageStore(Context context, IDatabaseHelper dbHelper)
 	{
-		this.databaseHelper = dbHelper;
+		this.context = context;
 		try {
 			this.dao = dbHelper.getGeoCamTalkMessageDao();
 		} catch (SQLException e) {
@@ -35,7 +38,9 @@ public class MessageStore implements IMessageStore {
 	
 	@Override
 	public void synchronize() {
-			
+		Intent synchronizeIntent = new Intent(this.context, DjangoTalk.class);
+		synchronizeIntent.setAction(DjangoTalkIntent.SYNCHRONIZE.toString());
+		context.startService(synchronizeIntent);
 	}
 
 	@Override

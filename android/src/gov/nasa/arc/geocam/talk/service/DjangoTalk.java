@@ -12,26 +12,24 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
-import android.app.IntentService;
+import roboguice.service.RoboIntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.google.inject.Inject;
 
-public class DjangoTalk extends IntentService implements IDjangoTalk {
+public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 	
 	@Inject IDjangoTalkJsonConverter jsonConverter;
 	@InjectResource(R.string.url_message_list) String talkMessagesJson;
 	@Inject ISiteAuth siteAuth;
 	@Inject IMessageStore messageStore;
 	
-	private Context context;
+	//private Context context;
 	
-	@Inject
-	public DjangoTalk(Context context, @InjectResource(R.string.django_talk_service_name) String serviceName) {
-		super(serviceName);
-		this.context = context;
+	public DjangoTalk() {
+		super("DjangoTalkService");
 	}
 	
 	@Override
@@ -47,13 +45,13 @@ public class DjangoTalk extends IntentService implements IDjangoTalk {
 		{
 			messageStore.addMessage(newMessages);
 			Intent newMsgIntent = new Intent(DjangoTalkIntent.NEW_MESSAGES.toString());
-			context.sendBroadcast(newMsgIntent);
+			this.getApplicationContext().sendBroadcast(newMsgIntent);
 		}
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		if(intent.getAction().equals(DjangoTalkIntent.SYNCHRONIZE))
+		if(intent.getAction().contentEquals(DjangoTalkIntent.SYNCHRONIZE.toString()))
 		{
 			try{
 				this.getTalkMessages();

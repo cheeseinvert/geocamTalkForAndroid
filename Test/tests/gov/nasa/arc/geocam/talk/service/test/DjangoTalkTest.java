@@ -26,9 +26,7 @@ public class DjangoTalkTest extends GeoCamTestCase {
 	@Test
 	public void shouldEnsureGetTalkMessagesReturnsMessages() throws Exception {
 		DjangoTalk talkImpl = 
-			new DjangoTalk(
-					Robolectric.application.getApplicationContext(),
-					"testService");
+			new DjangoTalk();
 		
 		IDjangoTalkJsonConverter jsonConv = 
 			mock(IDjangoTalkJsonConverter.class);

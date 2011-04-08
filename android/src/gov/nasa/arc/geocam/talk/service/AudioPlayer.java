@@ -6,11 +6,10 @@ import gov.nasa.arc.geocam.talk.R;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import android.content.Context;
 import android.media.MediaPlayer;
+
+import com.google.inject.Inject;
 
 public class AudioPlayer implements IAudioPlayer {
 

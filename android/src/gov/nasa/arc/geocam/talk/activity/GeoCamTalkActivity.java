@@ -4,6 +4,7 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.IDjangoTalk;
+import gov.nasa.arc.geocam.talk.service.IMessageStore;
 
 import java.util.List;
 
@@ -28,23 +29,18 @@ public class GeoCamTalkActivity extends RoboActivity {
 	@Inject IDjangoTalk djangoTalk;
 	@InjectView(R.id.TalkListView) ListView talkListView;
 	@Inject GeoCamTalkMessageArrayAdapter adapter;
-	
+	@Inject IMessageStore messageStore;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);        
-        
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		String username = prefs.getString("webapp_username", null);
-		String password = prefs.getString("webapp_password", null);
 		
 		List<GeoCamTalkMessage> talkMessages = null;
 		
         try{		
-        	//talkMessages = djangoTalk.getTalkMessages();
+        	talkMessages = messageStore.getAllMessages();
         } catch (Exception e)
         {
         	Log.i("Talk", "Error:" + e.getMessage());
@@ -58,7 +54,7 @@ public class GeoCamTalkActivity extends RoboActivity {
         	Toast.makeText(this.getApplicationContext(), "Communication Error with Server", Toast.LENGTH_SHORT).show();
         }
         
-        
+        messageStore.synchronize();        
     }
     
     @Override

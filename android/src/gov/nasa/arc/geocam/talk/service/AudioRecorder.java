@@ -3,7 +3,6 @@ package gov.nasa.arc.geocam.talk.service;
 import java.io.IOException;
 
 import android.media.MediaRecorder;
-import android.util.Log;
 
 public class AudioRecorder implements IAudioRecorder {
 
