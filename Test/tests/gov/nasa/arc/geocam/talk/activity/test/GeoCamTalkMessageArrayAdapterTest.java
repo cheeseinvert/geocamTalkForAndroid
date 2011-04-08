@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,7 +28,8 @@ public class GeoCamTalkMessageArrayAdapterTest extends GeoCamTestCase{
 		msgs.add(FakeGeoCamTalkMessageFactory.getMessage("testing", "Patrick", true));
 		msgs.add(FakeGeoCamTalkMessageFactory.getMessage("testing2", "Not Patrick", false));
 
-		GeoCamTalkMessageArrayAdapter adapter = new GeoCamTalkMessageArrayAdapter(); 
+		GeoCamTalkMessageArrayAdapter adapter = new GeoCamTalkMessageArrayAdapter(
+				Robolectric.application.getApplicationContext()); 
 		adapter.setTalkMessages(msgs);
 		
 		View temp1 = View.inflate(Robolectric.application.getApplicationContext(), R.layout.list_item, null);		

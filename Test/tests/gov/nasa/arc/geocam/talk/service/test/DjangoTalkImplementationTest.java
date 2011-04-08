@@ -17,6 +17,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.j256.ormlite.dao.Dao;
+import com.xtremelabs.robolectric.Robolectric;
 
 
 public class DjangoTalkImplementationTest extends GeoCamTestCase {
@@ -27,7 +28,8 @@ public class DjangoTalkImplementationTest extends GeoCamTestCase {
 		
 		when(dao.queryForAll()).thenReturn(new ArrayList<GeoCamTalkMessage>());
 		
-		DjangoTalkImplementation talkImpl = new DjangoTalkImplementation();
+		DjangoTalkImplementation talkImpl = new DjangoTalkImplementation(
+				Robolectric.application.getApplicationContext());
 		setHiddenField(talkImpl, "dao", dao);
 		
 		DjangoTalkJsonConverterInterface jsonConv = 

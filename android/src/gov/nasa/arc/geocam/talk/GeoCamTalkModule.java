@@ -5,7 +5,7 @@ import gov.nasa.arc.geocam.talk.service.AudioPlayerImplementation;
 import gov.nasa.arc.geocam.talk.service.AudioPlayerInterface;
 import gov.nasa.arc.geocam.talk.service.AudioRecorderImplementation;
 import gov.nasa.arc.geocam.talk.service.AudioRecorderInterface;
-import gov.nasa.arc.geocam.talk.service.DatabaseHelper;
+import gov.nasa.arc.geocam.talk.service.DatabaseHelperImplementation;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkImplementation;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkInterface;
 import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverterImplementation;
@@ -22,10 +22,6 @@ public class GeoCamTalkModule extends AbstractAndroidModule{
 
 	@Override
 	protected void configure() {
-		requestStaticInjection(GeoCamTalkMessageArrayAdapter.class);
-		requestStaticInjection(DjangoTalkImplementation.class);
-		requestStaticInjection(AudioRecorderImplementation.class);
-		requestStaticInjection(AudioPlayerImplementation.class);
 		bind(DjangoTalkInterface.class).to(DjangoTalkImplementation.class);
 
 		bind(AudioRecorderInterface.class).to(AudioRecorderImplementation.class);

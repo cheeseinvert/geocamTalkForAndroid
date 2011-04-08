@@ -17,7 +17,7 @@ import com.j256.ormlite.table.TableUtils;
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
  * the DAOs used by the other classes.
  */
-public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
+public class DatabaseHelperImplementation extends OrmLiteSqliteOpenHelper implements DatabaseHelperInterface{
 
 	
 	// name of the database file for your application -- change to something appropriate for your app
@@ -29,8 +29,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	// the DAO object we use to access the SimpleData table
 	private Dao<GeoCamTalkMessage, Integer> simpleDao = null;
-
-	public DatabaseHelper(Context context) {
+	
+	public DatabaseHelperImplementation(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -41,10 +41,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
 		try {
-			Log.i(DatabaseHelper.class.getName(), "onCreate");
+			Log.i(DatabaseHelperImplementation.class.getName(), "onCreate");
 			TableUtils.createTable(connectionSource, GeoCamTalkMessage.class);
 		} catch (SQLException e) {
-			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
+			Log.e(DatabaseHelperImplementation.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -56,12 +56,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
 		try {
-			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
+			Log.i(DatabaseHelperImplementation.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, GeoCamTalkMessage.class, true);
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {
-			Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
+			Log.e(DatabaseHelperImplementation.class.getName(), "Can't drop databases", e);
 			throw new RuntimeException(e);
 		}
 	}

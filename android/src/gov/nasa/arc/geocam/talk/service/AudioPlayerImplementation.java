@@ -14,8 +14,14 @@ import android.media.MediaPlayer;
 
 public class AudioPlayerImplementation implements AudioPlayerInterface {
 
-	@Inject protected static Provider<Context> contextProvider;
+	Context context;
 	MediaPlayer player = new MediaPlayer();
+	
+	@Inject
+	public AudioPlayerImplementation(Context context)
+	{
+		this.context = context;
+	}
 	
 	@Override
 	public void startPlaying(String filename) throws IllegalArgumentException, IllegalStateException, IOException {
@@ -37,13 +43,13 @@ public class AudioPlayerImplementation implements AudioPlayerInterface {
 	
 	@Override
 	public void playBeepA() {
-		MediaPlayer mp = MediaPlayer.create(contextProvider.get(), R.raw.beep_a);
+		MediaPlayer mp = MediaPlayer.create(context, R.raw.beep_a);
 	    mp.start();
 	}
 
 	@Override
 	public void playBeepB() {
-		MediaPlayer mp = MediaPlayer.create(contextProvider.get(), R.raw.beep_b);
+		MediaPlayer mp = MediaPlayer.create(context, R.raw.beep_b);
 	    mp.start();
 	}
 }

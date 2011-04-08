@@ -16,10 +16,10 @@ import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.j256.ormlite.dao.Dao;
 
 public class DjangoTalkImplementation implements DjangoTalkInterface{
@@ -28,17 +28,17 @@ public class DjangoTalkImplementation implements DjangoTalkInterface{
 	@InjectResource(R.string.url_server_root) String serverRootUrl;
 	@InjectResource(R.string.url_relative_app) String appPath;
 	@InjectResource(R.string.url_message_list) String talkMessagesJson;
-	@Inject protected static Provider<Context> contextProvider;
 	@Inject SiteAuthInterface siteAuthImplementation;
-	DatabaseHelper databaseHelper;
+	DatabaseHelperImplementation databaseHelper;
 	Dao<GeoCamTalkMessage, Integer> dao;
 	
-	
-	public DjangoTalkImplementation()
+	@Inject
+	public DjangoTalkImplementation(Context context)
 	{
-		databaseHelper = new DatabaseHelper(contextProvider.get());
+		//super("DjangoTalkImplementation");
+		databaseHelper = new DatabaseHelperImplementation(context);
 		try {
-			dao = databaseHelper.getDao(GeoCamTalkMessage.class);
+			dao = databaseHelper.getGeoCamTalkMessageDao();
 		} catch (SQLException e) {
 			Log.e("Talk.databaseHelper", "dao could not be created: " + e.getMessage());
 		}

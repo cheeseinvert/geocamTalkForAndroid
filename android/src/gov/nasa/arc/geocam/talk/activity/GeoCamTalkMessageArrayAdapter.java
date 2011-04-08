@@ -20,11 +20,11 @@ import com.google.inject.Provider;
 
 public class GeoCamTalkMessageArrayAdapter extends ArrayAdapter<GeoCamTalkMessage> {
     
-	@Inject protected static Provider<Context> contextProvider;
 	@Inject LayoutInflater mInflater;
 	
-	public GeoCamTalkMessageArrayAdapter() {
-		super(contextProvider.get(), R.layout.list_item);
+	@Inject
+	public GeoCamTalkMessageArrayAdapter(Context context) {
+		super(context, R.layout.list_item);
 	}
 	
 	public void setTalkMessages(List<GeoCamTalkMessage> talkMessages)
