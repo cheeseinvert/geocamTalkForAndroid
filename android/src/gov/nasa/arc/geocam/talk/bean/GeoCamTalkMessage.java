@@ -10,28 +10,41 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "talkMessages")
 public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 
+	public static final String DATE_FIELD_NAME = "contentTimestamp";
+	
 	@DatabaseField(index = true)
 	private int 		messageId;
+	
 	@DatabaseField
 	private Integer  	authorId;
+	
 	@DatabaseField
 	private String 		authorUsername;
+	
 	@DatabaseField
 	private String		authorFullname;
+	
 	@DatabaseField
 	private String 		content;
-	@DatabaseField
+	
+	@DatabaseField(columnName = DATE_FIELD_NAME)
 	private Date 		contentTimestamp;
+	
 	@DatabaseField
 	private Double 		latitude;
+	
 	@DatabaseField
 	private Double 		longitude;
+	
 	@DatabaseField
 	private Integer 	accuracy;
+	
 	@DatabaseField
 	private boolean		hasGeolocation;
+	
 	@DatabaseField(dataType=DataType.BYTE_ARRAY)
 	private byte[]		audio;
+	
 	
 	public int getMessageId() {
 		return messageId;
