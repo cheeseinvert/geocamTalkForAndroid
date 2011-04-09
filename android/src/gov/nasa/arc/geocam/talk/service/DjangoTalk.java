@@ -7,6 +7,7 @@ import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Timer;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -21,15 +22,26 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 	@Inject
 	IDjangoTalkJsonConverter jsonConverter;
+	
 	@InjectResource(R.string.url_message_list)
 	String talkMessagesJson;
+	
 	@Inject
 	ISiteAuth siteAuth;
+	
 	@Inject
 	IMessageStore messageStore;
+	
+	@Inject
+	IIntentHelper intentHelper;
+	
+	@Inject
+	GeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 
 	public DjangoTalk() {
 		super("DjangoTalkService");
+		Timer timer = new Timer();
+		timer.schedule(geoCamSynchronizationTimerTask, 0, 60 * 10 * 1000); // delay 0 period 10 min.
 	}
 
 	@Override
@@ -44,8 +56,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 		if (newMessages.size() > 0) {
 			messageStore.addMessage(newMessages);
-			Intent newMsgIntent = new Intent(DjangoTalkIntent.NEW_MESSAGES.toString());
-			this.getApplicationContext().sendBroadcast(newMsgIntent);
+			intentHelper.BroadcastNewMessages();
 		}
 	}
 
