@@ -1,16 +1,26 @@
 package gov.nasa.arc.geocam.talk.service;
 
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
+
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
 public interface ISiteAuth {
     public void setRoot(String siteRoot);
-    public String post(String relativePath, Map<String, String> params) 
-            throws AuthorizationFailedException, IOException, ClientProtocolException;
+
+    public int post(String relativePath, Map<String, String> params) 
+            throws AuthenticationFailedException, IOException, ClientProtocolException,
+            InvalidParameterException;
+
+    public int post(String relativePath, Map<String, String> params, byte[] audioBytes) 
+            throws AuthenticationFailedException, IOException, ClientProtocolException,
+            InvalidParameterException;
+
     public String get(String relativePath, Map<String, String> params) 
-            throws AuthorizationFailedException, IOException, ClientProtocolException;
+            throws AuthenticationFailedException, IOException, ClientProtocolException;
 }
 
 class AuthorizationFailedException extends Exception {

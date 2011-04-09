@@ -27,7 +27,6 @@ public class GeoCamTalkMessageTest extends TestCase {
 		message1.setLatitude(37.411629);
 		message1.setMessageId(15);
 		message1.setAccuracy(60);
-		message1.setHasGeolocation(true);
 
 		GeoCamTalkMessage message2 = new GeoCamTalkMessage();
 		message2.setAuthorUsername("rhornsby");
@@ -38,7 +37,6 @@ public class GeoCamTalkMessageTest extends TestCase {
 		message2.setLatitude(37.411629);
 		message2.setMessageId(15);
 		message2.setAccuracy(60);
-		message2.setHasGeolocation(true);
 				
 		// assert
 		assertTrue(message1.equals(message2));
@@ -58,7 +56,6 @@ public class GeoCamTalkMessageTest extends TestCase {
 		message1.setLatitude(37.411629);
 		message1.setMessageId(15);
 		message1.setAccuracy(60);
-		message1.setHasGeolocation(true);
 
 		GeoCamTalkMessage message2 = new GeoCamTalkMessage();
 		message2.setAuthorUsername("rhornsby");
@@ -69,7 +66,6 @@ public class GeoCamTalkMessageTest extends TestCase {
 		message2.setLatitude(37.411629);
 		message2.setMessageId(15);
 		message2.setAccuracy(60);
-		message2.setHasGeolocation(true);
 				
 		// assert
 		assertFalse(message1.equals(message2));

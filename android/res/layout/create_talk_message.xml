@@ -14,7 +14,7 @@
         		android:src="@drawable/title"           
         		android:onClick="onHomeClick" />        
     </LinearLayout>
-   	<EditText 
+    <EditText 
 		android:id="@+id/newTalkTextInput"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -23,31 +23,35 @@
         android:gravity="top"
         android:maxLines="4"
         android:maxLength="1024" android:inputType="text|textCapSentences|textAutoCorrect|textMultiLine|textShortMessage"/>
-    <Button android:id="@+id/record_button"
-    	android:text="Record Audio"
-     	android:layout_width="@dimen/logo_title_width"
-     	android:layout_height="@dimen/send_button_height"
-     	android:layout_alignWithParentIfMissing="true"
-     	android:layout_alignParentLeft="true"
-     	android:layout_alignParentTop="true"
-     	android:layout_alignParentBottom="true"     		           
-     	android:onClick="onRecordClick" />  
-     <Button android:id="@+id/playback_button"
-    	android:text="Playback Audio"
-     	android:layout_width="@dimen/logo_title_width"
-     	android:layout_height="@dimen/send_button_height"
-     	android:layout_alignWithParentIfMissing="true"
-     	android:layout_alignParentLeft="true"
-     	android:layout_alignParentTop="true"
-     	android:layout_alignParentBottom="true"     		           
-     	android:onClick="onPlaybackClick" /> 
-    <Button android:id="@+id/send_button"
-    	android:text="Send"
-     	android:layout_width="@dimen/logo_title_width"
-     	android:layout_height="@dimen/send_button_height"
-     	android:layout_alignWithParentIfMissing="true"
-     	android:layout_alignParentLeft="true"
-     	android:layout_alignParentTop="true"
-     	android:layout_alignParentBottom="true"     		           
-     	android:onClick="onSendClick" />  
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_height="wrap_content"
+                  android:layout_width="fill_parent">
+	    <Button android:id="@+id/record_button"
+	    	android:text="Record Audio"
+	     	android:layout_width="wrap_content"
+	     	android:layout_height="wrap_content"
+	     	android:layout_alignWithParentIfMissing="true"
+	     	android:layout_alignParentLeft="true"
+	     	android:layout_alignParentTop="true"
+	     	android:layout_alignParentBottom="true"     		           
+	     	android:onClick="onRecordClick" />  
+	     <Button android:id="@+id/playback_button"
+	    	android:text="Playback Audio"
+	     	android:layout_width="wrap_content"
+	     	android:layout_height="wrap_content"
+	     	android:layout_alignWithParentIfMissing="true"
+	     	android:layout_alignParentLeft="true"
+	     	android:layout_alignParentTop="true"
+	     	android:layout_alignParentBottom="true"     		           
+	     	android:onClick="onPlaybackClick" /> 
+	    <Button android:id="@+id/send_button"
+	    	android:text="Send"
+	     	android:layout_width="wrap_content"
+	     	android:layout_height="wrap_content"
+	     	android:layout_alignWithParentIfMissing="true"
+	     	android:layout_alignParentLeft="true"
+	     	android:layout_alignParentTop="true"
+	     	android:layout_alignParentBottom="true"     		           
+	     	android:onClick="onSendClick" />  
+    </LinearLayout>
 </LinearLayout>

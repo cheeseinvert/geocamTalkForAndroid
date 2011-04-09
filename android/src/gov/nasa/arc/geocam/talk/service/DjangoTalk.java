@@ -3,9 +3,11 @@ package gov.nasa.arc.geocam.talk.service;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.bean.DjangoTalkIntent;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -21,19 +23,22 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 	@Inject
 	IDjangoTalkJsonConverter jsonConverter;
-	
+
 	@InjectResource(R.string.url_message_list)
-	String talkMessagesJson;
+	String urlMessageList;
 	
+	@InjectResource(R.string.url_create_message)
+	String urlCreateMessage;
+
 	@Inject
 	ISiteAuth siteAuth;
-	
+
 	@Inject
 	IMessageStore messageStore;
-	
+
 	@Inject
 	IIntentHelper intentHelper;
-	
+
 	@Inject
 	GeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 
@@ -43,17 +48,29 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 	@Override
 	public void getTalkMessages() throws SQLException, ClientProtocolException,
-			AuthorizationFailedException, IOException {
+			AuthenticationFailedException, IOException {
 
 		// let's check the server and add any new messages to the database
 		String jsonString = null;
 
-		jsonString = siteAuth.get(talkMessagesJson, null);
+		jsonString = siteAuth.get(urlMessageList, null);
 		List<GeoCamTalkMessage> newMessages = jsonConverter.deserializeList(jsonString);
 
 		if (newMessages.size() > 0) {
 			messageStore.addMessage(newMessages);
 			intentHelper.BroadcastNewMessages();
+		}
+	}
+
+	@Override
+	public void createTalkMessage(GeoCamTalkMessage message)
+			throws ClientProtocolException, AuthenticationFailedException, IOException {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("message", jsonConverter.serialize(message));
+		int responseCode = siteAuth.post(urlCreateMessage, map, message.getAudio());
+		if (responseCode != 200) {
+			throw new ClientProtocolException("Message could not be created (HTTP error "
+					+ responseCode + ")");
 		}
 	}
 

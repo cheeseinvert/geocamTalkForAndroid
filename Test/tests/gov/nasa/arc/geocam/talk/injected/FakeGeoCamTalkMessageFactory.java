@@ -1,9 +1,9 @@
 package gov.nasa.arc.geocam.talk.injected;
 
+import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 
 public class FakeGeoCamTalkMessageFactory {
 
@@ -22,7 +22,6 @@ public class FakeGeoCamTalkMessageFactory {
 		msg.setAuthorUsername(fullname.replaceAll(" ", "").toLowerCase());
 		msg.setContent(contents);
 		msg.setMessageId(messageId++);
-		msg.setHasGeolocation(hasGeolocation);
 		if(hasGeolocation)
 		{
 			msg.setLatitude(Math.random()*MAXDIST + CMUSVLAT);			

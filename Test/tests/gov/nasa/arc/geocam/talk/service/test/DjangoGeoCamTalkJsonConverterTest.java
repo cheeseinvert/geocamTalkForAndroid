@@ -41,7 +41,6 @@ public class DjangoGeoCamTalkJsonConverterTest extends GeoCamTestCase {
 		message2.setLatitude(37.411629);
 		message2.setMessageId(15);
 		message2.setAccuracy(60);
-		message2.setHasGeolocation(true);
 		
 		// act
 		List<GeoCamTalkMessage> resolvedList =

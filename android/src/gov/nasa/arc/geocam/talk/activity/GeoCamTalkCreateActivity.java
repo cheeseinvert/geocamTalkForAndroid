@@ -1,11 +1,19 @@
 package gov.nasa.arc.geocam.talk.activity;
 
-import com.google.inject.Inject;
-
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
+import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IAudioRecorder;
+import gov.nasa.arc.geocam.talk.service.IIntentHelper;
+import gov.nasa.arc.geocam.talk.service.IMessageStore;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Date;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.os.Bundle;
@@ -14,12 +22,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.inject.Inject;
+
 public class GeoCamTalkCreateActivity extends RoboActivity{
 	
 	@InjectView(R.id.newTalkTextInput)EditText newTalkTextView;
-    @Inject IAudioRecorder recorder;
+    
+	@Inject IAudioRecorder recorder;
+    
     @Inject IAudioPlayer player;
-	
+    
+    @Inject IMessageStore messageStore;
+    
+    @Inject IIntentHelper intentHelper;
+    
+    private String filename = null;
+    
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +72,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 			Log.i("TALKCREATE", "STOP recording now.");
 			try {
 				player.playBeepB();
-				String filename = recorder.stopRecording();
+				filename = recorder.stopRecording();
 				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
 				player.startPlaying(filename);
 				//recorder.toggleRecordingStatus();
@@ -79,9 +97,46 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 		}
 	}
 	
-	public void onSendClick(View v){
+	public void onSendClick(View v) {
 		CharSequence text = newTalkTextView.getText();
 		int duration = Toast.LENGTH_SHORT;
-		Toast.makeText(this, text, duration).show();		
+		Toast.makeText(this, text, duration).show();
+
+		GeoCamTalkMessage message = new GeoCamTalkMessage();
+		message.setContent(text.toString());
+		message.setContentTimestamp(new Date());
+		
+		if (filename != null) {
+			message.setAudio(createByteArray());
+		}
+		
+		try {
+			messageStore.addMessage(message);
+			intentHelper.Synchronize();
+			UIUtils.goHome(this);
+		} catch (Exception e) {
+			UIUtils.displayException(this, e, "Communication with the server failed");
+		}
+	}
+
+	private byte[] createByteArray() {
+		byte[] audioBytes = null;
+		
+		try {
+			File audioFile = new File(filename);
+			int length = (int)audioFile.length();
+			audioBytes = new byte[(int)length];
+			
+			FileInputStream fis;
+			
+			fis = new FileInputStream(audioFile);
+			fis.read(audioBytes, 0, length); // TODO GHETTO we should be better about big files
+		} catch (FileNotFoundException e) {
+			UIUtils.displayException(this, e, "Could not find audio file");
+		} catch (IOException e) {
+			UIUtils.displayException(this, e, "Could not encode audio file");
+		}
+		
+		return audioBytes;
 	}
 }
