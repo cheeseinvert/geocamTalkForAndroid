@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
@@ -24,20 +25,28 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
-public class GeoCamTalkCreateActivity extends RoboActivity{
-	
-	@InjectView(R.id.newTalkTextInput)EditText newTalkTextView;
-    
-	@Inject IAudioRecorder recorder;
-    
-    @Inject IAudioPlayer player;
-    
-    @Inject IMessageStore messageStore;
-    
-    @Inject IIntentHelper intentHelper;
-    
-    private String filename = null;
-    
+public class GeoCamTalkCreateActivity extends RoboActivity {
+
+	@Inject
+	GeoCamTalkRoboApplication appState;
+
+	@InjectView(R.id.newTalkTextInput)
+	EditText newTalkTextView;
+
+	@Inject
+	IAudioRecorder recorder;
+
+	@Inject
+	IAudioPlayer player;
+
+	@Inject
+	IMessageStore messageStore;
+
+	@Inject
+	IIntentHelper intentHelper;
+
+	private String filename = null;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,24 +58,23 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 	public void onHomeClick(View v) {
 		UIUtils.goHome(this);
 	}
-	
-	public void onPlaybackClick(View v){
-        // TODO: add this to call the Audio service
+
+	public void onPlaybackClick(View v) {
+		// TODO: add this to call the Audio service
 
 		Log.i("TALKCREATE", "Playback recording now.");
 		try {
 			Toast.makeText(this, "Recording playback", Toast.LENGTH_SHORT).show();
 			player.startPlaying(this.getFilesDir().toString() + "/audio_recording.mp4");
-			//recorder.toggleRecordingStatus();
-		} 
-		catch (Exception e) {
+			// recorder.toggleRecordingStatus();
+		} catch (Exception e) {
 			Log.e("TALKCREATE", "Exception: " + e.getMessage());
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
-	
-	public void onRecordClick(View v){
-        // TODO: add this to call the Audio service
+
+	public void onRecordClick(View v) {
+		// TODO: add this to call the Audio service
 
 		if (recorder.isRecording()) {
 			Log.i("TALKCREATE", "STOP recording now.");
@@ -75,19 +83,17 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 				filename = recorder.stopRecording();
 				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
 				player.startPlaying(filename);
-				//recorder.toggleRecordingStatus();
-			} 
-			catch (Exception e) {
+				// recorder.toggleRecordingStatus();
+			} catch (Exception e) {
 				Log.e("TALKCREATE", "Exception: " + e.getMessage());
 				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
 			}
-		}
-		else {	
+		} else {
 			Log.i("TALKCREATE", "START recording now.");
 			try {
 				player.playBeepA();
 				recorder.startRecording(this.getFilesDir().toString() + "/audio_recording.mp4");
-				//recorder.toggleRecordingStatus();
+				// recorder.toggleRecordingStatus();
 				Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
 			} catch (Exception e) {
 				Log.e("TALKCREATE", "Exception: " + e.getMessage());
@@ -96,20 +102,17 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 			}
 		}
 	}
-	
-	public void onSendClick(View v) {
-		CharSequence text = newTalkTextView.getText();
-		int duration = Toast.LENGTH_SHORT;
-		Toast.makeText(this, text, duration).show();
 
+	public void onSendClick(View v) {
 		GeoCamTalkMessage message = new GeoCamTalkMessage();
-		message.setContent(text.toString());
+		message.setContent(newTalkTextView.getText().toString());
 		message.setContentTimestamp(new Date());
-		
+		message.setLocation(appState.getLocation());
+
 		if (filename != null) {
 			message.setAudio(createByteArray());
 		}
-		
+
 		try {
 			messageStore.addMessage(message);
 			intentHelper.Synchronize();
@@ -121,22 +124,23 @@ public class GeoCamTalkCreateActivity extends RoboActivity{
 
 	private byte[] createByteArray() {
 		byte[] audioBytes = null;
-		
+
 		try {
 			File audioFile = new File(filename);
-			int length = (int)audioFile.length();
-			audioBytes = new byte[(int)length];
-			
+			int length = (int) audioFile.length();
+			audioBytes = new byte[(int) length];
+
 			FileInputStream fis;
-			
+
 			fis = new FileInputStream(audioFile);
-			fis.read(audioBytes, 0, length); // TODO GHETTO we should be better about big files
+			fis.read(audioBytes, 0, length); // TODO GHETTO we should be better
+												// about big files
 		} catch (FileNotFoundException e) {
 			UIUtils.displayException(this, e, "Could not find audio file");
 		} catch (IOException e) {
 			UIUtils.displayException(this, e, "Could not encode audio file");
 		}
-		
+
 		return audioBytes;
 	}
 }

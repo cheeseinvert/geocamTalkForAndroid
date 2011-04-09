@@ -18,19 +18,11 @@ import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.service.IntentHelper;
 import gov.nasa.arc.geocam.talk.service.MessageStore;
 import gov.nasa.arc.geocam.talk.service.SiteAuthCookie;
-import roboguice.application.RoboApplication;
 import roboguice.config.AbstractAndroidModule;
 
 import com.google.inject.Scopes;
 
 public class GeoCamTalkModule extends AbstractAndroidModule {
-
-	private RoboApplication application;
-
-	public GeoCamTalkModule(final RoboApplication applicaiton) {
-		this.application = applicaiton;
-	}
-
 	@Override
 	protected void configure() {
 		bind(IDjangoTalk.class).to(DjangoTalk.class);

@@ -2,6 +2,8 @@ package gov.nasa.arc.geocam.talk.bean;
 
 import java.util.Date;
 
+import android.location.Location;
+
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -186,6 +188,16 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 			return 1;
 		} else {
 			return -1;
+		}
+	}
+	public void setLocation(Location location) {
+		if (location != null) {
+			this.setLatitude(location.getLatitude());
+			this.setLongitude(location.getLongitude());
+			
+			if (location.hasAccuracy()) {
+				this.setAccuracy((int) location.getAccuracy());
+			}
 		}
 	}
 }
