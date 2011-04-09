@@ -11,8 +11,12 @@ import com.j256.ormlite.table.DatabaseTable;
 public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 
 	public static final String DATE_FIELD_NAME = "contentTimestamp";
+	public static final String MESSAGE_ID_FIELD_NAME = "messageId";
 	
 	@DatabaseField(index = true)
+	private int			localId;
+	
+	@DatabaseField(columnName = MESSAGE_ID_FIELD_NAME)
 	private Integer 	messageId;
 	
 	@DatabaseField

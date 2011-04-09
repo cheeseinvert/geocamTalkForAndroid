@@ -26,7 +26,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 	@InjectResource(R.string.url_message_list)
 	String urlMessageList;
-	
+
 	@InjectResource(R.string.url_create_message)
 	String urlCreateMessage;
 
@@ -63,8 +63,8 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 	}
 
 	@Override
-	public void createTalkMessage(GeoCamTalkMessage message)
-			throws ClientProtocolException, AuthenticationFailedException, IOException {
+	public void createTalkMessage(GeoCamTalkMessage message) throws ClientProtocolException,
+			AuthenticationFailedException, IOException {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("message", jsonConverter.serialize(message));
 		int responseCode = siteAuth.post(urlCreateMessage, map, message.getAudio());
@@ -78,6 +78,11 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 	protected void onHandleIntent(Intent intent) {
 		if (intent.getAction().contentEquals(DjangoTalkIntent.SYNCHRONIZE.toString())) {
 			try {
+				for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
+					this.createTalkMessage(message);
+					messageStore.removeMessage(message);
+				}
+
 				this.getTalkMessages();
 				this.geoCamSynchronizationTimerTask.resetTimer();
 			} catch (Exception e) {

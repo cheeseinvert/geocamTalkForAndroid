@@ -38,6 +38,18 @@ public class MessageStore implements IMessageStore {
 	public void synchronize() {
 		this.intentHelper.Synchronize();
 	}
+	
+	@Override
+	public List<GeoCamTalkMessage> getAllLocalMessages() throws SQLException {
+		QueryBuilder<GeoCamTalkMessage, Integer> qb = dao.queryBuilder();
+		qb.where().isNull(GeoCamTalkMessage.MESSAGE_ID_FIELD_NAME);
+		
+		SortedSet<GeoCamTalkMessage> hash = 
+			new TreeSet<GeoCamTalkMessage>(Collections.reverseOrder());
+		hash.addAll(dao.query(qb.prepare()));
+		
+		return new ArrayList<GeoCamTalkMessage>(hash);
+	}
 
 	@Override
 	public List<GeoCamTalkMessage> getAllMessages() throws SQLException {
@@ -74,5 +86,10 @@ public class MessageStore implements IMessageStore {
 		List<GeoCamTalkMessage> singleItemList = new ArrayList<GeoCamTalkMessage>();
 		singleItemList.add(message);
 		addMessage(singleItemList);
+	}
+	
+	@Override
+	public void removeMessage(GeoCamTalkMessage message) throws SQLException {
+		dao.delete(message);
 	}
 }
