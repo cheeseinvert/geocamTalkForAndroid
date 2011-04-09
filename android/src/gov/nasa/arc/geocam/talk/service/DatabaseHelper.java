@@ -15,30 +15,34 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 /**
- * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
- * the DAOs used by the other classes.
+ * Database helper class used to manage the creation and upgrading of your
+ * database. This class also usually provides the DAOs used by the other
+ * classes.
  */
-public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabaseHelper{
+public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabaseHelper {
 
-	
-	// name of the database file for your application -- change to something appropriate for your app
-	//TODO: Will this work? @InjectResource(R.string.sqlite_database_name) public static final String DATABASE_NAME;
+	// name of the database file for your application -- change to something
+	// appropriate for your app
+	// TODO: Will this work? @InjectResource(R.string.sqlite_database_name)
+	// public static final String DATABASE_NAME;
 	private static final String DATABASE_NAME = "geocamTalk.db";
-	
-	// any time you make changes to your database objects, you may have to increase the database version
+
+	// any time you make changes to your database objects, you may have to
+	// increase the database version
 	private static final int DATABASE_VERSION = 6;
 
 	// the DAO object we use to access the SimpleData table
 	private Dao<GeoCamTalkMessage, Integer> simpleDao = null;
-	
+
 	@Inject
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	/**
-	 * This is called when the database is first created. Usually you should call createTable statements here to create
-	 * the tables that will store your data.
+	 * This is called when the database is first created. Usually you should
+	 * call createTable statements here to create the tables that will store
+	 * your data.
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
@@ -52,11 +56,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabase
 	}
 
 	/**
-	 * This is called when your application is upgraded and it has a higher version number. This allows you to adjust
-	 * the various data to match the new version number.
+	 * This is called when your application is upgraded and it has a higher
+	 * version number. This allows you to adjust the various data to match the
+	 * new version number.
 	 */
 	@Override
-	public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+	public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion,
+			int newVersion) {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, GeoCamTalkMessage.class, true);
@@ -69,8 +75,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabase
 	}
 
 	/**
-	 * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
-	 * value.
+	 * Returns the Database Access Object (DAO) for our SimpleData class. It
+	 * will create it or just give the cached value.
 	 */
 	public Dao<GeoCamTalkMessage, Integer> getGeoCamTalkMessageDao() throws SQLException {
 		if (simpleDao == null) {

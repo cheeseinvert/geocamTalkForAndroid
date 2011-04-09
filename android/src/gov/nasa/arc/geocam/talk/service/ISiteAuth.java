@@ -13,4 +13,6 @@ public interface ISiteAuth {
             throws AuthorizationFailedException, IOException, ClientProtocolException;
 }
 
-class AuthorizationFailedException extends Exception{}
+class AuthorizationFailedException extends Exception {
+	private static final long serialVersionUID = 1L;
+}

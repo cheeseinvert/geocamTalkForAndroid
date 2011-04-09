@@ -13,7 +13,7 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	public static final String DATE_FIELD_NAME = "contentTimestamp";
 	
 	@DatabaseField(index = true)
-	private int 		messageId;
+	private Integer 	messageId;
 	
 	@DatabaseField
 	private Integer  	authorId;
@@ -39,15 +39,16 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	@DatabaseField
 	private Integer 	accuracy;
 	
-	@DatabaseField
-	private boolean		hasGeolocation;
-	
 	@DatabaseField(dataType = DataType.BYTE_ARRAY)
 	private byte[]		audio;
 	
-	
 	public int getMessageId() {
-		return messageId;
+		if (this.messageId == null) {
+			return -1;
+		}
+		else {
+			return messageId;
+		}
 	}
 	public void setMessageId(int messageId) {
 		this.messageId = messageId;
@@ -101,20 +102,15 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 		this.accuracy = accuracy;
 	}
 	public boolean hasGeolocation() {
-		return hasGeolocation;
+		return this.longitude != null && this.latitude != null;
 	}
-	public void setHasGeolocation(boolean hasGeolocation) {
-		this.hasGeolocation = hasGeolocation;
-	}
-
-
 	
 	@Override
 	public boolean equals(Object o) {
 		GeoCamTalkMessage other = (GeoCamTalkMessage)o;
 		
 		return 
-		this.messageId == other.messageId && 	
+		equalOrBothNull(this.messageId, other.messageId) && 	
 		equalOrBothNull(authorId, other.authorId) &&
 		equalOrBothNull(authorUsername, other.authorUsername) &&
 		equalOrBothNull(authorFullname, other.authorFullname) &&
@@ -122,16 +118,21 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 		equalOrBothNull(contentTimestamp, other.contentTimestamp) &&
 		equalOrBothNull(latitude, other.latitude) &&
 		equalOrBothNull(longitude, other.longitude) &&
-		equalOrBothNull(accuracy, other.accuracy) &&
-		this.hasGeolocation == other.hasGeolocation;
+		equalOrBothNull(accuracy, other.accuracy);
 	}
 	
 	@Override
 	public int hashCode() {
-		return this.messageId;		
+		if (this.messageId != null) {
+			return this.messageId.intValue();
+		}
+		else if (this.content != null) {
+			return this.content.hashCode();
+		}
+		else {
+			return super.hashCode();
+		}
 	}
-	
-	
 	
 	// TODO: Revisit this if we need other helper methods. Maybe move to global helper function?
 	// Jakarta Commons library may provide some additional methods that would be useful
