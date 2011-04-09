@@ -40,7 +40,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 	IIntentHelper intentHelper;
 
 	@Inject
-	GeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
+	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 
 	public DjangoTalk() {
 		super("DjangoTalkService");

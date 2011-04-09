@@ -21,15 +21,16 @@ import gov.nasa.arc.geocam.talk.service.SiteAuthCookie;
 import roboguice.application.RoboApplication;
 import roboguice.config.AbstractAndroidModule;
 
-public class GeoCamTalkModule extends AbstractAndroidModule{
+import com.google.inject.Scopes;
+
+public class GeoCamTalkModule extends AbstractAndroidModule {
 
 	private RoboApplication application;
-	
-	public GeoCamTalkModule(final RoboApplication applicaiton)
-	{
+
+	public GeoCamTalkModule(final RoboApplication applicaiton) {
 		this.application = applicaiton;
 	}
-	
+
 	@Override
 	protected void configure() {
 		bind(IDjangoTalk.class).to(DjangoTalk.class);
@@ -38,10 +39,10 @@ public class GeoCamTalkModule extends AbstractAndroidModule{
 		bind(IAudioRecorder.class).to(AudioRecorder.class);
 		bind(IAudioPlayer.class).to(AudioPlayer.class);
 		bind(IDjangoTalkJsonConverter.class).to(DjangoTalkJsonConverter.class);
-		bind(ISiteAuth.class).toInstance(new SiteAuthCookie(application.getApplicationContext()));
+		bind(ISiteAuth.class).to(SiteAuthCookie.class).in(Scopes.SINGLETON);
 		bind(IIntentHelper.class).to(IntentHelper.class);
-		bind(IGeoCamSynchronizationTimerTask.class).to(GeoCamSynchronizationTimerTask.class);
+		bind(IGeoCamSynchronizationTimerTask.class).to(GeoCamSynchronizationTimerTask.class).in(
+				Scopes.SINGLETON);
 	}
-	
-	
+
 }

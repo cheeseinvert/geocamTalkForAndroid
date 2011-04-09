@@ -8,12 +8,12 @@ public class GeoCamSynchronizationTimerTask implements IGeoCamSynchronizationTim
 	
 	private IIntentHelper intentHelper;
 	private Handler handler = new Handler();
-	private long period = 60 * 10 * 1000; // 10 minutes TODO make shared preference
+	private long period = 60 * 10 * 1000; // 10 minutes TODO make shared preference 
 
 	@Inject
 	public GeoCamSynchronizationTimerTask(IIntentHelper intentHelper) {
 		this.intentHelper = intentHelper;
-		this.run();
+		this.handler.postDelayed(this, period);
 	}
 
 	@Override
