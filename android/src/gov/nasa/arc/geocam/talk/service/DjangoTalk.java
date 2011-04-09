@@ -62,6 +62,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 		if (intent.getAction().contentEquals(DjangoTalkIntent.SYNCHRONIZE.toString())) {
 			try {
 				this.getTalkMessages();
+				this.geoCamSynchronizationTimerTask.resetTimer();
 			} catch (Exception e) {
 				Log.e("GeoCam Talk", "Comm Error", e);
 				// TODO: Display this to the user (Toast or notification bar)

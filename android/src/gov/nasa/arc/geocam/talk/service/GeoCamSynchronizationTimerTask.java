@@ -1,26 +1,31 @@
 package gov.nasa.arc.geocam.talk.service;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import android.os.Handler;
 
 import com.google.inject.Inject;
 
-public class GeoCamSynchronizationTimerTask extends TimerTask
-            implements IGeoCamSynchronizationTimerTask {
+public class GeoCamSynchronizationTimerTask implements IGeoCamSynchronizationTimerTask {
 	
 	private IIntentHelper intentHelper;
-	private Timer timer = new Timer();
+	private Handler handler = new Handler();
+	private long period = 60 * 10 * 1000; // 10 minutes TODO make shared preference
 
 	@Inject
 	public GeoCamSynchronizationTimerTask(IIntentHelper intentHelper) {
 		this.intentHelper = intentHelper;
-		
-		this.timer.schedule(this, 0, 60 * 10 * 1000); // delay 0 period 10 min.
+		this.run();
 	}
 
 	@Override
 	public void run() {
 		this.intentHelper.Synchronize();
+		this.handler.postDelayed(this, period);
+	}
+
+	@Override
+	public void resetTimer() {
+		this.handler.removeCallbacks(this);
+		this.handler.postDelayed(this, period);
 	}
 
 }
