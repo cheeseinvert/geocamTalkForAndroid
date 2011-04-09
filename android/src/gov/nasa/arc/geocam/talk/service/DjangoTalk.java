@@ -57,6 +57,11 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 		List<GeoCamTalkMessage> newMessages = jsonConverter.deserializeList(jsonString);
 
 		if (newMessages.size() > 0) {
+			for(GeoCamTalkMessage message : newMessages) {
+				message.setSynchronized(true); // TODO re factor this to not suck, as we 
+				                               // iterate again in addMessage
+			}
+			
 			messageStore.addMessage(newMessages);
 			intentHelper.BroadcastNewMessages();
 		}
@@ -64,7 +69,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 	@Override
 	public void createTalkMessage(GeoCamTalkMessage message) throws ClientProtocolException,
-			AuthenticationFailedException, IOException {
+			AuthenticationFailedException, IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("message", jsonConverter.serialize(message));
 		int responseCode = siteAuth.post(urlCreateMessage, map, message.getAudio());
@@ -72,6 +77,8 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 			throw new ClientProtocolException("Message could not be created (HTTP error "
 					+ responseCode + ")");
 		}
+		
+		messageStore.removeMessage(message);
 	}
 
 	@Override
@@ -80,7 +87,6 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 			try {
 				for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
 					this.createTalkMessage(message);
-					messageStore.removeMessage(message);
 				}
 
 				this.getTalkMessages();

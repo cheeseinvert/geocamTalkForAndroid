@@ -12,8 +12,12 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 
 	public static final String DATE_FIELD_NAME = "contentTimestamp";
 	public static final String MESSAGE_ID_FIELD_NAME = "messageId";
+	public static final String IS_SYNCHRONIZED_FIELD_NAME = "isSynchronized";
 	
-	@DatabaseField(index = true)
+	@DatabaseField(columnName = IS_SYNCHRONIZED_FIELD_NAME)
+	private boolean		isSynchronized = false;
+	
+	@DatabaseField(generatedId = true)
 	private int			localId;
 	
 	@DatabaseField(columnName = MESSAGE_ID_FIELD_NAME)
@@ -109,6 +113,20 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 		return this.longitude != null && this.latitude != null;
 	}
 	
+	public byte[] getAudio() {
+		return audio;
+	}
+	public void setAudio(byte[] audio) {
+		this.audio = audio;
+	}
+	
+	public void setSynchronized(boolean isSynchronized) {
+		this.isSynchronized = isSynchronized;
+	}
+	public boolean isSynchronized() {
+		return isSynchronized;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		GeoCamTalkMessage other = (GeoCamTalkMessage)o;
@@ -155,12 +173,7 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 			return false;
 		}
 	}
-	public byte[] getAudio() {
-		return audio;
-	}
-	public void setAudio(byte[] audio) {
-		this.audio = audio;
-	}
+	
 	@Override
 	public int compareTo(GeoCamTalkMessage another) {
 		if(this.equals(another)) {

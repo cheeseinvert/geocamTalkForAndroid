@@ -12,6 +12,6 @@ public interface IDjangoTalk {
 	void getTalkMessages() throws SQLException, ClientProtocolException,
 			AuthenticationFailedException, IOException;
 
-	void createTalkMessage(GeoCamTalkMessage message)
-			throws ClientProtocolException, AuthenticationFailedException, IOException;
+	void createTalkMessage(GeoCamTalkMessage message) throws ClientProtocolException,
+			AuthenticationFailedException, IOException, SQLException;
 }

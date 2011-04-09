@@ -42,7 +42,7 @@ public class MessageStore implements IMessageStore {
 	@Override
 	public List<GeoCamTalkMessage> getAllLocalMessages() throws SQLException {
 		QueryBuilder<GeoCamTalkMessage, Integer> qb = dao.queryBuilder();
-		qb.where().isNull(GeoCamTalkMessage.MESSAGE_ID_FIELD_NAME);
+		qb.where().eq(GeoCamTalkMessage.IS_SYNCHRONIZED_FIELD_NAME, false);
 		
 		SortedSet<GeoCamTalkMessage> hash = 
 			new TreeSet<GeoCamTalkMessage>(Collections.reverseOrder());
@@ -78,7 +78,7 @@ public class MessageStore implements IMessageStore {
 		{
 			if(!existingMessages.contains(m))
 			dao.create(m);
-		}		
+		}
 	}
 
 	@Override
@@ -91,5 +91,10 @@ public class MessageStore implements IMessageStore {
 	@Override
 	public void removeMessage(GeoCamTalkMessage message) throws SQLException {
 		dao.delete(message);
+	}
+	
+	@Override
+	public void updateMessage(GeoCamTalkMessage message) throws SQLException {
+		dao.update(message);
 	}
 }

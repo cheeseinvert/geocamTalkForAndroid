@@ -14,4 +14,5 @@ public interface IMessageStore {
 	public void addMessage(List<GeoCamTalkMessage> messages) throws SQLException;
 	public void addMessage(GeoCamTalkMessage message) throws SQLException;
 	public void removeMessage(GeoCamTalkMessage message) throws SQLException;
+	public void updateMessage(GeoCamTalkMessage message) throws SQLException;
 }
