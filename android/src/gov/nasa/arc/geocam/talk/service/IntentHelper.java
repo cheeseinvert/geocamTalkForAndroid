@@ -13,26 +13,33 @@ public class IntentHelper implements IIntentHelper {
 	public IntentHelper(Context context) {
 		this.context = context;
 	}
-	
+
 	public void Synchronize() {
 		Intent synchronizeIntent = new Intent(this.context, TalkServer.class);
-		synchronizeIntent.setAction(TalkServerIntent.SYNCHRONIZE.toString());
+		synchronizeIntent.setAction(TalkServerIntent.INTENT_SYNCHRONIZE.toString());
 		context.startService(synchronizeIntent);
 	}
 
 	@Override
 	public void BroadcastNewMessages() {
-		Intent newMsgIntent = new Intent(TalkServerIntent.NEW_MESSAGES.toString());
-		this.context.sendBroadcast(newMsgIntent);		
+		Intent newMsgIntent = new Intent(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
+		this.context.sendBroadcast(newMsgIntent);
 	}
 
 	@Override
 	public void RegisterC2dm() {
-		
+		Intent registerIntent = new Intent(this.context, TalkServer.class);
+		registerIntent.setAction(TalkServerIntent.INTENT_C2DM_REGISTER.toString());
+		context.startService(registerIntent);
 	}
 
 	@Override
 	public void StoreC2dmRegistrationId(String registrationId) {
-			
+		Intent storeRegistrationIdIntent = new Intent(this.context, TalkServer.class);
+		storeRegistrationIdIntent.setAction(TalkServerIntent.INTENT_STORE_C2DM_ID.toString());
+		storeRegistrationIdIntent.putExtra(
+				TalkServerIntent.EXTRA_MESSAGE_ID.toString(),
+				registrationId);
+		context.startService(storeRegistrationIdIntent);
 	}
 }

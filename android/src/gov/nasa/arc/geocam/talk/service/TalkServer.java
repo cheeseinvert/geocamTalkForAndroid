@@ -83,7 +83,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		if (intent.getAction().contentEquals(TalkServerIntent.SYNCHRONIZE.toString())) {
+		if (intent.getAction().contentEquals(TalkServerIntent.INTENT_SYNCHRONIZE.toString())) {
 			try {
 				for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
 					this.createTalkMessage(message);

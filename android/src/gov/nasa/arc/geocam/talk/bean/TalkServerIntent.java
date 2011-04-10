@@ -1,26 +1,24 @@
 package gov.nasa.arc.geocam.talk.bean;
 
 public enum TalkServerIntent {
-	NEW_MESSAGES("new_messages"),
+	INTENT_NEW_MESSAGES("new_messages"),
 
-	SYNCHRONIZE("syncrhonize"),
+	INTENT_SYNCHRONIZE("syncrhonize"),
 
-	C2DM_REGISTER("c2dm_register"),
+	INTENT_C2DM_REGISTER("c2dm_register"),
 
-	STORE_C2DM_ID("c2dm_id_store");
+	INTENT_STORE_C2DM_ID("c2dm_id_store"),
+	
+	EXTRA_MESSAGE_ID("message_id");
 
-	private String action;
+	private String value;
 
-	private TalkServerIntent(String action) {
-		this.action = action;
-	}
-
-	public String getAction() {
-		return action;
+	private TalkServerIntent(String value) {
+		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return action;
+		return value;
 	}
 }
