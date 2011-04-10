@@ -54,33 +54,39 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	public TalkServer() {
 		super("DjangoTalkService");
 	}
+	
+	private int maxMessageId = 0;
 
-	@Override
+	@Override 
 	public void getTalkMessages() throws SQLException, ClientProtocolException,
 			AuthenticationFailedException, IOException {
 
 		// let's check the server and add any new messages to the database
 		String jsonString = null;
 
-		ServerResponse sr = siteAuth.get(urlMessageList, null);
-		if(sr.getResponseCode() == 401)
+		String url = String.format(urlMessageList, maxMessageId);
+		
+		ServerResponse sr = siteAuth.get(url, null);
+		if(sr.getResponseCode() == 401) // TODO: move this to siteAuth
 		{
 			siteAuth.reAuthenticate();
-			sr = siteAuth.get(urlMessageList, null);
+			sr = siteAuth.get(url, null);
 		}
 
 		jsonString = sr.getContent();
 		List<GeoCamTalkMessage> newMessages = jsonConverter.deserializeList(jsonString);
-
+		List<GeoCamTalkMessage> existingMessages = messageStore.getAllMessages();
+		newMessages.removeAll(existingMessages);
+		
 		if (newMessages.size() > 0) {
 			for(GeoCamTalkMessage message : newMessages) {
-				message.setSynchronized(true); // TODO re factor this to not suck, as we 
-				                               // iterate again in addMessage
+				message.setSynchronized(true);
 			}
-			
 			messageStore.addMessage(newMessages);
 			intentHelper.BroadcastNewMessages();
 		}
+		
+		maxMessageId = messageStore.getNewestMessageId();
 	}
 
 	@Override
@@ -129,13 +135,11 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	private void handleSynchronizeIntent() {
 		try {
+			this.getTalkMessages();
+			this.geoCamSynchronizationTimerTask.resetTimer();
 			for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
 				this.createTalkMessage(message);
 			}
-
-			
-			this.getTalkMessages();
-			this.geoCamSynchronizationTimerTask.resetTimer();
 		} catch (Exception e) {
 			Log.e("GeoCam Talk", "Comm Error", e);
 			// TODO: Display this to the user (Toast or notification bar)
@@ -156,7 +160,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		Log.i("Talk", "Received notification for message:" + messageId);
 		String url = String.format(urlMessageFormatString, messageId);
 		
-		String jsonString;		
+		String jsonString;
 		try{
 			ServerResponse sr = siteAuth.get(url, null);
 			if(sr.getResponseCode() == 401)

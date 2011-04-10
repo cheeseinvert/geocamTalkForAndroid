@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 
 import com.google.inject.Inject;
@@ -96,5 +97,17 @@ public class MessageStore implements IMessageStore {
 	@Override
 	public void updateMessage(GeoCamTalkMessage message) throws SQLException {
 		dao.update(message);
+	}
+
+	@Override
+	public int getNewestMessageId() throws SQLException, NotFoundException {
+		QueryBuilder<GeoCamTalkMessage, Integer> qb = dao.queryBuilder();
+		
+		qb.where().eq(GeoCamTalkMessage.IS_SYNCHRONIZED_FIELD_NAME, true);
+		qb.selectColumns(GeoCamTalkMessage.MESSAGE_ID_FIELD_NAME);
+		qb.limit(1);
+		qb.orderBy(GeoCamTalkMessage.MESSAGE_ID_FIELD_NAME, false);
+		
+		return dao.query(qb.prepare()).get(0).getMessageId();
 	}
 }

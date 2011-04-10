@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="url_server_root">http://10.0.2.2:8080</string>
-    <string name="url_message_list">messages.json</string>
     <string name="url_relative_app">talk</string>
     <string name="url_create_message">messages/create.json</string>
     <string name="url_registration">register</string>
 
     <!-- using java formatting http://download.oracle.com/javase/1.5.0/docs/api/java/util/Formatter.html#syntax -->
+    <string name="url_message_list">messages.json?since=%1$d</string>
     <string name="url_message_format">messages/details/%1$s.json</string>
 </resources>

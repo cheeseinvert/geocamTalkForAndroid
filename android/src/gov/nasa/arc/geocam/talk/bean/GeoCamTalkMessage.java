@@ -134,7 +134,8 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 		GeoCamTalkMessage other = (GeoCamTalkMessage)o;
 		
 		return 
-		equalOrBothNull(this.messageId, other.messageId) && 	
+		equalOrBothNull(this.messageId, other.messageId); // assumed there is no editing taking place
+		/*&& 	
 		equalOrBothNull(authorId, other.authorId) &&
 		equalOrBothNull(authorUsername, other.authorUsername) &&
 		equalOrBothNull(authorFullname, other.authorFullname) &&
@@ -142,7 +143,7 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 		equalOrBothNull(contentTimestamp, other.contentTimestamp) &&
 		equalOrBothNull(latitude, other.latitude) &&
 		equalOrBothNull(longitude, other.longitude) &&
-		equalOrBothNull(accuracy, other.accuracy);
+		equalOrBothNull(accuracy, other.accuracy);*/
 	}
 	
 	@Override

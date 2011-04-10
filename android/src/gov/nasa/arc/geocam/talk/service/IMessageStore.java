@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import android.content.res.Resources.NotFoundException;
+
 public interface IMessageStore {
 	public void synchronize();
 	public List<GeoCamTalkMessage> getAllLocalMessages() throws SQLException;
@@ -15,4 +17,5 @@ public interface IMessageStore {
 	public void addMessage(GeoCamTalkMessage message) throws SQLException;
 	public void removeMessage(GeoCamTalkMessage message) throws SQLException;
 	public void updateMessage(GeoCamTalkMessage message) throws SQLException;
+	public int getNewestMessageId() throws SQLException, NotFoundException;
 }
