@@ -2,12 +2,12 @@ package gov.nasa.arc.geocam.talk.service;
 
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.bean.ServerResponse;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +62,14 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		// let's check the server and add any new messages to the database
 		String jsonString = null;
 
-		jsonString = siteAuth.get(urlMessageList, null);
+		ServerResponse sr = siteAuth.get(urlMessageList, null);
+		if(sr.getResponseCode() == 401)
+		{
+			siteAuth.reAuthenticate();
+			sr = siteAuth.get(urlMessageList, null);
+		}
+
+		jsonString = sr.getContent();
 		List<GeoCamTalkMessage> newMessages = jsonConverter.deserializeList(jsonString);
 
 		if (newMessages.size() > 0) {
@@ -81,13 +88,19 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			AuthenticationFailedException, IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("message", jsonConverter.serialize(message));
-		int responseCode = siteAuth.post(urlCreateMessage, map, message.getAudio());
-		if (responseCode != 200) {
-			throw new ClientProtocolException("Message could not be created (HTTP error "
-					+ responseCode + ")");
+		ServerResponse sr = siteAuth.post(urlCreateMessage, map, message.getAudio());
+		if(sr.getResponseCode() == 401)
+		{
+			siteAuth.reAuthenticate();
+			sr = siteAuth.post(urlCreateMessage, map, message.getAudio());
 		}
 		
-		messageStore.removeMessage(message);
+		if (sr.getResponseCode() != 200) {
+			throw new ClientProtocolException("Message could not be created (HTTP error "
+					+ sr.getResponseCode() + ")");
+		}
+		
+		//messageStore.removeMessage(message);
 	}
 
 	@Override
@@ -109,6 +122,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 				this.createTalkMessage(message);
 			}
 
+			
 			this.getTalkMessages();
 			this.geoCamSynchronizationTimerTask.resetTimer();
 		} catch (Exception e) {
@@ -133,8 +147,13 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		
 		String jsonString;		
 		try{
-			
-			jsonString = siteAuth.get(url, null);
+			ServerResponse sr = siteAuth.get(url, null);
+			if(sr.getResponseCode() == 401)
+			{
+				siteAuth.reAuthenticate();
+				sr = siteAuth.get(url, null);
+			}
+			jsonString = sr.getContent();
 			GeoCamTalkMessage pushedMessage = 
 				jsonConverter.deserialize(jsonString);
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if avaialable

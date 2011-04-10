@@ -1,6 +1,7 @@
 package gov.nasa.arc.geocam.talk.service;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.bean.ServerResponse;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
 import java.io.BufferedReader;
@@ -60,14 +61,14 @@ public class SiteAuthCookie implements ISiteAuth {
 	}
 
 	@Override
-	public int post(String relativePath, Map<String, String> params)
+	public ServerResponse post(String relativePath, Map<String, String> params)
 			throws AuthenticationFailedException, IOException, ClientProtocolException,
 			InvalidParameterException {
 		return post(relativePath, params, null);
 	}
 
 	@Override
-	public int post(String relativePath, Map<String, String> params, byte[] audioBytes)
+	public ServerResponse post(String relativePath, Map<String, String> params, byte[] audioBytes)
 			throws AuthenticationFailedException, IOException, ClientProtocolException,
 			InvalidParameterException {
 		if (params == null) {
@@ -111,14 +112,12 @@ public class SiteAuthCookie implements ISiteAuth {
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
 		// post.setHeader("Cookie", sessionIdCookie.toString());
 
-		HttpResponse r = httpClient.execute(post);
-		// TODO: check for redirect to login and call login if is the case
-
-		return r.getStatusLine().getStatusCode();
+		return new ServerResponse(httpClient.execute(post));
+		
 	}
 
 	@Override
-	public String get(String relativePath, Map<String, String> params)
+	public ServerResponse get(String relativePath, Map<String, String> params)
 			throws AuthenticationFailedException, IOException, ClientProtocolException {
 		ensureAuthenticated();
 		httpClient = new DefaultHttpClient();
@@ -130,27 +129,13 @@ public class SiteAuthCookie implements ISiteAuth {
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
 		// get.setHeader("Cookie", sessionIdCookie.toString());
 
-		HttpResponse r = httpClient.execute(get);
-		// TODO: check for redirect to login and call login if is the case
-
-		InputStream content = r.getEntity().getContent();
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(content));
-		StringBuilder sb = new StringBuilder();
-		String line = null;
-
-		while ((line = br.readLine()) != null) {
-			sb.append(line + "\n");
-		}
-
-		br.close();
-		return sb.toString();
+		return new ServerResponse(httpClient.execute(get));
 	}
 
 	private void ensureAuthenticated() throws AuthenticationFailedException,
 			ClientProtocolException, IOException {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
+		// TODO: INject shared prefs!
 		String username = prefs.getString("webapp_username", null);
 		String password = prefs.getString("webapp_password", null);
 
@@ -164,6 +149,8 @@ public class SiteAuthCookie implements ISiteAuth {
 			}
 		}
 	}
+	
+	
 
 	private void login(String username, String password) throws ClientProtocolException,
 			IOException, AuthenticationFailedException {
@@ -194,5 +181,11 @@ public class SiteAuthCookie implements ISiteAuth {
 			throw new AuthenticationFailedException("Got unexpected response code from server: "
 					+ r.getStatusLine().getStatusCode());
 		}
+	}
+
+	@Override
+	public void reAuthenticate() throws ClientProtocolException, AuthenticationFailedException, IOException {
+		sessionIdCookie = null;
+		ensureAuthenticated();		
 	}
 }
