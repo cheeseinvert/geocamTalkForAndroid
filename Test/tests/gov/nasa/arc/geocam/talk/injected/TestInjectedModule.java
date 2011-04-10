@@ -1,11 +1,11 @@
 package gov.nasa.arc.geocam.talk.injected;
 
 import gov.nasa.arc.geocam.talk.service.DatabaseHelper;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverter;
+import gov.nasa.arc.geocam.talk.service.TalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.GeoCamSynchronizationTimerTask;
 import gov.nasa.arc.geocam.talk.service.IDatabaseHelper;
-import gov.nasa.arc.geocam.talk.service.IDjangoTalk;
-import gov.nasa.arc.geocam.talk.service.IDjangoTalkJsonConverter;
+import gov.nasa.arc.geocam.talk.service.ITalkServer;
+import gov.nasa.arc.geocam.talk.service.ITalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.IGeoCamSynchronizationTimerTask;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
@@ -17,8 +17,8 @@ public class TestInjectedModule extends AbstractAndroidModule {
 
 	@Override
 	protected void configure() {
-		bind(IDjangoTalk.class).to(FakeDjangoTalk.class);
-		bind(IDjangoTalkJsonConverter.class).to(DjangoTalkJsonConverter.class);
+		bind(ITalkServer.class).to(FakeTalkServer.class);
+		bind(ITalkJsonConverter.class).to(TalkJsonConverter.class);
 		bind(IMessageStore.class).to(MessageStore.class);
 		bind(IDatabaseHelper.class).to(DatabaseHelper.class);
 		bind(IIntentHelper.class).to(IntentHelper.class);

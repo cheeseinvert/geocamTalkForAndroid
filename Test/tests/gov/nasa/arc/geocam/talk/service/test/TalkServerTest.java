@@ -9,10 +9,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.service.DjangoTalk;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverter;
-import gov.nasa.arc.geocam.talk.service.IDjangoTalk;
-import gov.nasa.arc.geocam.talk.service.IDjangoTalkJsonConverter;
+import gov.nasa.arc.geocam.talk.service.TalkServer;
+import gov.nasa.arc.geocam.talk.service.TalkJsonConverter;
+import gov.nasa.arc.geocam.talk.service.ITalkServer;
+import gov.nasa.arc.geocam.talk.service.ITalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.service.MessageStore;
@@ -24,15 +24,15 @@ import java.util.List;
 import org.junit.Test;
 
 
-public class DjangoTalkTest extends GeoCamTestCase {
+public class TalkServerTest extends GeoCamTestCase {
 
 	@Test
 	public void shouldEnsureGetTalkMessagesReturnsMessages() throws Exception {
-		DjangoTalk talkImpl = 
-			new DjangoTalk();
+		TalkServer talkImpl = 
+			new TalkServer();
 		
-		IDjangoTalkJsonConverter jsonConv = 
-			mock(IDjangoTalkJsonConverter.class);
+		ITalkJsonConverter jsonConv = 
+			mock(ITalkJsonConverter.class);
 		
 		ISiteAuth siteauth =
 			mock(ISiteAuth.class);
@@ -61,9 +61,9 @@ public class DjangoTalkTest extends GeoCamTestCase {
 	@Test
 	public void shouldEnsureCreateTalkMessagePostsTalkMessage() throws Exception
 	{
-		IDjangoTalk talkImpl = new DjangoTalk();
+		ITalkServer talkImpl = new TalkServer();
 
-		IDjangoTalkJsonConverter jsonConv = mock(DjangoTalkJsonConverter.class);
+		ITalkJsonConverter jsonConv = mock(TalkJsonConverter.class);
 		
 		ISiteAuth siteauth = mock(ISiteAuth.class);
 		when(siteauth.post(anyString(), anyMap(), any(byte[].class))).thenReturn(200);

@@ -13,8 +13,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-public class DjangoTalkJsonConverter
-    implements IDjangoTalkJsonConverter {
+public class TalkJsonConverter
+    implements ITalkJsonConverter {
 
 	@Override
 	public List<GeoCamTalkMessage> deserializeList(String jsonString) {

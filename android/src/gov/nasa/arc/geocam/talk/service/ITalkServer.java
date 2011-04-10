@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import org.apache.http.client.ClientProtocolException;
 
-public interface IDjangoTalk {
+public interface ITalkServer {
 	void getTalkMessages() throws SQLException, ClientProtocolException,
 			AuthenticationFailedException, IOException;
 

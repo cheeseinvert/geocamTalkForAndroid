@@ -1,7 +1,7 @@
 package gov.nasa.arc.geocam.talk.service.test;
 
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.service.DjangoTalkJsonConverter;
+import gov.nasa.arc.geocam.talk.service.TalkJsonConverter;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Test;
 
 
-public class DjangoGeoCamTalkJsonConverterTest extends GeoCamTestCase {
+public class TalkJsonConverterTest extends GeoCamTestCase {
 	
 	@Test
 	public void ensureProperParsingOfMessageListFeed() throws Exception
@@ -20,8 +20,8 @@ public class DjangoGeoCamTalkJsonConverterTest extends GeoCamTestCase {
 		String jsonString = 
 			"{\"ts\": 1, \"ms\": [{\"authorUsername\": \"rhornsby\", \"authorFullname\":\"Rufus Hornsby\", \"longitude\": null, \"content\": \"Crap, my geolocation service crashed and I am not providing geoloc with this message. This message should be the latest to make sure we gracefully fall back to the next available geolocated message.\", \"contentTimestamp\": \"03/13/11 11:23:21\",\"latitude\": null, \"messageId\": 19, \"accuracy\": null}, {\"authorUsername\": \"rhornsby\", \"longitude\": -122.057954, \"content\": \"Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.\", \"contentTimestamp\": \"03/13/11 10:48:44\", \"latitude\": 37.411629, \"messageId\": 15, \"accuracy\":60.0, \"hasGeolocation\":true}]}";
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
-		DjangoTalkJsonConverter converter =
-			new DjangoTalkJsonConverter();
+		TalkJsonConverter converter =
+			new TalkJsonConverter();
 		
 		GeoCamTalkMessage message1 = new GeoCamTalkMessage();
 		message1.setAuthorUsername("rhornsby");
@@ -54,8 +54,8 @@ public class DjangoGeoCamTalkJsonConverterTest extends GeoCamTestCase {
 	@Test
 	public void ensureSingularDeserializationWorks() throws Exception {
 		// arrange
-		DjangoTalkJsonConverter converter =
-			new DjangoTalkJsonConverter();
+		TalkJsonConverter converter =
+			new TalkJsonConverter();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		
@@ -81,8 +81,8 @@ public class DjangoGeoCamTalkJsonConverterTest extends GeoCamTestCase {
 	@Test
 	public void ensureSerializeReturnsProperString() throws Exception
 	{
-		DjangoTalkJsonConverter converter =
-			new DjangoTalkJsonConverter();
+		TalkJsonConverter converter =
+			new TalkJsonConverter();
 		
 		GeoCamTalkMessage msg = new GeoCamTalkMessage();
 		msg.setContent("contentTest");

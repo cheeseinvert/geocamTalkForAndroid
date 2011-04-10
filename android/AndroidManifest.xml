@@ -40,7 +40,7 @@
             </intent-filter>
         </receiver>        
         
-        <service android:name=".service.DjangoTalk" />
+        <service android:name="service.TalkServer" />
     </application>
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET" />

@@ -3,7 +3,7 @@ package gov.nasa.arc.geocam.talk.activity;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.service.IDjangoTalk;
+import gov.nasa.arc.geocam.talk.service.ITalkServer;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 public class GeoCamTalkActivity extends RoboActivity {
 
 	@Inject
-	IDjangoTalk djangoTalk;
+	ITalkServer djangoTalk;
 	@InjectView(R.id.TalkListView)
 	ListView talkListView;
 	@Inject

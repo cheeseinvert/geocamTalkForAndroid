@@ -39,7 +39,7 @@ public class C2DMReciever extends BroadcastReceiver {
         }
     }
 
-    public void handleMessage(Context context, Intent intent)
+    private void handleMessage(Context context, Intent intent)
     {
         // we've received a message, simply post to user via Toast
         String msg = "Message ID pushed: " + intent.getStringExtra("message");

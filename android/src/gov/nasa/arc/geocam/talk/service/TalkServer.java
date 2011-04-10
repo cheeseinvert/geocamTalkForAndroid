@@ -1,7 +1,7 @@
 package gov.nasa.arc.geocam.talk.service;
 
 import gov.nasa.arc.geocam.talk.R;
-import gov.nasa.arc.geocam.talk.bean.DjangoTalkIntent;
+import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
@@ -19,10 +19,10 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
-public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
+public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	@Inject
-	IDjangoTalkJsonConverter jsonConverter;
+	ITalkJsonConverter jsonConverter;
 
 	@InjectResource(R.string.url_message_list)
 	String urlMessageList;
@@ -42,7 +42,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 
-	public DjangoTalk() {
+	public TalkServer() {
 		super("DjangoTalkService");
 	}
 
@@ -83,7 +83,7 @@ public class DjangoTalk extends RoboIntentService implements IDjangoTalk {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		if (intent.getAction().contentEquals(DjangoTalkIntent.SYNCHRONIZE.toString())) {
+		if (intent.getAction().contentEquals(TalkServerIntent.SYNCHRONIZE.toString())) {
 			try {
 				for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
 					this.createTalkMessage(message);

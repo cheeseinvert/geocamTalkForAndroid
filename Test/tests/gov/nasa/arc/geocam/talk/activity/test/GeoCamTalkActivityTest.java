@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThat;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.injected.FakeDjangoTalk;
+import gov.nasa.arc.geocam.talk.injected.FakeTalkServer;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import com.google.inject.Inject;
 
 public class GeoCamTalkActivityTest extends GeoCamTestCase {	
 	@Inject GeoCamTalkActivity activity;
-	@Inject FakeDjangoTalk fakeDjangoTalk;
+	@Inject FakeTalkServer fakeDjangoTalk;
 	
 	
 	
