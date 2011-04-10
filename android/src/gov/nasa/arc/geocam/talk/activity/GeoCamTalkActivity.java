@@ -88,4 +88,9 @@ public class GeoCamTalkActivity extends RoboActivity {
 	public void onCreateTalkClick(View v) {
 		UIUtils.createTalkMessage(this);
 	}
+	
+	public void onPlaybackClick(View v) {
+		Toast.makeText(this.getApplicationContext(), "Clicked to listen for audio",
+				Toast.LENGTH_SHORT).show();
+	}
 }
