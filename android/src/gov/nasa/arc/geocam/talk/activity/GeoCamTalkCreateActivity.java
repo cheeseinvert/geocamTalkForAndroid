@@ -17,7 +17,9 @@ import java.util.Date;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -44,6 +46,8 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 
 	@Inject
 	IIntentHelper intentHelper;
+	
+	SharedPreferences sharedPreferences;
 
 	private String filename = null;
 
@@ -52,7 +56,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create_talk_message);
-
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 	}
 
 	public void onHomeClick(View v) {
@@ -108,6 +112,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 		message.setContent(newTalkTextView.getText().toString());
 		message.setContentTimestamp(new Date());
 		message.setLocation(appState.getLocation());
+		message.setAuthorUsername(sharedPreferences.getString("webapp_username", null));
 
 		if (filename != null) {
 			message.setAudio(createByteArray());

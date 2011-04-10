@@ -4,10 +4,7 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.bean.ServerResponse;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +42,8 @@ public class SiteAuthCookie implements ISiteAuth {
 	
 	@InjectResource(R.string.url_relative_app)
 	String appPath;
-
+	
+	private SharedPreferences sharedPreferences;
 	private DefaultHttpClient httpClient;
 	private Cookie sessionIdCookie;
 	private Context context;
@@ -53,11 +51,13 @@ public class SiteAuthCookie implements ISiteAuth {
 	@Inject
 	public SiteAuthCookie(Context context) {
 		this.context = context;
+		this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	@Override
 	public void setRoot(String siteRoot) {
 		serverRootUrl = siteRoot;
+		
 	}
 
 	@Override
@@ -134,10 +134,8 @@ public class SiteAuthCookie implements ISiteAuth {
 
 	private void ensureAuthenticated() throws AuthenticationFailedException,
 			ClientProtocolException, IOException {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		// TODO: INject shared prefs!
-		String username = prefs.getString("webapp_username", null);
-		String password = prefs.getString("webapp_password", null);
+		String username = sharedPreferences.getString("webapp_username", null);
+		String password = sharedPreferences.getString("webapp_password", null);
 
 		if (username == null || password == null) {
 			throw new AuthenticationFailedException("Username and/or password not set.");

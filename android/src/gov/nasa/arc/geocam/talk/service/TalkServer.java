@@ -94,8 +94,19 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			siteAuth.reAuthenticate();
 			sr = siteAuth.post(urlCreateMessage, map, message.getAudio());
 		}
-		
-		if (sr.getResponseCode() != 200) {
+		if (sr.getResponseCode() == 200) {
+			// read content to string
+			Map<String, String> result = jsonConverter.createMap(sr.getContent());
+			try{
+				message.setMessageId(Integer.parseInt(result.get("messageId")));
+				message.setAuthorFullname(result.get("authorFullname"));
+			} catch (Exception e) {
+				Log.e("Talk", "", e);
+			} 
+			message.setSynchronized(true);
+			messageStore.updateMessage(message);
+			Log.i("Talk", "Updated message");
+		} else {
 			throw new ClientProtocolException("Message could not be created (HTTP error "
 					+ sr.getResponseCode() + ")");
 		}

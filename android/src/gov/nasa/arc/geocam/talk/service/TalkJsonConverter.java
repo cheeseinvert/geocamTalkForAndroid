@@ -4,6 +4,7 @@ import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -62,4 +63,11 @@ public class TalkJsonConverter
 		}
 
     }
+
+	@Override
+	public Map<String, String> createMap(String jsonString) {
+		Gson gson = new Gson();
+		Type mapType = new TypeToken<Map<String, String>>(){}.getType();
+		return gson.fromJson(jsonString, mapType);
+	}
 }

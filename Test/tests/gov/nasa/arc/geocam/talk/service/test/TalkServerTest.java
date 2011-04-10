@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.bean.ServerResponse;
 import gov.nasa.arc.geocam.talk.service.TalkServer;
 import gov.nasa.arc.geocam.talk.service.TalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.ITalkServer;
@@ -36,7 +37,7 @@ public class TalkServerTest extends GeoCamTestCase {
 		
 		ISiteAuth siteauth =
 			mock(ISiteAuth.class);
-		when(siteauth.get(anyString(), anyMap())).thenReturn("");
+		when(siteauth.get(anyString(), anyMap())).thenReturn(new ServerResponse(200, ""));
 		setHiddenField(talkImpl, "siteAuth", siteauth);
 		
 		List<GeoCamTalkMessage> expectedList = new ArrayList<GeoCamTalkMessage>();
@@ -66,7 +67,7 @@ public class TalkServerTest extends GeoCamTestCase {
 		ITalkJsonConverter jsonConv = mock(TalkJsonConverter.class);
 		
 		ISiteAuth siteauth = mock(ISiteAuth.class);
-		when(siteauth.post(anyString(), anyMap(), any(byte[].class))).thenReturn(200);
+		when(siteauth.post(anyString(), anyMap(), any(byte[].class))).thenReturn(new ServerResponse(200, ""));
 		setHiddenField(talkImpl, "siteAuth", siteauth);
 
 		when(jsonConv.serialize((GeoCamTalkMessage)anyObject())).thenReturn("");

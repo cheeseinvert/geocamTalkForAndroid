@@ -6,7 +6,9 @@ import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -106,5 +108,25 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 		assertFalse(jsonString.contains("audio"));
 	}
 	
+	@Test
+	public void testMapConversion() throws Exception
+	{
+		// arrange
+		String jsonString = "{'key1':'value1', 'key2':'value2'}";
+		Map<String, String> expectedMap = new HashMap<String, String>();
+		
+		expectedMap.put("key1", "value1");
+		expectedMap.put("key2", "value2");
+		
+		TalkJsonConverter converter =
+			new TalkJsonConverter();
+		
+		//act
+		Map<String, String> results = converter.createMap(jsonString);
+		
+		//assert
+		assertEquals(expectedMap.get("key1"), results.get("key1"));		
+		assertEquals(expectedMap.get("key2"), results.get("key2"));		
+	}
 	
 }
