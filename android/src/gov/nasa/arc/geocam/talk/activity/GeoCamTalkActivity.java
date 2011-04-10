@@ -58,9 +58,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 		} else {
 			Toast.makeText(this.getApplicationContext(), "Communication Error with Server",
 					Toast.LENGTH_SHORT).show();
-		}
-		intentHelper.RegisterC2dm();
-		
+		}		
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package gov.nasa.arc.geocam.talk;
 import gov.nasa.arc.geocam.talk.service.GeoLocationListener;
+import gov.nasa.arc.geocam.talk.service.IGeoCamSynchronizationTimerTask;
+import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 
 import java.util.List;
 
@@ -26,8 +28,12 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
 		LocationManager locationManager = injector.getInstance(LocationManager.class);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, listener);		
 		
-		injector.injectMembers(this);
+		IGeoCamSynchronizationTimerTask timerTask = injector.getInstance(IGeoCamSynchronizationTimerTask.class);
+		IIntentHelper intentHelper = injector.getInstance(IIntentHelper.class);
+		intentHelper.RegisterC2dm();
 		
+		injector.injectMembers(this);
+
 		setDefaultSettings();
         super.onCreate();
 	}

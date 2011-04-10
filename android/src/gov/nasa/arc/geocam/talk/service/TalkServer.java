@@ -6,8 +6,8 @@ import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.sql.SQLException;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +34,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	
 	@InjectResource(R.string.url_registration)
 	String urlRegistration;
+	
+	@InjectResource(R.string.url_message_format)
+	String urlMessageFormatString;
 	
 
 	@Inject
@@ -126,8 +129,20 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	private void handlePushedMessageIntent(String messageId) { // assumed this is not null
 		Log.i("Talk", "Received notification for message:" + messageId);
+		String url = String.format(urlMessageFormatString, messageId);
 		
-		
+		String jsonString;		
+		try{
+			
+			jsonString = siteAuth.get(url, null);
+			GeoCamTalkMessage pushedMessage = 
+				jsonConverter.deserialize(jsonString);
+			messageStore.addMessage(pushedMessage); // TODO: go get audio if avaialable
+			
+			intentHelper.BroadcastNewMessages();
+		} catch (Exception e) {
+			Log.e("GeoCam Talk", "Error on single message get", e);
+		}
 	}
 
 }
