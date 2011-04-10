@@ -3,8 +3,10 @@ package gov.nasa.arc.geocam.talk.activity;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.ITalkServer;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
+import gov.nasa.arc.geocam.talk.service.IntentHelper;
 
 import java.util.List;
 
@@ -32,6 +34,9 @@ public class GeoCamTalkActivity extends RoboActivity {
 	GeoCamTalkMessageArrayAdapter adapter;
 	@Inject
 	IMessageStore messageStore;
+	
+	@Inject
+	IIntentHelper intentHelper;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -54,6 +59,8 @@ public class GeoCamTalkActivity extends RoboActivity {
 			Toast.makeText(this.getApplicationContext(), "Communication Error with Server",
 					Toast.LENGTH_SHORT).show();
 		}
+		intentHelper.RegisterC2dm();
+		
 	}
 
 	@Override

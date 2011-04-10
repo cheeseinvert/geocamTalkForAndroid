@@ -5,11 +5,13 @@ public enum TalkServerIntent {
 
 	INTENT_SYNCHRONIZE("syncrhonize"),
 
-	INTENT_C2DM_REGISTER("c2dm_register"),
-
 	INTENT_STORE_C2DM_ID("c2dm_id_store"),
 	
-	EXTRA_MESSAGE_ID("message_id");
+	INTENT_PUSHED_MESSAGE("pushed_message"),
+	
+	EXTRA_MESSAGE_ID("message_id"),
+	
+	EXTRA_REGISTRATION_ID("registration_id");
 
 	private String value;
 

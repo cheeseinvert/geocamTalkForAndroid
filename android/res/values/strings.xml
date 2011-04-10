@@ -11,5 +11,6 @@
     <string name="create_message_button_title">New</string>
     <string name="sqlite_database_name">geocamTalk.db</string>
     <string name="django_talk_service_name">DjangoTalkService</string>
+    <string name="c2dm_sender_address">geocamtalk@gmail.com</string>
     
 </resources>

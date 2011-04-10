@@ -1,14 +1,16 @@
 package gov.nasa.arc.geocam.talk.service;
 
 import gov.nasa.arc.geocam.talk.R;
-import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -29,6 +31,10 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	@InjectResource(R.string.url_create_message)
 	String urlCreateMessage;
+	
+	@InjectResource(R.string.url_registration)
+	String urlRegistration;
+	
 
 	@Inject
 	ISiteAuth siteAuth;
@@ -84,17 +90,44 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		if (intent.getAction().contentEquals(TalkServerIntent.INTENT_SYNCHRONIZE.toString())) {
-			try {
-				for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
-					this.createTalkMessage(message);
-				}
-
-				this.getTalkMessages();
-				this.geoCamSynchronizationTimerTask.resetTimer();
-			} catch (Exception e) {
-				Log.e("GeoCam Talk", "Comm Error", e);
-				// TODO: Display this to the user (Toast or notification bar)
-			}
+			handleSynchronizeIntent();
+		} else if (intent.getAction().contentEquals(TalkServerIntent.INTENT_STORE_C2DM_ID.toString())) {
+			String registrationId = intent.getStringExtra(TalkServerIntent.EXTRA_REGISTRATION_ID.toString());
+			handleStoreRegistrationIdIntent(registrationId);
+		} else if (intent.getAction().contentEquals(TalkServerIntent.INTENT_PUSHED_MESSAGE.toString())) {
+			String messageId = intent.getStringExtra(TalkServerIntent.EXTRA_MESSAGE_ID.toString());
+			handlePushedMessageIntent(messageId);
 		}
 	}
+
+	private void handleSynchronizeIntent() {
+		try {
+			for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
+				this.createTalkMessage(message);
+			}
+
+			this.getTalkMessages();
+			this.geoCamSynchronizationTimerTask.resetTimer();
+		} catch (Exception e) {
+			Log.e("GeoCam Talk", "Comm Error", e);
+			// TODO: Display this to the user (Toast or notification bar)
+		}
+	}
+
+	private void handleStoreRegistrationIdIntent(String registrationId) { // assumed this is not null
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(TalkServerIntent.EXTRA_REGISTRATION_ID.toString(), registrationId);
+		try{
+			siteAuth.post(urlRegistration, params);
+		} catch (Exception e) {
+			Log.e("GeoCam Talk", "Comm Error", e);
+		}
+	}
+
+	private void handlePushedMessageIntent(String messageId) { // assumed this is not null
+		
+	}
+
 }
+
+
