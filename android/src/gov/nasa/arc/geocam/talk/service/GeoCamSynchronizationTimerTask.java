@@ -14,6 +14,7 @@ public class GeoCamSynchronizationTimerTask implements IGeoCamSynchronizationTim
 	public GeoCamSynchronizationTimerTask(IIntentHelper intentHelper) {
 		this.intentHelper = intentHelper;
 		this.handler.postDelayed(this, period);
+		this.handler.post(this);
 	}
 
 	@Override

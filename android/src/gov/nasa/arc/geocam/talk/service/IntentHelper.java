@@ -14,7 +14,7 @@ public class IntentHelper implements IIntentHelper {
 	private Context context;
 
 	@InjectResource(R.string.c2dm_sender_address) 
-	private String c2dmSenderAddress;
+	String c2dmSenderAddress;
 	
 	@Inject
 	public IntentHelper(Context context) {
@@ -53,11 +53,11 @@ public class IntentHelper implements IIntentHelper {
 
 	@Override
 	public void PushedMessage(String messageId) {
-		Intent storeRegistrationIdIntent = new Intent(this.context, TalkServer.class);
-		storeRegistrationIdIntent.setAction(TalkServerIntent.INTENT_PUSHED_MESSAGE.toString());
-		storeRegistrationIdIntent.putExtra(
+		Intent pushedMessageIntent = new Intent(this.context, TalkServer.class);
+		pushedMessageIntent.setAction(TalkServerIntent.INTENT_PUSHED_MESSAGE.toString());
+		pushedMessageIntent.putExtra(
 				TalkServerIntent.EXTRA_MESSAGE_ID.toString(),
 				messageId);
-		context.startService(storeRegistrationIdIntent);
+		context.startService(pushedMessageIntent);
 	}
 }

@@ -125,6 +125,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	}
 
 	private void handlePushedMessageIntent(String messageId) { // assumed this is not null
+		Log.i("Talk", "Received notification for message:" + messageId);
+		
 		
 	}
 
