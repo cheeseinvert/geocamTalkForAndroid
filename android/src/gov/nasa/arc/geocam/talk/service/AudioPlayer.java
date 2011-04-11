@@ -3,7 +3,9 @@ package gov.nasa.arc.geocam.talk.service;
 
 import gov.nasa.arc.geocam.talk.R;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.content.Context;
@@ -50,5 +52,17 @@ public class AudioPlayer implements IAudioPlayer {
 	public void playBeepB() {
 		MediaPlayer mp = MediaPlayer.create(context, R.raw.beep_b);
 	    mp.start();
+	}
+	
+	@Override
+	public void startPlaying(byte[] soundByte) throws IllegalArgumentException, IllegalStateException, IOException {
+		
+		File tempAudio = File.createTempFile("tempAudioMessage", ".mp4", context.getFilesDir());
+        //tempAudio.deleteOnExit();
+        FileOutputStream fos = new FileOutputStream(tempAudio);
+        fos.write(soundByte);
+        fos.close();
+        
+		startPlaying(tempAudio.getAbsolutePath());
 	}
 }

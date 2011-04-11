@@ -4,6 +4,7 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.bean.ServerResponse;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -130,6 +131,29 @@ public class SiteAuthCookie implements ISiteAuth {
 		// get.setHeader("Cookie", sessionIdCookie.toString());
 
 		return new ServerResponse(httpClient.execute(get));
+	}
+	
+	@Override
+	public String getAudioFile(String relativePath, Map<String, String> params)
+			throws AuthenticationFailedException, IOException, ClientProtocolException {
+		ensureAuthenticated();
+
+		httpClient = new DefaultHttpClient();
+		
+		HttpPost post = new HttpPost(this.serverRootUrl + relativePath);
+		// TODO: add param parsing and query string construction as necessary
+
+		httpClient.getCookieStore().addCookie(sessionIdCookie);
+
+		HttpResponse r = httpClient.execute(post);
+		          
+        if(r.getFirstHeader("Content-Type").getValue().contains("mp4"))
+        {
+        	FileOutputStream ostream = new FileOutputStream(context.getFilesDir().toString() + "/tempfile.mp4");
+            r.getEntity().writeTo(ostream);
+        }
+        return (context.getFilesDir().toString() + "/tempfile.mp4");
+        
 	}
 
 	private void ensureAuthenticated() throws AuthenticationFailedException,

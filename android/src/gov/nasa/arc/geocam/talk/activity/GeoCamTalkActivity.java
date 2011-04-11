@@ -4,13 +4,16 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
+import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.service.ITalkServer;
 
 import java.util.List;
 
 import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,10 +37,16 @@ public class GeoCamTalkActivity extends RoboActivity {
 	ITalkServer djangoTalk;
 	@InjectView(R.id.TalkListView)
 	ListView talkListView;
+	@InjectResource(R.string.url_server_root)
+	String serverRootUrl;
 	@Inject
 	GeoCamTalkMessageArrayAdapter adapter;
 	@Inject
 	IMessageStore messageStore;
+	@Inject
+	ISiteAuth siteAuth;
+	@Inject
+	IAudioPlayer player;
 
 	@Inject
 	IIntentHelper intentHelper;
@@ -60,7 +70,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 	}
 	
 	@Override
@@ -126,14 +136,29 @@ public class GeoCamTalkActivity extends RoboActivity {
 	
 	@Override
     protected void onResume() {
+        super.onResume();        
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
         registerReceiver(receiver, filter);
 
-        super.onResume();
-        
-        
-        setContentView(R.layout.main);
+		setContentView(R.layout.main);
+
+		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+		    @Override
+		    public void onItemClick (AdapterView<?> parentView, View childView, int position, long id) {
+		    	GeoCamTalkMessage msg = adapter.getTalkMessage(position);
+		    	
+		    	try
+		    	{
+		    		UIUtils.playAudio(getApplicationContext(), msg, player, siteAuth);
+		    	} catch (Exception e)
+		    	{
+		    		UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
+		    	}
+		    }
+			});
+		
 
 		try {
 			talkMessages = messageStore.getAllMessages();
@@ -147,7 +172,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 		} else {
 			Toast.makeText(this.getApplicationContext(), "Communication Error with Server",
 					Toast.LENGTH_SHORT).show();
-		}        
+		} 
     }
 	
     @Override

@@ -23,6 +23,9 @@ public interface ISiteAuth {
 	public ServerResponse get(String relativePath, Map<String, String> params)
 			throws AuthenticationFailedException, IOException, ClientProtocolException;
 
+    public String getAudioFile(String relativePath, Map<String, String> params) 
+			throws AuthenticationFailedException, IOException, ClientProtocolException;	
+	
 	public void reAuthenticate() 
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 }
