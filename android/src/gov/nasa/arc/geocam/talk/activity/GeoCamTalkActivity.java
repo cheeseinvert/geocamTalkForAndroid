@@ -3,16 +3,19 @@ package gov.nasa.arc.geocam.talk.activity;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
-import gov.nasa.arc.geocam.talk.service.ITalkServer;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
-import gov.nasa.arc.geocam.talk.service.IntentHelper;
+import gov.nasa.arc.geocam.talk.service.ITalkServer;
 
 import java.util.List;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,33 +37,32 @@ public class GeoCamTalkActivity extends RoboActivity {
 	GeoCamTalkMessageArrayAdapter adapter;
 	@Inject
 	IMessageStore messageStore;
-	
+
 	@Inject
 	IIntentHelper intentHelper;
+	
+	List<GeoCamTalkMessage> talkMessages;
 
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().contentEquals(TalkServerIntent.INTENT_NEW_MESSAGES.toString()))
+			{
+				GeoCamTalkActivity.this.newMessages();
+			}
+		}
+	};
+
+	
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-
-		List<GeoCamTalkMessage> talkMessages = null;
-
-		try {
-			talkMessages = messageStore.getAllMessages();
-		} catch (Exception e) {
-			Log.i("Talk", "Error:" + e.getMessage());
-		}
-
-		if (talkMessages != null) {
-			adapter.setTalkMessages(talkMessages);
-			talkListView.setAdapter(adapter);
-		} else {
-			Toast.makeText(this.getApplicationContext(), "Communication Error with Server",
-					Toast.LENGTH_SHORT).show();
-		}		
+		
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -90,7 +92,67 @@ public class GeoCamTalkActivity extends RoboActivity {
 		}
 	}
 
+	public void onGoHomeClick(View v) {
+		List<GeoCamTalkMessage> talkMessages = null;
+
+		try {
+			talkMessages = messageStore.getAllMessages();
+		} catch (Exception e) {
+			Log.i("Talk", "Error:" + e.getMessage());
+		}
+
+		if (talkMessages != null) {
+			adapter.setTalkMessages(talkMessages);
+			talkListView.setAdapter(adapter);
+		}
+	}
+
 	public void onCreateTalkClick(View v) {
 		UIUtils.createTalkMessage(this);
 	}
+
+	public void newMessages() {
+		try {
+			talkMessages = messageStore.getAllMessages();
+		} catch (Exception e) {
+			Log.i("Talk", "Error:" + e.getMessage());
+		}
+
+		if (talkMessages != null) {
+			adapter.setTalkMessages(talkMessages);
+			talkListView.setAdapter(adapter);
+		}		
+	}
+	
+	@Override
+    protected void onResume() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
+        registerReceiver(receiver, filter);
+
+        super.onResume();
+        
+        
+        setContentView(R.layout.main);
+
+		try {
+			talkMessages = messageStore.getAllMessages();
+		} catch (Exception e) {
+			Log.i("Talk", "Error:" + e.getMessage());
+		}
+
+		if (talkMessages != null) {
+			adapter.setTalkMessages(talkMessages);
+			talkListView.setAdapter(adapter);
+		} else {
+			Toast.makeText(this.getApplicationContext(), "Communication Error with Server",
+					Toast.LENGTH_SHORT).show();
+		}        
+    }
+	
+    @Override
+    protected void onPause() {
+        unregisterReceiver(receiver);
+        super.onPause();
+    }
 }

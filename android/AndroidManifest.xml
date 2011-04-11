@@ -39,7 +39,7 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <category android:name="gov.nasa.arc.geocam.talk" />
             </intent-filter>
-        </receiver>        
+        </receiver>     
         
         <service android:name=".service.TalkServer" />
     </application>

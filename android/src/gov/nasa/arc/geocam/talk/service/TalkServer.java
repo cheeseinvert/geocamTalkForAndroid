@@ -55,7 +55,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		super("DjangoTalkService");
 	}
 	
-	private int maxMessageId = 0;
+	private static int maxMessageId = 0;
 
 	@Override 
 	public void getTalkMessages() throws SQLException, ClientProtocolException,
@@ -87,6 +87,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		}
 		
 		maxMessageId = messageStore.getNewestMessageId();
+		Log.i("Talk", "MaxMessageIdNow:" + maxMessageId);
 	}
 
 	@Override
@@ -94,6 +95,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			AuthenticationFailedException, IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("message", jsonConverter.serialize(message));
+		message.setSynchronized(true);
+		messageStore.updateMessage(message);
 		ServerResponse sr = siteAuth.post(urlCreateMessage, map, message.getAudio());
 		if(sr.getResponseCode() == 401)
 		{
@@ -111,13 +114,13 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			} 
 			message.setSynchronized(true);
 			messageStore.updateMessage(message);
-			Log.i("Talk", "Updated message");
+			intentHelper.BroadcastNewMessages();
 		} else {
+			message.setSynchronized(false);
+			messageStore.updateMessage(message);			
 			throw new ClientProtocolException("Message could not be created (HTTP error "
 					+ sr.getResponseCode() + ")");
-		}
-		
-		//messageStore.removeMessage(message);
+		}		
 	}
 
 	@Override
@@ -171,6 +174,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			jsonString = sr.getContent();
 			GeoCamTalkMessage pushedMessage = 
 				jsonConverter.deserialize(jsonString);
+			// TODO: We're assuming all is well, may need to check for existing message id first
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if avaialable
 			
 			intentHelper.BroadcastNewMessages();

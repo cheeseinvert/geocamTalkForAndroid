@@ -108,7 +108,7 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 		
 		post.setEntity(httpEntity);
-
+		
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
 		// post.setHeader("Cookie", sessionIdCookie.toString());
 
@@ -147,8 +147,6 @@ public class SiteAuthCookie implements ISiteAuth {
 			}
 		}
 	}
-	
-	
 
 	private void login(String username, String password) throws ClientProtocolException,
 			IOException, AuthenticationFailedException {
