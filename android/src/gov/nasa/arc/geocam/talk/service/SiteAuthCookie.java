@@ -4,6 +4,9 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,7 +36,9 @@ import org.apache.http.protocol.HTTP;
 import roboguice.inject.InjectResource;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -145,6 +150,29 @@ public class SiteAuthCookie implements ISiteAuth {
 
 		br.close();
 		return sb.toString();
+	}
+	
+	@Override
+	public String getAudioFile(String relativePath, Map<String, String> params)
+			throws AuthenticationFailedException, IOException, ClientProtocolException {
+		ensureAuthenticated();
+
+		httpClient = new DefaultHttpClient();
+		
+		HttpPost post = new HttpPost(this.serverRootUrl + relativePath);
+		// TODO: add param parsing and query string construction as necessary
+
+		httpClient.getCookieStore().addCookie(sessionIdCookie);
+
+		HttpResponse r = httpClient.execute(post);
+		          
+        if(r.getFirstHeader("Content-Type").getValue().contains("mp4"))
+        {
+        	FileOutputStream ostream = new FileOutputStream(context.getFilesDir().toString() + "/tempfile.mp4");
+            r.getEntity().writeTo(ostream);
+        }
+        return (context.getFilesDir().toString() + "/tempfile.mp4");
+        
 	}
 
 	private void ensureAuthenticated() throws AuthenticationFailedException,

@@ -35,6 +35,11 @@ public class GeoCamTalkMessageArrayAdapter extends ArrayAdapter<GeoCamTalkMessag
 			add(m);
 		}
 	}
+	
+	public GeoCamTalkMessage getTalkMessage(int position){
+		GeoCamTalkMessage msg = getItem(position);
+		return msg;
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

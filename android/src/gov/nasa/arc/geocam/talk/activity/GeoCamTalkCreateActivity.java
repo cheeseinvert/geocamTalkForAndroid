@@ -111,6 +111,11 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 
 		if (filename != null) {
 			message.setAudio(createByteArray());
+		} else
+		{
+			//TODO: Is this the best way to prevent pulling null AudioUrl on click
+			//	before django update? (still local)
+			message.setAudioUrl("");
 		}
 
 		try {

@@ -52,6 +52,9 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	@DatabaseField(dataType = DataType.BYTE_ARRAY)
 	private byte[]		audio;
 	
+	@DatabaseField
+	private String 		audioUrl;
+	
 	public int getMessageId() {
 		if (this.messageId == null) {
 			return -1;
@@ -120,6 +123,13 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	}
 	public void setAudio(byte[] audio) {
 		this.audio = audio;
+	}
+	
+	public String getAudioUrl() {
+		return audioUrl;
+	}
+	public void setAudioUrl(String audioUrl) {
+		this.audioUrl = audioUrl;
 	}
 	
 	public void setSynchronized(boolean isSynchronized) {

@@ -3,12 +3,22 @@ package gov.nasa.arc.geocam.talk.activity;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
+import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IDjangoTalk;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
+
 import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,10 +39,16 @@ public class GeoCamTalkActivity extends RoboActivity {
 	IDjangoTalk djangoTalk;
 	@InjectView(R.id.TalkListView)
 	ListView talkListView;
+	@InjectResource(R.string.url_server_root)
+	String serverRootUrl;
 	@Inject
 	GeoCamTalkMessageArrayAdapter adapter;
 	@Inject
 	IMessageStore messageStore;
+	@Inject
+	ISiteAuth siteAuth;
+	@Inject
+	IAudioPlayer player;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -40,6 +57,47 @@ public class GeoCamTalkActivity extends RoboActivity {
 		setContentView(R.layout.main);
 
 		List<GeoCamTalkMessage> talkMessages = null;
+		
+		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+		    @Override
+		    public void onItemClick (AdapterView<?> parentView, View childView, int position, long id) {
+		    	GeoCamTalkMessage msg = adapter.getTalkMessage(position);
+		    	
+		    	try
+		    	{
+		    		String audioUrl = msg.getAudioUrl();
+		    		//No audio recorded with message
+			    	if (msg.getAudio() == null && audioUrl.equals("")) {
+			    		Toast.makeText(getApplicationContext(), "This message has no audio",
+								Toast.LENGTH_SHORT).show();	
+			    	}
+			    	//We have audio, but not locally
+			    	else if (msg.getAudio() == null && !audioUrl.equals(""))
+			    	{
+			    		String localFileName = siteAuth.getAudioFile(audioUrl, null);
+			    		player.startPlaying(localFileName);
+			    		File audioFile = new File(localFileName);
+			    		int length = (int) audioFile.length();
+			    		byte[] audioBytes = new byte[(int) length];
+
+			    		FileInputStream fis = new FileInputStream(audioFile);
+			    		fis.read(audioBytes, 0, length);
+			    		msg.setAudio(audioBytes);
+			    	}
+			    	// We have audio locally
+			    	else
+			    	{
+			    		Toast.makeText(getApplicationContext(), "This message LOCAL audio",
+								Toast.LENGTH_SHORT).show();	
+			    		player.startPlaying(msg.getAudio());
+			    	}
+		    	} catch (Exception e)
+		    	{
+		    		e.printStackTrace();
+		    	}
+		    }
+			});
+		
 
 		try {
 			talkMessages = messageStore.getAllMessages();
@@ -89,8 +147,4 @@ public class GeoCamTalkActivity extends RoboActivity {
 		UIUtils.createTalkMessage(this);
 	}
 	
-	public void onPlaybackClick(View v) {
-		Toast.makeText(this.getApplicationContext(), "Clicked to listen for audio",
-				Toast.LENGTH_SHORT).show();
-	}
 }
