@@ -87,8 +87,6 @@ public class GeoCamTalkActivity extends RoboActivity {
 			    	// We have audio locally
 			    	else
 			    	{
-			    		Toast.makeText(getApplicationContext(), "This message LOCAL audio",
-								Toast.LENGTH_SHORT).show();	
 			    		player.startPlaying(msg.getAudio());
 			    	}
 		    	} catch (Exception e)
