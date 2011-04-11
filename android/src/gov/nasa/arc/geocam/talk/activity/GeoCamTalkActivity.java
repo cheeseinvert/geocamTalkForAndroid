@@ -65,33 +65,10 @@ public class GeoCamTalkActivity extends RoboActivity {
 		    	
 		    	try
 		    	{
-		    		String audioUrl = msg.getAudioUrl();
-		    		//No audio recorded with message
-			    	if (msg.getAudio() == null && audioUrl.equals("")) {
-			    		Toast.makeText(getApplicationContext(), "This message has no audio",
-								Toast.LENGTH_SHORT).show();	
-			    	}
-			    	//We have audio, but not locally
-			    	else if (msg.getAudio() == null && !audioUrl.equals(""))
-			    	{
-			    		String localFileName = siteAuth.getAudioFile(audioUrl, null);
-			    		player.startPlaying(localFileName);
-			    		File audioFile = new File(localFileName);
-			    		int length = (int) audioFile.length();
-			    		byte[] audioBytes = new byte[(int) length];
-
-			    		FileInputStream fis = new FileInputStream(audioFile);
-			    		fis.read(audioBytes, 0, length);
-			    		msg.setAudio(audioBytes);
-			    	}
-			    	// We have audio locally
-			    	else
-			    	{
-			    		player.startPlaying(msg.getAudio());
-			    	}
+		    		UIUtils.playAudio(getApplicationContext(), msg, player, siteAuth);
 		    	} catch (Exception e)
 		    	{
-		    		e.printStackTrace();
+		    		UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
 		    	}
 		    }
 			});
