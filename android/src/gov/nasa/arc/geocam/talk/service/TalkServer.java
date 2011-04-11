@@ -51,9 +51,6 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 	
-	@Inject
-	IAudioPlayer player;
-
 	public TalkServer() {
 		super("DjangoTalkService");
 	}
@@ -112,6 +109,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			try{
 				message.setMessageId(Integer.parseInt(result.get("messageId")));
 				message.setAuthorFullname(result.get("authorFullname"));
+				if(result.containsKey("audioUrl")){
+					message.setAudioUrl(result.get("audioUrl"));
+				}				
 			} catch (Exception e) {
 				Log.e("Talk", "", e);
 			} 
@@ -179,8 +179,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 				jsonConverter.deserialize(jsonString);
 			// TODO: We're assuming all is well, may need to check for existing message id first
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if avaialable
-			player.startPlaying(pushedMessage.getAudio());
-			intentHelper.BroadcastNewMessages();
+			intentHelper.BroadcastNewMessages(); 
 		} catch (Exception e) {
 			Log.e("GeoCam Talk", "Error on single message get", e);
 		}

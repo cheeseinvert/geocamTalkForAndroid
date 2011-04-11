@@ -49,6 +49,9 @@ public class SiteAuthCookie implements ISiteAuth {
 	private Cookie sessionIdCookie;
 	private Context context;
 	
+	private String username;
+	private String password;		
+	
 	@Inject
 	public SiteAuthCookie(Context context) {
 		this.context = context;
@@ -158,9 +161,19 @@ public class SiteAuthCookie implements ISiteAuth {
 
 	private void ensureAuthenticated() throws AuthenticationFailedException,
 			ClientProtocolException, IOException {
-		String username = sharedPreferences.getString("webapp_username", null);
-		String password = sharedPreferences.getString("webapp_password", null);
+		
+		String new_username = sharedPreferences.getString("webapp_username", null);
+		String new_password = sharedPreferences.getString("webapp_password", null);
 
+		if (username == null || password == null || new_username == null || new_password == null) {
+			username = new_username;
+			password = new_password;
+			reAuthenticate();
+		} else if ( !username.contentEquals(new_username) || !password.contentEquals(new_password))
+		{
+			reAuthenticate();
+		}
+		
 		if (username == null || password == null) {
 			throw new AuthenticationFailedException("Username and/or password not set.");
 		} else {
@@ -206,6 +219,5 @@ public class SiteAuthCookie implements ISiteAuth {
 	@Override
 	public void reAuthenticate() throws ClientProtocolException, AuthenticationFailedException, IOException {
 		sessionIdCookie = null;
-		ensureAuthenticated();		
 	}
 }

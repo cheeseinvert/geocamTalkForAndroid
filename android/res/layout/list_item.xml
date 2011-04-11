@@ -20,6 +20,10 @@
 			<ImageView android:id="@+id/hasGeoLocation"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:src="@drawable/map" android:paddingLeft="2dip" android:visibility="visible"></ImageView>
+			<ImageView android:id="@+id/hasAudio"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:src="@drawable/play" android:paddingLeft="2dip" android:visibility="visible"></ImageView>
+				
 		</TableRow>
 	</TableLayout>
 	<TextView android:id="@+id/content"

@@ -148,13 +148,15 @@ public class GeoCamTalkActivity extends RoboActivity {
 		    @Override
 		    public void onItemClick (AdapterView<?> parentView, View childView, int position, long id) {
 		    	GeoCamTalkMessage msg = adapter.getTalkMessage(position);
-		    	
-		    	try
+		    	if(msg.hasAudio())
 		    	{
-		    		UIUtils.playAudio(getApplicationContext(), msg, player, siteAuth);
-		    	} catch (Exception e)
-		    	{
-		    		UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
+		    		try
+		    		{
+			    		UIUtils.playAudio(getApplicationContext(), msg, player, siteAuth);
+			    	} catch (Exception e)
+			    	{
+			    		UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
+			    	}
 		    	}
 		    }
 			});

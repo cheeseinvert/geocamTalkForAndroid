@@ -59,6 +59,8 @@ public class GeoCamTalkMessageArrayAdapter extends ArrayAdapter<GeoCamTalkMessag
 			(TextView) row.findViewById(R.id.content_timestamp);
 		ImageView geolocationImageView = 
 			(ImageView) row.findViewById(R.id.hasGeoLocation);
+		ImageView audioImageView = 
+			(ImageView) row.findViewById(R.id.hasAudio);
 		
 		GeoCamTalkMessage msg = getItem(position);
 		
@@ -76,6 +78,14 @@ public class GeoCamTalkMessageArrayAdapter extends ArrayAdapter<GeoCamTalkMessag
 		else
 		{
 			geolocationImageView.setVisibility(View.INVISIBLE);
+		}
+		if(msg.hasAudio())
+		{
+			audioImageView.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			audioImageView.setVisibility(View.INVISIBLE);
 		}
 		
 		return row;

@@ -125,6 +125,11 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 		this.audio = audio;
 	}
 	
+	public boolean hasAudio()
+	{
+		return this.audioUrl != null;
+	}
+	
 	public String getAudioUrl() {
 		return audioUrl;
 	}

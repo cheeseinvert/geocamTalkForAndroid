@@ -1,33 +1,25 @@
 package gov.nasa.arc.geocam.talk.activity;
 
-import com.google.inject.Inject;
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import roboguice.activity.RoboPreferenceActivity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
+import com.google.inject.Inject;
 
 public class GeoCamTalkSettings extends RoboPreferenceActivity {
-    @Inject ISiteAuth siteAuthInterface;
-	
+	@Inject
+	ISiteAuth siteAuth;
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.settings);
-    }
-    
-	/*
-    @Override
-    public void onContentChanged()
-    {
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.layout.settings);
 
-    	siteAuthInterface.setAuth(
-    			prefs.getString("webapp_username", null), 
-    			prefs.getString("webapp_password", null));
-    }
-*/
-
+	}
 }
