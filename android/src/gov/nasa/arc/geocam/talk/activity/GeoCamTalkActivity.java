@@ -96,6 +96,19 @@ public class GeoCamTalkActivity extends RoboActivity {
 		case R.id.message_list_menu_button:
 			Log.i("Talk", "Message List Button");
 			return false;
+		case R.id.logout_menu_button:
+			try {
+				UIUtils.logout(siteAuth);
+				//Intent intent = new Intent(this, GeoCamTalkSettings.class);
+				// intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				this.startActivity(new Intent(this, GeoCamTalkSettings.class));
+				unregisterReceiver(receiver);
+			}
+			catch (Exception e)
+			{
+				UIUtils.displayException(getApplicationContext(), e, "You're screwed");	
+			}
+			return false;
 		default:
 			Log.i("Talk", "NO BUTTON!!!");
 			return super.onOptionsItemSelected(item);

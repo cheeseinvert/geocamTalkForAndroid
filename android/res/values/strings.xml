@@ -13,4 +13,5 @@
     <string name="django_talk_service_name">DjangoTalkService</string>
     <string name="c2dm_sender_address">geocamtalk@gmail.com</string>
     
+<string name="logout_menu_button_title">Logout</string>
 </resources>

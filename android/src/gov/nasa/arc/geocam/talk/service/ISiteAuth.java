@@ -28,6 +28,9 @@ public interface ISiteAuth {
 	
 	public void reAuthenticate() 
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
+	
+	public void logout()
+			throws ClientProtocolException, AuthenticationFailedException, IOException;
 }
 
 class AuthorizationFailedException extends Exception {

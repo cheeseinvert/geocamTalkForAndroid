@@ -75,4 +75,9 @@ public class UIUtils {
     		player.startPlaying(msg.getAudio());
     	}
     }
+    
+    public static void logout(ISiteAuth siteAuth)throws ClientProtocolException, AuthenticationFailedException, IOException
+    {
+    	siteAuth.logout();
+    }
 }

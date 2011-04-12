@@ -8,6 +8,8 @@
           android:title="@string/message_list_button_title" />
     <item android:id="@+id/settings_menu_button"
           android:icon="@android:drawable/ic_menu_preferences"
-          android:title="@string/settings_menu_button_title" />
-                   
+          android:title="@string/settings_menu_button_title" />                  
+	<item android:id="@+id/logout_menu_button" 
+		  android:title="@string/logout_menu_button_title" 
+		  android:icon="@android:drawable/ic_menu_preferences"></item>
 </menu>

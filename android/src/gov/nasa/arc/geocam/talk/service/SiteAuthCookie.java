@@ -215,6 +215,32 @@ public class SiteAuthCookie implements ISiteAuth {
 					+ r.getStatusLine().getStatusCode());
 		}
 	}
+	
+	public void logout()throws AuthenticationFailedException, ClientProtocolException, IOException
+	{
+		httpClient = new DefaultHttpClient();
+		HttpParams params = httpClient.getParams();
+		HttpClientParams.setRedirecting(params, false);
+
+		HttpPost p = new HttpPost(serverRootUrl + "/accounts/logout/");
+		p.setParams(params);
+
+		List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("username", username));
+		nameValuePairs.add(new BasicNameValuePair("password", password));
+
+		p.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
+
+		HttpResponse r = httpClient.execute(p);
+		if (302 == r.getStatusLine().getStatusCode()) {
+			sessionIdCookie = null;
+			return;
+
+		} else {
+			throw new AuthenticationFailedException("Got unexpected response code from server: "
+					+ r.getStatusLine().getStatusCode());
+		}
+	}
 
 	@Override
 	public void reAuthenticate() throws ClientProtocolException, AuthenticationFailedException, IOException {
