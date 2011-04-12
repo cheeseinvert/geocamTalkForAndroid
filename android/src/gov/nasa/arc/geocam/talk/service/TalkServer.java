@@ -178,6 +178,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			GeoCamTalkMessage pushedMessage = 
 				jsonConverter.deserialize(jsonString);
 			// TODO: We're assuming all is well, may need to check for existing message id first
+			pushedMessage.setSynchronized(true);
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if avaialable
 			intentHelper.BroadcastNewMessages(); 
 		} catch (Exception e) {
