@@ -51,6 +51,8 @@ public class TalkServerTest extends GeoCamTestCase {
 		IIntentHelper intentHelper = mock(IIntentHelper.class);
 		setHiddenField(talkImpl, "intentHelper", intentHelper);
 		
+		setHiddenField(talkImpl, "urlMessageList", "test");
+		
 		// act
 		talkImpl.getTalkMessages();		
 		
@@ -73,6 +75,12 @@ public class TalkServerTest extends GeoCamTestCase {
 		when(jsonConv.serialize((GeoCamTalkMessage)anyObject())).thenReturn("");
 		setHiddenField(talkImpl, "jsonConverter", jsonConv);
 
+		MessageStore ms = mock(MessageStore.class);
+		setHiddenField(talkImpl, "messageStore", ms);
+		
+		IIntentHelper ih = mock(IIntentHelper.class);
+		setHiddenField(talkImpl, "intentHelper", ih);
+		
 		// act
 		talkImpl.createTalkMessage(new GeoCamTalkMessage());
 

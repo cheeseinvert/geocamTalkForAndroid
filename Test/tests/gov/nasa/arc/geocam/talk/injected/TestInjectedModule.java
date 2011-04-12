@@ -1,6 +1,14 @@
 package gov.nasa.arc.geocam.talk.injected;
 
+import com.google.inject.Scopes;
+
+import gov.nasa.arc.geocam.talk.service.AudioPlayer;
+import gov.nasa.arc.geocam.talk.service.AudioRecorder;
 import gov.nasa.arc.geocam.talk.service.DatabaseHelper;
+import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
+import gov.nasa.arc.geocam.talk.service.IAudioRecorder;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
+import gov.nasa.arc.geocam.talk.service.SiteAuthCookie;
 import gov.nasa.arc.geocam.talk.service.TalkJsonConverter;
 import gov.nasa.arc.geocam.talk.service.GeoCamSynchronizationTimerTask;
 import gov.nasa.arc.geocam.talk.service.IDatabaseHelper;
@@ -18,10 +26,13 @@ public class TestInjectedModule extends AbstractAndroidModule {
 	@Override
 	protected void configure() {
 		bind(ITalkServer.class).to(FakeTalkServer.class);
-		bind(ITalkJsonConverter.class).to(TalkJsonConverter.class);
-		bind(IMessageStore.class).to(MessageStore.class);
 		bind(IDatabaseHelper.class).to(DatabaseHelper.class);
+		bind(IMessageStore.class).to(MessageStore.class);
+		bind(IAudioRecorder.class).to(AudioRecorder.class);
+		bind(IAudioPlayer.class).to(AudioPlayer.class);
+		bind(ITalkJsonConverter.class).to(TalkJsonConverter.class);
+		bind(ISiteAuth.class).to(SiteAuthCookie.class).in(Scopes.SINGLETON);
 		bind(IIntentHelper.class).to(IntentHelper.class);
-		bind(IGeoCamSynchronizationTimerTask.class).to(GeoCamSynchronizationTimerTask.class);
-	}	
+		bind(IGeoCamSynchronizationTimerTask.class).to(GeoCamSynchronizationTimerTask.class).in(
+				Scopes.SINGLETON);	}	
 }
