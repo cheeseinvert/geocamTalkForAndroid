@@ -32,6 +32,7 @@ import org.apache.http.protocol.HTTP;
 import roboguice.inject.InjectResource;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 import com.google.inject.Inject;
@@ -234,6 +235,9 @@ public class SiteAuthCookie implements ISiteAuth {
 		HttpResponse r = httpClient.execute(p);
 		if (302 == r.getStatusLine().getStatusCode()) {
 			sessionIdCookie = null;
+			Editor  editor = sharedPreferences.edit();
+			editor.clear();
+			editor.commit();
 			return;
 
 		} else {

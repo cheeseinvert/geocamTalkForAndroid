@@ -99,10 +99,9 @@ public class GeoCamTalkActivity extends RoboActivity {
 		case R.id.logout_menu_button:
 			try {
 				UIUtils.logout(siteAuth);
-				//Intent intent = new Intent(this, GeoCamTalkSettings.class);
-				// intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			
 				this.startActivity(new Intent(this, GeoCamTalkSettings.class));
-				unregisterReceiver(receiver);
+				//unregisterReceiver(receiver);
 			}
 			catch (Exception e)
 			{
