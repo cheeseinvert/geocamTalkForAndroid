@@ -57,9 +57,9 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
         Editor editor = prefs.edit();
         
         if(null == prefs.getString("webapp_username", null))
-            editor.putString("webapp_username", getString(R.string.default_username));
+            editor.putString("webapp_username", "");
         if(null == prefs.getString("webapp_password", null))
-        	editor.putString("webapp_password", getString(R.string.default_password));
+        	editor.putString("webapp_password", "");
         editor.commit();
     }    
 }

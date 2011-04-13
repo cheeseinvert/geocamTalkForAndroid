@@ -186,7 +186,7 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 	}
 
-	private void login(String username, String password) throws ClientProtocolException,
+	public void login(String username, String password) throws ClientProtocolException,
 			IOException, AuthenticationFailedException {
 		httpClient = new DefaultHttpClient();
 		HttpParams params = httpClient.getParams();
@@ -211,6 +211,8 @@ public class SiteAuthCookie implements ISiteAuth {
 			}
 			throw new AuthenticationFailedException(
 					"Session cookie was missing from server login response.");
+		} else if (200 == r.getStatusLine().getStatusCode()){
+			return;
 		} else {
 			throw new AuthenticationFailedException("Got unexpected response code from server: "
 					+ r.getStatusLine().getStatusCode());

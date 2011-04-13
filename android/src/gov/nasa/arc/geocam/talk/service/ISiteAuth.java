@@ -31,6 +31,9 @@ public interface ISiteAuth {
 	
 	public void logout()
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
+	
+	public void login(String username, String password)
+			throws ClientProtocolException, AuthenticationFailedException, IOException;
 }
 
 class AuthorizationFailedException extends Exception {
