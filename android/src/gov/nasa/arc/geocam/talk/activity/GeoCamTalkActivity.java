@@ -71,6 +71,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 	}
 
 	private void populateListView() {
@@ -129,19 +130,22 @@ public class GeoCamTalkActivity extends RoboActivity {
 
 	@Override
 	protected void onResume() {
+		super.onResume();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
 		registerReceiver(receiver, filter);
 
-		setContentView(R.layout.main);
+		populateListView();
 
 		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+			public void onItemClick(AdapterView<?> parentView, View childView,
+					int position, long id) {
 				GeoCamTalkMessage msg = adapter.getTalkMessage(position);
 				if (msg.hasAudio()) {
 					try {
-						UIUtils.playAudio(getApplicationContext(), msg, player, siteAuth);
+						UIUtils.playAudio(getApplicationContext(), msg, player,
+								siteAuth);
 					} catch (Exception e) {
 						UIUtils.displayException(getApplicationContext(), e,
 								"Cannot retrieve audio");
@@ -149,9 +153,6 @@ public class GeoCamTalkActivity extends RoboActivity {
 				}
 			}
 		});
-
-		populateListView();
-		super.onResume();
 	}
 
 	@Override
