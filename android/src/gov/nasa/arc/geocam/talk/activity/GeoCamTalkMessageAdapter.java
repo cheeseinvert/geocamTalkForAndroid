@@ -59,8 +59,9 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 
 		contentTextView.setText(msg.getContent());
 		fullnameTextView.setText(msg.getAuthorFullname());
+		
+		Date contentTimestamp = msg.getContentTimestampDate();
 
-		Date contentTimestamp = msg.getContentTimestamp();
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		contentTimestampTextView.setText(sdf.format(contentTimestamp));
 
