@@ -4,25 +4,39 @@ import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.bean.ServerResponse;
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IAudioRecorder;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
+import gov.nasa.arc.geocam.talk.service.ITalkJsonConverter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
@@ -34,7 +48,19 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 
 	@InjectView(R.id.newTalkTextInput)
 	EditText newTalkTextView;
+	
+	@InjectResource(R.string.url_teammates_list)
+	String urlTeammatesList;
+	
+	@InjectView(R.id.recipientSpinner)
+	Spinner recipientSpinner;
 
+	@Inject
+	ISiteAuth siteAuth;
+
+	@Inject
+	ITalkJsonConverter jsonConverter;
+	
 	@Inject
 	IAudioRecorder recorder;
 
@@ -50,6 +76,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 	SharedPreferences sharedPreferences;
 
 	private String filename = null;
+	private String recipient = null;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,8 +84,41 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create_talk_message);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		List<String> spinnerList = new ArrayList<String>();
+		spinnerList.add("Broadcast");
+		//String[] teamMemberArray = {"rhornsby", "jmiller","rboethlisberger","acurie","root"};
+		try {
+			spinnerList.addAll(getTeammates());
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AuthenticationFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerList);
+	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    recipientSpinner.setPrompt("Broadcast");
+	    recipientSpinner.setAdapter(adapter);
+	    recipientSpinner.setOnItemSelectedListener(new MySpinnerItemSelectedListener());
 	}
 
+	private List<String> getTeammates() throws ClientProtocolException, AuthenticationFailedException, IOException {
+		ServerResponse sr = siteAuth.get(urlTeammatesList, null);
+		if(sr.getResponseCode() == 401) // TODO: move this to siteAuth
+		{
+			siteAuth.reAuthenticate();
+			sr = siteAuth.get(urlTeammatesList, null);
+		}
+		String jsonString = null;
+		jsonString = sr.getContent();
+		List<String> teammatesList = jsonConverter.deserializeTeammates(jsonString);
+		return teammatesList;	
+	}
+	
 	public void onHomeClick(View v) {
 		UIUtils.goHome(this);
 	}
@@ -107,12 +167,26 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 		}
 	}
 
+	public class MySpinnerItemSelectedListener implements OnItemSelectedListener {
+
+	    public void onItemSelected(AdapterView<?> parent,
+	        View view, int pos, long id) {
+	    	recipient = parent.getItemAtPosition(pos).toString();
+		    Toast.makeText(parent.getContext(), "The recipient is " + recipient, Toast.LENGTH_LONG).show();
+	    }
+
+	    public void onNothingSelected(AdapterView<?> parent) {
+	      // Do nothing.
+	    }
+	}
+	
 	public void onSendClick(View v) {
 		GeoCamTalkMessage message = new GeoCamTalkMessage();
 		message.setContent(newTalkTextView.getText().toString());
 		message.setContentTimestamp(new Date());
 		message.setLocation(appState.getLocation());
 		message.setAuthorUsername(sharedPreferences.getString("webapp_username", null));
+        message.setRecipientUsername(recipient);
 
 		if (filename != null) {
 			message.setAudio(createByteArray());

@@ -29,6 +29,9 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	private Integer  	authorId;
 	
 	@DatabaseField
+	private String 		recipientUsername;
+	
+	@DatabaseField
 	private String 		authorUsername;
 	
 	@DatabaseField
@@ -71,6 +74,12 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	}
 	public Integer getAuthorId() {
 		return authorId;
+	}
+	public String getRecipientUsername() {
+		return recipientUsername;
+	}
+	public void setRecipientUsername(String recipientUsername) {
+		this.recipientUsername = recipientUsername;
 	}
 	public String getAuthorUsername() {
 		return authorUsername;

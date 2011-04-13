@@ -33,6 +33,14 @@ public class TalkJsonConverter
 		return gson.fromJson(jsonMessages, listType);
 	}
 
+	public List<String> deserializeTeammates(String jsonString) {
+		GsonBuilder builder = new GsonBuilder();
+		
+		Gson gson = builder.create();
+		Type listType = new TypeToken<List<String>>(){}.getType();
+		return gson.fromJson(jsonString, listType);
+	}
+	
 	public GeoCamTalkMessage deserialize(String jsonString) {
 		GsonBuilder builder = new GsonBuilder();
 		builder.setDateFormat("MM/dd/yy HH:mm:ss");

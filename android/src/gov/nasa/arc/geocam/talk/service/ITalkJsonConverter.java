@@ -10,4 +10,5 @@ public interface ITalkJsonConverter {
 	GeoCamTalkMessage deserialize(String jsonString);
 	String serialize(GeoCamTalkMessage message);
 	Map<String, String> createMap(String jsonString);
+	List<String> deserializeTeammates(String jsonString);
 }

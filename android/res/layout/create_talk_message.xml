@@ -12,7 +12,8 @@
         		android:layout_alignParentTop="true"
         		android:layout_alignParentBottom="true"
         		android:src="@drawable/title"           
-        		android:onClick="onHomeClick" />        
+        		android:onClick="onHomeClick" />
+		<Spinner android:id="@+id/recipientSpinner" android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>        
     </LinearLayout>
     <EditText 
 		android:id="@+id/newTalkTextInput"

@@ -8,4 +8,5 @@
     <!-- using java formatting http://download.oracle.com/javase/1.5.0/docs/api/java/util/Formatter.html#syntax -->
     <string name="url_message_list">messages.json?since=%1$d</string>
     <string name="url_message_format">messages/details/%1$s.json</string>
+    <string name="url_teammates_list">teammates.json</string>
 </resources>
