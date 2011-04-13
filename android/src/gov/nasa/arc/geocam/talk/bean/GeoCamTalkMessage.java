@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.bean;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import android.location.Location;
@@ -41,7 +42,7 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	private String 		content;
 	
 	@DatabaseField(columnName = DATE_FIELD_NAME)
-	private Date 		contentTimestamp;
+	private Long 		contentTimestamp;
 	
 	@DatabaseField
 	private Double 		latitude;
@@ -99,11 +100,17 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getContentTimestamp() {
-		return contentTimestamp;
+	public Long getContentTimestamp() {
+		return this.contentTimestamp;
+	}
+	public void setContentTimestamp(Long contentTimestamp) {
+		this.contentTimestamp = contentTimestamp;
+	}
+	public Date getContentTimestampDate() {
+		return new Date(this.contentTimestamp);
 	}
 	public void setContentTimestamp(Date contentTimestamp) {
-		this.contentTimestamp = contentTimestamp;
+		this.contentTimestamp = contentTimestamp.getTime();
 	}
 	public Double getLatitude() {
 		return latitude;
@@ -209,12 +216,13 @@ public class GeoCamTalkMessage implements Comparable<GeoCamTalkMessage> {
 			return -1;
 		} else if(another.getContentTimestamp() == null) {
 			return 1;
-		} else if(this.contentTimestamp.after(another.getContentTimestamp())) {
+		} else if(this.getContentTimestampDate().after(another.getContentTimestampDate())) {
 			return 1;
 		} else {
 			return -1;
 		}
 	}
+	
 	public void setLocation(Location location) {
 		if (location != null) {
 			this.setLatitude(location.getLatitude());
