@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<item type="id" name="title_container" />
+    <item type="id" name="title_button" />
+    <item type="id" name="title_create_button" />
+    <item type="id" name="newTalkTextInput" />
+    <item type="id" name="record_button" />
+    <item type="id" name="send_button" />
+</resources>

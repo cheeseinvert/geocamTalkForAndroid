@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="lib" path="lib/robolectric-1.0-RC1-jar-with-dependencies.jar"/>
+	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/android.jar"/>
+	<classpathentry kind="lib" path="lib/maps.jar"/>
+	<classpathentry kind="lib" path="lib/mockito-core-1.8.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GeoCamTalkForAndroid"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/gson-1.6.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/guice-2.0-no_aop.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/roboguice-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/ormlite-core-4.18.jar"/>
+	<classpathentry kind="lib" path="/GeoCamTalkForAndroid/lib/ormlite-android-4.18.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
