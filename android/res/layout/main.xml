@@ -16,13 +16,21 @@
         		android:onClick="onGoHomeClick" />
 		<Button android:id="@+id/title_create_button"
         		android:text="Create"
-        		android:layout_width="@dimen/title_height"
         		android:layout_height="fill_parent"
         		android:layout_alignWithParentIfMissing="true"
         		android:layout_alignParentRight="true"
         		android:layout_alignParentTop="true"
         		android:layout_alignParentBottom="true"             
-        		android:onClick="onCreateTalkClick" />
+        		android:onClick="onCreateTalkClick" android:layout_width="wrap_content"/>
+        <EditText android:id="@+id/username_label"
+        		android:text="!"
+        		style="@style/TitleBar"
+        		android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:layout_alignWithParentIfMissing="true"
+        		android:layout_alignParentRight="true"
+        		android:layout_alignParentTop="true"
+        		android:layout_alignParentBottom="true" android:focusable="false" android:focusableInTouchMode="false"/>
     </LinearLayout>
 	
 	<ListView android:id="@+id/TalkListView" android:layout_width="wrap_content"

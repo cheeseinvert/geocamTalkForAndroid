@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,11 +49,13 @@ public class GeoCamTalkActivity extends RoboActivity {
 	ISiteAuth siteAuth;
 	@Inject
 	IAudioPlayer player;
-
+	@Inject
+	SharedPreferences prefs;
 	@Inject
 	IIntentHelper intentHelper;
 	
 	List<GeoCamTalkMessage> talkMessages;
+	private EditText username;
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		
@@ -70,7 +74,16 @@ public class GeoCamTalkActivity extends RoboActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setUsername();
+	}
+	
+	private void setUsername()
+	{
+		username = (EditText)findViewById(R.id.username_label);
+		if (prefs.getString("webapp_username", null) != null)
+		{
+			username.setText(prefs.getString("webapp_username", null));
+		}
 	}
 	
 	@Override
@@ -155,6 +168,7 @@ public class GeoCamTalkActivity extends RoboActivity {
         registerReceiver(receiver, filter);
 
 		setContentView(R.layout.main);
+		setUsername();
 
 		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 		    @Override

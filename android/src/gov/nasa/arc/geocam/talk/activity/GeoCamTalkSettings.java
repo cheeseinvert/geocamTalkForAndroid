@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,10 +24,8 @@ public class GeoCamTalkSettings extends RoboPreferenceActivity {
 	
 	@Inject
 	SharedPreferences prefs;
-	
 	@InjectResource(R.string.url_message_list)
 	String urlMessageList;
-	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,20 +34,29 @@ public class GeoCamTalkSettings extends RoboPreferenceActivity {
 		addPreferencesFromResource(R.xml.prefs);
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+	
 	public void onLoginClick(View v) {
-
-		try {
-			Editor  editor = prefs.edit();
-			editor.commit();
-			siteAuth.login(prefs.getString("webapp_username", null),prefs.getString("webapp_password", null));
-			Intent intent = new Intent(this, GeoCamTalkActivity.class);
-			this.startActivity(intent);
+		String url = String.format(urlMessageList,0);
+		
+		try 
+		{
+			ServerResponse r = siteAuth.get(url, null);
+			if (403 != r.getResponseCode())
+			{
+				Intent intent = new Intent(this, GeoCamTalkActivity.class);
+				this.startActivity(intent);
+			}		
 		} catch (AuthenticationFailedException f) {
 			Toast.makeText(this.getApplicationContext(), "Bad Username/Password combination",
 					Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			Log.i("Talk", "Error:" + e.getMessage());
 		}
+		
 
 
 	}
