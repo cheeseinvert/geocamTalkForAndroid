@@ -1,6 +1,7 @@
 package gov.nasa.arc.geocam.talk.service;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.bean.ServerResponse;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
+import roboguice.application.RoboApplication;
 import roboguice.inject.InjectResource;
 import roboguice.service.RoboIntentService;
 import android.content.Intent;
@@ -48,6 +50,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	@Inject
 	IIntentHelper intentHelper;
 
+	@Inject
+	IAudioPlayer audioPlayer;
+	
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 	
@@ -181,6 +186,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 			pushedMessage.setSynchronized(true);
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if avaialable
+
+			UIUtils.playAudio(getApplicationContext(), pushedMessage, audioPlayer, siteAuth);
 
 			intentHelper.BroadcastNewMessages(); 
 		} catch (Exception e) {

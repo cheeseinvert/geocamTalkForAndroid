@@ -29,12 +29,12 @@ public class GeoCamTalkModule extends AbstractAndroidModule {
 		bind(IDatabaseHelper.class).to(DatabaseHelper.class);
 		bind(IMessageStore.class).to(MessageStore.class);
 		bind(IAudioRecorder.class).to(AudioRecorder.class);
-		bind(IAudioPlayer.class).to(AudioPlayer.class);
+		bind(IAudioPlayer.class).to(AudioPlayer.class).in(Scopes.SINGLETON);
 		bind(ITalkJsonConverter.class).to(TalkJsonConverter.class);
 		bind(ISiteAuth.class).to(SiteAuthCookie.class).in(Scopes.SINGLETON);
 		bind(IIntentHelper.class).to(IntentHelper.class);
-		bind(IGeoCamSynchronizationTimerTask.class).to(GeoCamSynchronizationTimerTask.class).in(
-				Scopes.SINGLETON);
+		bind(IGeoCamSynchronizationTimerTask.class).to(
+				GeoCamSynchronizationTimerTask.class).in(Scopes.SINGLETON);
 	}
 
 }
