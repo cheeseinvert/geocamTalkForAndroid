@@ -1,7 +1,7 @@
 package gov.nasa.arc.geocam.talk.activity.test;
 
 import gov.nasa.arc.geocam.talk.R;
-import gov.nasa.arc.geocam.talk.activity.GeoCamTalkMessageArrayAdapter;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkMessageAdapter;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.injected.FakeGeoCamTalkMessageFactory;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
@@ -28,7 +28,7 @@ public class GeoCamTalkMessageArrayAdapterTest extends GeoCamTestCase{
 		msgs.add(FakeGeoCamTalkMessageFactory.getMessage("testing", "Patrick", true));
 		msgs.add(FakeGeoCamTalkMessageFactory.getMessage("testing2", "Not Patrick", false));
 
-		GeoCamTalkMessageArrayAdapter adapter = new GeoCamTalkMessageArrayAdapter(
+		GeoCamTalkMessageAdapter adapter = new GeoCamTalkMessageAdapter(
 				Robolectric.application.getApplicationContext()); 
 		adapter.setTalkMessages(msgs);
 		

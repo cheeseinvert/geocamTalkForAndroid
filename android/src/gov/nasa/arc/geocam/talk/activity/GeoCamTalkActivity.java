@@ -29,7 +29,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -37,43 +36,46 @@ public class GeoCamTalkActivity extends RoboActivity {
 
 	@Inject
 	ITalkServer djangoTalk;
+
 	@InjectView(R.id.TalkListView)
 	ListView talkListView;
+
 	@InjectResource(R.string.url_server_root)
 	String serverRootUrl;
+
 	@Inject
-	GeoCamTalkMessageArrayAdapter adapter;
+	GeoCamTalkMessageAdapter adapter;
+
 	@Inject
 	IMessageStore messageStore;
+
 	@Inject
 	ISiteAuth siteAuth;
+
 	@Inject
 	IAudioPlayer player;
 	@Inject
 	SharedPreferences prefs;
 	@Inject
 	IIntentHelper intentHelper;
-	
+
 	List<GeoCamTalkMessage> talkMessages;
 	private EditText username;
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
-		
+
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if(intent.getAction().contentEquals(TalkServerIntent.INTENT_NEW_MESSAGES.toString()))
-			{
+			if (intent.getAction().contentEquals(TalkServerIntent.INTENT_NEW_MESSAGES.toString())) {
 				GeoCamTalkActivity.this.newMessages();
 			}
 		}
 	};
 
-	
-	
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 		setUsername();
 	}
 	
@@ -85,7 +87,20 @@ public class GeoCamTalkActivity extends RoboActivity {
 			username.setText(prefs.getString("webapp_username", null));
 		}
 	}
-	
+
+	private void populateListView() {
+		try {
+			talkMessages = messageStore.getAllMessages();
+		} catch (Exception e) {
+			Log.i("Talk", "Error:" + e.getMessage());
+		}
+		
+		if (talkMessages != null) {
+			adapter.setTalkMessages(talkMessages);
+			talkListView.setAdapter(adapter);
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -128,18 +143,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 	}
 
 	public void onGoHomeClick(View v) {
-		List<GeoCamTalkMessage> talkMessages = null;
-
-		try {
-			talkMessages = messageStore.getAllMessages();
-		} catch (Exception e) {
-			Log.i("Talk", "Error:" + e.getMessage());
-		}
-
-		if (talkMessages != null) {
-			adapter.setTalkMessages(talkMessages);
-			talkListView.setAdapter(adapter);
-		}
+		populateListView();
 	}
 
 	public void onCreateTalkClick(View v) {
@@ -147,65 +151,40 @@ public class GeoCamTalkActivity extends RoboActivity {
 	}
 
 	public void newMessages() {
-		try {
-			talkMessages = messageStore.getAllMessages();
-		} catch (Exception e) {
-			Log.i("Talk", "Error:" + e.getMessage());
-		}
-
-		if (talkMessages != null) {
-			adapter.setTalkMessages(talkMessages);
-			talkListView.setAdapter(adapter);
-		}		
+		populateListView();
 	}
-	
+
 	@Override
-    protected void onResume() {
-        super.onResume();        
+	protected void onResume() {
+		super.onResume();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
+		registerReceiver(receiver, filter);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
-        registerReceiver(receiver, filter);
-
-		setContentView(R.layout.main);
+		populateListView();
 		setUsername();
 
-		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-		    @Override
-		    public void onItemClick (AdapterView<?> parentView, View childView, int position, long id) {
-		    	GeoCamTalkMessage msg = adapter.getTalkMessage(position);
-		    	if(msg.hasAudio())
-		    	{
-		    		try
-		    		{
-			    		UIUtils.playAudio(getApplicationContext(), msg, player, siteAuth);
-			    	} catch (Exception e)
-			    	{
-			    		UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
-			    	}
-		    	}
-		    }
-			});
-		
+		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parentView, View childView,
+					int position, long id) {
+				GeoCamTalkMessage msg = adapter.getTalkMessage(position);
+				if (msg.hasAudio()) {
+					try {
+						UIUtils.playAudio(getApplicationContext(), msg, player,
+								siteAuth);
+					} catch (Exception e) {
+						UIUtils.displayException(getApplicationContext(), e,
+								"Cannot retrieve audio");
+					}
+				}
+			}
+		});
+	}
 
-		try {
-			talkMessages = messageStore.getAllMessages();
-		} catch (Exception e) {
-			Log.i("Talk", "Error:" + e.getMessage());
-		}
-
-		if (talkMessages != null) {
-			adapter.setTalkMessages(talkMessages);
-			talkListView.setAdapter(adapter);
-		} else {
-			Toast.makeText(this.getApplicationContext(), "Communication Error with Server",
-					Toast.LENGTH_SHORT).show();
-		} 
-    }
-	
-    @Override
-    protected void onPause() {
-        unregisterReceiver(receiver);
-        super.onPause();
-    }
+	@Override
+	protected void onPause() {
+		unregisterReceiver(receiver);
+		super.onPause();
+	}
 }

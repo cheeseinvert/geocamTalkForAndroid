@@ -20,7 +20,7 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 	{
 		// arrange
 		String jsonString = 
-			"{\"ts\": 1, \"ms\": [{\"authorUsername\": \"rhornsby\", \"authorFullname\":\"Rufus Hornsby\", \"longitude\": null, \"content\": \"Crap, my geolocation service crashed and I am not providing geoloc with this message. This message should be the latest to make sure we gracefully fall back to the next available geolocated message.\", \"contentTimestamp\": \"03/13/11 11:23:21\",\"latitude\": null, \"messageId\": 19, \"accuracy\": null}, {\"authorUsername\": \"rhornsby\", \"longitude\": -122.057954, \"content\": \"Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.\", \"contentTimestamp\": \"03/13/11 10:48:44\", \"latitude\": 37.411629, \"messageId\": 15, \"accuracy\":60.0, \"hasGeolocation\":true}]}";
+			"{\"ts\": 1, \"ms\": [{\"authorUsername\": \"rhornsby\", \"authorFullname\":\"Rufus Hornsby\", \"longitude\": null, \"content\": \"Crap, my geolocation service crashed and I am not providing geoloc with this message. This message should be the latest to make sure we gracefully fall back to the next available geolocated message.\", \"contentTimestamp\": 182376817,\"latitude\": null, \"messageId\": 19, \"accuracy\": null}, {\"authorUsername\": \"rhornsby\", \"longitude\": -122.057954, \"content\": \"Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.\", \"contentTimestamp\": 182376817, \"latitude\": 37.411629, \"messageId\": 15, \"accuracy\":60.0, \"hasGeolocation\":true}]}";
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		TalkJsonConverter converter =
 			new TalkJsonConverter();
@@ -30,7 +30,7 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 		message1.setAuthorFullname("Rufus Hornsby");
 		// don't set longitude
 		message1.setContent("Crap, my geolocation service crashed and I am not providing geoloc with this message. This message should be the latest to make sure we gracefully fall back to the next available geolocated message.");
-		message1.setContentTimestamp(sdf.parse("03/13/11 11:23:21"));
+		message1.setContentTimestamp(new Date(182376817));
 		// don't set latitude
 		message1.setMessageId(19);
 		// don't set accuracy
@@ -39,7 +39,7 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 		message2.setAuthorUsername("rhornsby");
 		message2.setLongitude(-122.057954);
 		message2.setContent("Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.");
-		message2.setContentTimestamp(sdf.parse("03/13/11 10:48:44"));
+		message2.setContentTimestamp(new Date(182376817));
 		message2.setLatitude(37.411629);
 		message2.setMessageId(15);
 		message2.setAccuracy(60);
@@ -62,13 +62,13 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		
 		String jsonString = 
-			"{\"authorUsername\": \"rhornsby\", \"longitude\": -122.057954, \"content\": \"Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.\", \"contentTimestamp\": \"03/13/11 10:48:44\", \"latitude\": 37.411629, \"messageId\": 15, \"accuracy\":60.0}";
+			"{\"authorUsername\": \"rhornsby\", \"longitude\": -122.057954, \"content\": \"Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.\", \"contentTimestamp\": 182376817, \"latitude\": 37.411629, \"messageId\": 15, \"accuracy\":60.0}";
 		
 		GeoCamTalkMessage message = new GeoCamTalkMessage();
 		message.setAuthorUsername("rhornsby");
 		message.setLongitude(-122.057954);
 		message.setContent("Structural engineer not allowing access to building. Fire is too out of control. Fire squad alerted.");
-		message.setContentTimestamp(sdf.parse("03/13/11 10:48:44"));
+		message.setContentTimestamp(new Date(182376817));
 		message.setLatitude(37.411629);
 		message.setMessageId(15);
 		message.setAccuracy(60);
@@ -88,7 +88,7 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 		
 		GeoCamTalkMessage msg = new GeoCamTalkMessage();
 		msg.setContent("contentTest");
-		msg.setContentTimestamp(new Date());
+		msg.setContentTimestamp(new Long(182376817));
 		msg.setAccuracy(10);
 		msg.setLatitude(11);
 		msg.setLongitude(20.5);
@@ -99,6 +99,7 @@ public class TalkJsonConverterTest extends GeoCamTestCase {
 		assertTrue(jsonString.contains("content"));	
 		assertTrue(jsonString.contains("contentTest"));
 		assertTrue(jsonString.contains("contentTimestamp"));
+		assertTrue(jsonString.contains("182376817"));
 		assertTrue(jsonString.contains("accuracy"));
 		assertTrue(jsonString.contains("10"));
 		assertTrue(jsonString.contains("latitude"));
