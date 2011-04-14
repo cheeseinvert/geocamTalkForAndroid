@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -82,6 +83,8 @@ public class GeoCamTalkActivity extends RoboActivity {
 	private void setUsername()
 	{
 		username = (EditText)findViewById(R.id.username_label);
+		Editor  editor = prefs.edit();
+		editor.commit();
 		if (prefs.getString("webapp_username", null) != null)
 		{
 			username.setText(prefs.getString("webapp_username", null));
@@ -112,15 +115,15 @@ public class GeoCamTalkActivity extends RoboActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.settings_menu_button:
-			Log.i("Talk", "Settings Button");
-			Intent intent = new Intent(this, GeoCamTalkSettings.class);
-			// intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			this.startActivity(intent);
-			return true;
-		case R.id.create_message_menu_button:
-			Log.i("Talk", "Create Button");
-			return false;
+		//case R.id.settings_menu_button:
+		//	Log.i("Talk", "Settings Button");
+		//	Intent intent = new Intent(this, GeoCamTalkSettings.class);
+		// 	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		//	this.startActivity(intent);
+		//	return true;
+		//case R.id.create_message_menu_button:
+		//	Log.i("Talk", "Create Button");
+		//	return false;
 		case R.id.message_list_menu_button:
 			Log.i("Talk", "Message List Button");
 			return false;
