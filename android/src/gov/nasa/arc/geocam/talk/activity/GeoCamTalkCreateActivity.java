@@ -16,12 +16,15 @@ import java.io.IOException;
 import java.util.Date;
 
 import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,6 +37,8 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 
 	@InjectView(R.id.newTalkTextInput)
 	EditText newTalkTextView;
+	@InjectView(R.id.record_button)
+	Button recordButton;
 
 	@Inject
 	IAudioRecorder recorder;
@@ -50,6 +55,8 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 	SharedPreferences sharedPreferences;
 
 	private String filename = null;
+	private Drawable recordImage = null;
+	private Drawable stopImage = null;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -57,6 +64,8 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create_talk_message);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		recordImage = getApplicationContext().getResources().getDrawable(R.drawable.record);
+		stopImage = getApplicationContext().getResources().getDrawable(R.drawable.stop);
 	}
 
 	public void onHomeClick(View v) {
@@ -84,6 +93,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 			Log.i("TALKCREATE", "STOP recording now.");
 			try {
 				player.playBeepB();
+				recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, recordImage, null);
 				filename = recorder.stopRecording();
 				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
 				player.startPlaying(filename);
@@ -96,6 +106,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 			Log.i("TALKCREATE", "START recording now.");
 			try {
 				player.playBeepA();
+				recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, stopImage, null);
 				recorder.startRecording(this.getFilesDir().toString() + "/audio_recording.mp4");
 				// recorder.toggleRecordingStatus();
 				Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
