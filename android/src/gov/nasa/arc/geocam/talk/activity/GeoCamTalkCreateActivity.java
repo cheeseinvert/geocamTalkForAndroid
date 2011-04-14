@@ -91,17 +91,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 
 		if (recorder.isRecording()) {
 			Log.i("TALKCREATE", "STOP recording now.");
-			try {
-				player.playBeepB();
-				recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, recordImage, null);
-				filename = recorder.stopRecording();
-				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
-				player.startPlaying(filename);
-				// recorder.toggleRecordingStatus();
-			} catch (Exception e) {
-				Log.e("TALKCREATE", "Exception: " + e.getMessage());
-				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-			}
+			stopRecording();
 		} else {
 			Log.i("TALKCREATE", "START recording now.");
 			try {
@@ -116,9 +106,30 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 				recorder.stopRecording();
 			}
 		}
+	} 
+	
+	private void stopRecording() {
+		try {
+			player.playBeepB();
+			recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, recordImage, null);
+			filename = recorder.stopRecording();
+			Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
+			player.startPlaying(filename);
+			// recorder.toggleRecordingStatus();
+		} catch (Exception e) {
+			Log.e("TALKCREATE", "Exception: " + e.getMessage());
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public void onSendClick(View v) {
+		
+		//If for some reason we are still recording, stop now
+		if (recorder.isRecording())
+		{
+			filename = recorder.stopRecording();
+		}
+		
 		GeoCamTalkMessage message = new GeoCamTalkMessage();
 		message.setContent(newTalkTextView.getText().toString());
 		message.setContentTimestamp(new Date());
@@ -163,5 +174,11 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 		}
 
 		return audioBytes;
+	}
+	
+	@Override
+	protected void onPause() {
+		stopRecording();
+		super.onPause();
 	}
 }
