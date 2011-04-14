@@ -29,11 +29,13 @@ public interface ISiteAuth {
 	public void reAuthenticate() 
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
-	public void logout()
+	public void logoutAndUnregister()
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
 	public void login(String username, String password)
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
+	
+	public boolean isLoggedIn();
 }
 
 class AuthorizationFailedException extends Exception {

@@ -2,7 +2,7 @@ package gov.nasa.arc.geocam.talk.activity.test;
 
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
-import gov.nasa.arc.geocam.talk.activity.GeoCamTalkSettings;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkLogon;
 import gov.nasa.arc.geocam.talk.test.GeoCamTestCase;
 
 import org.junit.Test;

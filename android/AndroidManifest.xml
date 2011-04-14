@@ -22,7 +22,7 @@
         <activity android:name="gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity"
         android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name="gov.nasa.arc.geocam.talk.activity.GeoCamTalkSettings">
+        <activity android:name=".activity.GeoCamTalkLogon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

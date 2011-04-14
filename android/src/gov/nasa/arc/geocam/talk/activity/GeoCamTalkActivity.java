@@ -67,7 +67,8 @@ public class GeoCamTalkActivity extends RoboActivity {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().contentEquals(TalkServerIntent.INTENT_NEW_MESSAGES.toString())) {
+			if (intent.getAction().contentEquals(
+					TalkServerIntent.INTENT_NEW_MESSAGES.toString())) {
 				GeoCamTalkActivity.this.newMessages();
 			}
 		}
@@ -79,14 +80,12 @@ public class GeoCamTalkActivity extends RoboActivity {
 		setContentView(R.layout.main);
 		setUsername();
 	}
-	
-	private void setUsername()
-	{
-		username = (EditText)findViewById(R.id.username_label);
-		Editor  editor = prefs.edit();
+
+	private void setUsername() {
+		username = (EditText) findViewById(R.id.username_label);
+		Editor editor = prefs.edit();
 		editor.commit();
-		if (prefs.getString("webapp_username", null) != null)
-		{
+		if (prefs.getString("webapp_username", null) != null) {
 			username.setText(prefs.getString("webapp_username", null));
 		}
 	}
@@ -97,7 +96,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 		} catch (Exception e) {
 			Log.i("Talk", "Error:" + e.getMessage());
 		}
-		
+
 		if (talkMessages != null) {
 			adapter.setTalkMessages(talkMessages);
 			talkListView.setAdapter(adapter);
@@ -115,28 +114,16 @@ public class GeoCamTalkActivity extends RoboActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		//case R.id.settings_menu_button:
-		//	Log.i("Talk", "Settings Button");
-		//	Intent intent = new Intent(this, GeoCamTalkSettings.class);
-		// 	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		//	this.startActivity(intent);
-		//	return true;
-		//case R.id.create_message_menu_button:
-		//	Log.i("Talk", "Create Button");
-		//	return false;
-		case R.id.message_list_menu_button:
-			Log.i("Talk", "Message List Button");
-			return false;
+
 		case R.id.logout_menu_button:
 			try {
 				UIUtils.logout(siteAuth);
-			
-				this.startActivity(new Intent(this, GeoCamTalkSettings.class));
-				//unregisterReceiver(receiver);
-			}
-			catch (Exception e)
-			{
-				UIUtils.displayException(getApplicationContext(), e, "You're screwed");	
+
+				this.startActivity(new Intent(this, GeoCamTalkLogon.class));
+				// unregisterReceiver(receiver);
+			} catch (Exception e) {
+				UIUtils.displayException(getApplicationContext(), e,
+						"You're screwed");
 			}
 			return false;
 		default:
@@ -167,22 +154,25 @@ public class GeoCamTalkActivity extends RoboActivity {
 		populateListView();
 		setUsername();
 
-		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parentView, View childView,
-					int position, long id) {
-				GeoCamTalkMessage msg = adapter.getTalkMessage(position);
-				if (msg.hasAudio()) {
-					try {
-						UIUtils.playAudio(getApplicationContext(), msg, player,
-								siteAuth);
-					} catch (Exception e) {
-						UIUtils.displayException(getApplicationContext(), e,
-								"Cannot retrieve audio");
+		talkListView
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parentView,
+							View childView, int position, long id) {
+						GeoCamTalkMessage msg = adapter
+								.getTalkMessage(position);
+						if (msg.hasAudio()) {
+							try {
+								UIUtils.playAudio(getApplicationContext(), msg,
+										player, siteAuth);
+							} catch (Exception e) {
+								UIUtils.displayException(
+										getApplicationContext(), e,
+										"Cannot retrieve audio");
+							}
+						}
 					}
-				}
-			}
-		});
+				});
 	}
 
 	@Override

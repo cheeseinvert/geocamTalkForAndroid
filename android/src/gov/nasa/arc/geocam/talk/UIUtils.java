@@ -49,7 +49,7 @@ public class UIUtils {
     }
     
     public static void playAudio(Context context, GeoCamTalkMessage msg, IAudioPlayer player, ISiteAuth siteAuth) throws ClientProtocolException, AuthenticationFailedException, IOException
-    {
+    {	
     	String audioUrl = msg.getAudioUrl();
 		//No audio recorded with message
     	if (msg.getAudio() == null && audioUrl.equals("")) {
@@ -78,6 +78,6 @@ public class UIUtils {
     
     public static void logout(ISiteAuth siteAuth)throws ClientProtocolException, AuthenticationFailedException, IOException
     {
-    	siteAuth.logout();
+    	siteAuth.logoutAndUnregister();
     }
 }

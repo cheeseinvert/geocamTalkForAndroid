@@ -14,4 +14,8 @@
     <string name="c2dm_sender_address">geocamtalk@gmail.com</string>
     
 <string name="logout_menu_button_title">Logout</string>
+    
+<string name="logon_username_label">Username</string>
+    
+<string name="logon_password_label">Password</string>
 </resources>

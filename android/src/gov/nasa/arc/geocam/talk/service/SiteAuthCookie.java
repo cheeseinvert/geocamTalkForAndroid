@@ -32,8 +32,7 @@ import org.apache.http.protocol.HTTP;
 import roboguice.inject.InjectResource;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -45,7 +44,8 @@ public class SiteAuthCookie implements ISiteAuth {
 	@InjectResource(R.string.url_relative_app)
 	String appPath;
 	
-	private SharedPreferences sharedPreferences;
+	@Inject SharedPreferences sharedPreferences;
+
 	private DefaultHttpClient httpClient;
 	private Cookie sessionIdCookie;
 	private Context context;
@@ -56,7 +56,6 @@ public class SiteAuthCookie implements ISiteAuth {
 	@Inject
 	public SiteAuthCookie(Context context) {
 		this.context = context;
-		this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	@Override
@@ -163,16 +162,18 @@ public class SiteAuthCookie implements ISiteAuth {
 	private void ensureAuthenticated() throws AuthenticationFailedException,
 			ClientProtocolException, IOException {
 		
-		String new_username = sharedPreferences.getString("webapp_username", null);
-		String new_password = sharedPreferences.getString("webapp_password", null);
+		String new_username = sharedPreferences.getString("username", null);
+		String new_password = sharedPreferences.getString("password", null);
 
 		if (username == null || password == null || new_username == null || new_password == null) {
 			username = new_username;
 			password = new_password;
+			Log.i("Talk", "Username and / or password are null");
 			reAuthenticate();
 		} else if ( !username.contentEquals(new_username) || !password.contentEquals(new_password))
 		{
 			reAuthenticate();
+			Log.i("Talk", "Username and / or password have changed");
 		}
 		
 		if (username == null || password == null) {
@@ -217,9 +218,15 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 	}
 	
-	public void logout()throws AuthenticationFailedException, ClientProtocolException, IOException
+	public void logoutAndUnregister()throws AuthenticationFailedException, ClientProtocolException, IOException
 	{
 		httpClient = new DefaultHttpClient();
+		
+		HttpGet g = new HttpGet(serverRootUrl + "/" + appPath + "/" + "unregister");
+		httpClient.execute(g);
+		
+		httpClient = new DefaultHttpClient();
+		
 		HttpParams params = httpClient.getParams();
 		HttpClientParams.setRedirecting(params, false);
 
@@ -235,9 +242,8 @@ public class SiteAuthCookie implements ISiteAuth {
 		HttpResponse r = httpClient.execute(p);
 		if (302 == r.getStatusLine().getStatusCode()) {
 			sessionIdCookie = null;
-			Editor  editor = sharedPreferences.edit();
-			editor.clear();
-			editor.commit();
+			sharedPreferences.edit().remove("username").commit();
+			sharedPreferences.edit().remove("password").commit();
 			return;
 
 		} else {
@@ -249,5 +255,19 @@ public class SiteAuthCookie implements ISiteAuth {
 	@Override
 	public void reAuthenticate() throws ClientProtocolException, AuthenticationFailedException, IOException {
 		sessionIdCookie = null;
+	}
+
+	@Override
+	public boolean isLoggedIn(){
+		
+		if(sessionIdCookie == null) return false;
+		
+		String username = sharedPreferences.getString("username", null);
+		String password = sharedPreferences.getString("password", null);
+
+		if ( username == null || password == null)
+			return false;
+		
+		return true;
 	}
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:orientation="vertical"
+	android:layout_height="fill_parent">
+	<TableLayout android:layout_height="wrap_content"
+		android:padding="20px" android:stretchColumns="1" android:id="@+id/tableLayout1"
+		android:layout_width="match_parent">
+		<TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:paddingBottom="20px">
+			<TextView android:paddingRight="10px" android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/logon_username_label" android:id="@+id/username_label"></TextView>
+			<EditText android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:imeOptions="actionNext" android:id="@+id/username" android:lines="1"></EditText>
+		</TableRow>
+		<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="@string/logon_password_label" android:id="@+id/password_label"></TextView>
+			<EditText android:password="true" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:imeOptions="actionDone" android:id="@+id/password" android:lines="1"></EditText>
+		</TableRow>
+	</TableLayout>
+	<Button android:id="@+id/login_button" android:text="Login"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_alignWithParentIfMissing="true"
+		android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+		android:layout_alignParentBottom="true" android:onClick="onLoginClick" />
+</LinearLayout>

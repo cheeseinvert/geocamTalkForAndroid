@@ -29,8 +29,6 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, listener);		
 		
 		IGeoCamSynchronizationTimerTask timerTask = injector.getInstance(IGeoCamSynchronizationTimerTask.class);
-		IIntentHelper intentHelper = injector.getInstance(IIntentHelper.class);
-		intentHelper.RegisterC2dm();
 		
 		injector.injectMembers(this);
 
