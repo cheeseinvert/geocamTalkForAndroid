@@ -53,6 +53,8 @@ public class SiteAuthCookie implements ISiteAuth {
 	private String username;
 	private String password;		
 	
+	@Inject IIntentHelper intentHelper;
+	
 	@Inject
 	public SiteAuthCookie(Context context) {
 		this.context = context;
@@ -112,12 +114,15 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 		
 		post.setEntity(httpEntity);
-		
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
-		// post.setHeader("Cookie", sessionIdCookie.toString());
-
-		return new ServerResponse(httpClient.execute(post));
+		ServerResponse sr = new ServerResponse(httpClient.execute(post));
 		
+		if(sr.getResponseCode() == 401 || sr.getResponseCode() == 403)
+		{
+			throw new AuthenticationFailedException("Server responded with code: " + sr.getResponseCode());
+		}
+		
+		return sr;
 	}
 
 	@Override
@@ -133,7 +138,14 @@ public class SiteAuthCookie implements ISiteAuth {
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
 		// get.setHeader("Cookie", sessionIdCookie.toString());
 
-		return new ServerResponse(httpClient.execute(get));
+		ServerResponse sr = new ServerResponse(httpClient.execute(get));
+		
+		if(sr.getResponseCode() == 401 || sr.getResponseCode() == 403)
+		{
+			throw new AuthenticationFailedException("Server responded with code: " + sr.getResponseCode());
+		}
+		
+		return sr;
 	}
 	
 	@Override
@@ -149,12 +161,18 @@ public class SiteAuthCookie implements ISiteAuth {
 		httpClient.getCookieStore().addCookie(sessionIdCookie);
 
 		HttpResponse r = httpClient.execute(post);
-		          
+		
+		if(r.getStatusLine().getStatusCode() == 401 || r.getStatusLine().getStatusCode() == 403)
+		{
+			throw new AuthenticationFailedException("Server responded with code: " + r.getStatusLine().getStatusCode());
+		}
+		
         if(r.getFirstHeader("Content-Type").getValue().contains("mp4"))
         {
         	FileOutputStream ostream = new FileOutputStream(context.getFilesDir().toString() + "/tempfile.mp4");
             r.getEntity().writeTo(ostream);
         }
+        
         return (context.getFilesDir().toString() + "/tempfile.mp4");
         
 	}
@@ -181,14 +199,17 @@ public class SiteAuthCookie implements ISiteAuth {
 		} else {
 			Date now = new Date();
 			if (sessionIdCookie == null || sessionIdCookie.isExpired(now)) {
-				// we're not logged in (at least we think. Let's log in)
-				login(username, password);
+				login();
 			}
 		}
 	}
 
-	public void login(String username, String password) throws ClientProtocolException,
+	public void login() throws ClientProtocolException,
 			IOException, AuthenticationFailedException {
+		
+		username = sharedPreferences.getString("username", null);
+		password = sharedPreferences.getString("password", null);
+		
 		httpClient = new DefaultHttpClient();
 		HttpParams params = httpClient.getParams();
 		HttpClientParams.setRedirecting(params, false);
@@ -207,6 +228,7 @@ public class SiteAuthCookie implements ISiteAuth {
 			for (Cookie c : httpClient.getCookieStore().getCookies()) {
 				if (c.getName().contains("sessionid")) {
 					sessionIdCookie = c;
+					intentHelper.RegisterC2dm();
 					return;
 				}
 			}
@@ -240,12 +262,13 @@ public class SiteAuthCookie implements ISiteAuth {
 		p.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.ASCII));
 
 		HttpResponse r = httpClient.execute(p);
+
+		sharedPreferences.edit().remove("username").commit();
+		sharedPreferences.edit().remove("password").commit();
+
 		if (302 == r.getStatusLine().getStatusCode()) {
 			sessionIdCookie = null;
-			sharedPreferences.edit().remove("username").commit();
-			sharedPreferences.edit().remove("password").commit();
 			return;
-
 		} else {
 			throw new AuthenticationFailedException("Got unexpected response code from server: "
 					+ r.getStatusLine().getStatusCode());

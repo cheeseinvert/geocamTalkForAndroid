@@ -7,12 +7,10 @@ import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
-import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import gov.nasa.arc.geocam.talk.service.ITalkServer;
 
 import java.util.List;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.content.BroadcastReceiver;
@@ -23,9 +21,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -33,7 +28,7 @@ import android.widget.ListView;
 
 import com.google.inject.Inject;
 
-public class GeoCamTalkActivity extends RoboActivity {
+public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 
 	@Inject
 	ITalkServer djangoTalk;
@@ -49,9 +44,6 @@ public class GeoCamTalkActivity extends RoboActivity {
 
 	@Inject
 	IMessageStore messageStore;
-
-	@Inject
-	ISiteAuth siteAuth;
 
 	@Inject
 	IAudioPlayer player;
@@ -100,35 +92,6 @@ public class GeoCamTalkActivity extends RoboActivity {
 		if (talkMessages != null) {
 			adapter.setTalkMessages(talkMessages);
 			talkListView.setAdapter(adapter);
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.default_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		switch (item.getItemId()) {
-
-		case R.id.logout_menu_button:
-			try {
-				UIUtils.logout(siteAuth);
-
-				this.startActivity(new Intent(this, GeoCamTalkLogon.class));
-				// unregisterReceiver(receiver);
-			} catch (Exception e) {
-				UIUtils.displayException(getApplicationContext(), e,
-						"You're screwed");
-			}
-			return false;
-		default:
-			Log.i("Talk", "NO BUTTON!!!");
-			return super.onOptionsItemSelected(item);
 		}
 	}
 

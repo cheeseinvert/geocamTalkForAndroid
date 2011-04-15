@@ -15,7 +15,6 @@ import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
-import roboguice.application.RoboApplication;
 import roboguice.inject.InjectResource;
 import roboguice.service.RoboIntentService;
 import android.content.Intent;
@@ -61,8 +60,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	private static int maxMessageId = 0;
 
-	@Override
-	public void getTalkMessages() throws SQLException, ClientProtocolException,
+	private void getTalkMessages() throws SQLException, ClientProtocolException,
 			AuthenticationFailedException, IOException {
 
 		// let's check the server and add any new messages to the database
@@ -71,33 +69,34 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		String url = String.format(urlMessageList, maxMessageId);
 
 		ServerResponse sr = siteAuth.get(url, null);
-		if (sr.getResponseCode() == 401) // TODO: move this to siteAuth
+		
+		if(sr.getResponseCode() == 200)
 		{
-			siteAuth.reAuthenticate();
-			sr = siteAuth.get(url, null);
-		}
-
-		jsonString = sr.getContent();
-		List<GeoCamTalkMessage> newMessages = jsonConverter
-				.deserializeList(jsonString);
-		List<GeoCamTalkMessage> existingMessages = messageStore
-				.getAllMessages();
-		newMessages.removeAll(existingMessages);
-
-		if (newMessages.size() > 0) {
-			for (GeoCamTalkMessage message : newMessages) {
-				message.setSynchronized(true);
+			jsonString = sr.getContent();
+			List<GeoCamTalkMessage> newMessages = jsonConverter
+					.deserializeList(jsonString);
+			List<GeoCamTalkMessage> existingMessages = messageStore
+					.getAllMessages();
+			newMessages.removeAll(existingMessages);
+	
+			if (newMessages.size() > 0) {
+				for (GeoCamTalkMessage message : newMessages) {
+					message.setSynchronized(true);
+				}
+				messageStore.addMessage(newMessages);
+				intentHelper.BroadcastNewMessages();
 			}
-			messageStore.addMessage(newMessages);
-			intentHelper.BroadcastNewMessages();
 		}
-
+		else
+		{
+			Log.e("Talk", "Could not get messages, invalid response");
+		}
+		
 		maxMessageId = messageStore.getNewestMessageId();
 		Log.i("Talk", "MaxMessageIdNow:" + maxMessageId);
 	}
 
-	@Override
-	public void createTalkMessage(GeoCamTalkMessage message)
+	private void createTalkMessage(GeoCamTalkMessage message)
 			throws ClientProtocolException, AuthenticationFailedException,
 			IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -152,7 +151,22 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 					.getStringExtra(TalkServerIntent.EXTRA_MESSAGE_ID
 							.toString());
 			handlePushedMessageIntent(messageId);
+		} else if (intent.getAction().contentEquals(
+				TalkServerIntent.INTENT_LOGIN.toString())) {
+			handleLogin();
 		}
+
+	}
+
+	private void handleLogin() {
+		try {
+			siteAuth.login();
+		} catch (AuthenticationFailedException e) {
+			intentHelper.LoginFailed();
+		} catch (Exception e) {
+			Log.e("Talk", "Comm error while logging in.", e);
+		}
+		
 	}
 
 	private void handleSynchronizeIntent() {
@@ -162,9 +176,10 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			for (GeoCamTalkMessage message : messageStore.getAllLocalMessages()) {
 				this.createTalkMessage(message);
 			}
+		} catch (AuthenticationFailedException e) {
+			intentHelper.LoginFailed();
 		} catch (Exception e) {
 			Log.e("GeoCam Talk", "Comm Error", e);
-			// TODO: Display this to the user (Toast or notification bar)
 		}
 	}
 
@@ -178,6 +193,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 				registrationId);
 		try {
 			siteAuth.post(urlRegistration, params);
+		} catch (AuthenticationFailedException e) {
+			intentHelper.LoginFailed();
 		} catch (Exception e) {
 			Log.e("GeoCam Talk", "Comm Error", e);
 		}
@@ -211,6 +228,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			}
 			
 			intentHelper.BroadcastNewMessages();
+		} catch (AuthenticationFailedException e) {
+			intentHelper.LoginFailed();
 		} catch (Exception e) {
 			Log.e("GeoCam Talk", "Error on single message get", e);
 		}

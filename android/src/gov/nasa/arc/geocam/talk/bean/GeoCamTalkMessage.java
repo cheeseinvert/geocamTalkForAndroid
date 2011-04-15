@@ -1,6 +1,5 @@
 package gov.nasa.arc.geocam.talk.bean;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import android.location.Location;

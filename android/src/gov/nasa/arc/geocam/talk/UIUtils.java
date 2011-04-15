@@ -8,6 +8,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkLogon;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
@@ -24,13 +25,19 @@ public class UIUtils {
      */
     public static void goHome(Context context) {
         final Intent intent = new Intent(context, GeoCamTalkActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+    
+    public static void goToLogin(Context context) {
+        final Intent intent = new Intent(context, GeoCamTalkLogon.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
     
     public static void createTalkMessage(Context context){
         final Intent intent = new Intent(context, GeoCamTalkCreateActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
     

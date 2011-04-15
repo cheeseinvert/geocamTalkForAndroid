@@ -10,4 +10,8 @@ public interface IIntentHelper {
 	void StoreC2dmRegistrationId(String registrationId); // forward registration
 															// on to our server
 	void PushedMessage(String messageId);
+
+	void LoginFailed();
+
+	void Login();
 }

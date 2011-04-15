@@ -6,6 +6,7 @@ import roboguice.inject.InjectResource;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -59,5 +60,20 @@ public class IntentHelper implements IIntentHelper {
 				TalkServerIntent.EXTRA_MESSAGE_ID.toString(),
 				messageId);
 		context.startService(pushedMessageIntent);
+	}
+	
+	@Override public void Login()
+	{
+		Intent loginInent = new Intent(this.context, TalkServer.class);
+		loginInent.setAction(TalkServerIntent.INTENT_LOGIN.toString());
+		Log.i("Talk", "Login intent broadcast");
+		context.startService(loginInent);	}
+	
+	@Override
+	public void LoginFailed()
+	{
+		Intent loginFailedIntent = new Intent(TalkServerIntent.INTENT_LOGIN_FAILED.toString());
+		context.sendBroadcast(loginFailedIntent);	
+		Log.i("Talk", "Login failed broadcast");
 	}
 }

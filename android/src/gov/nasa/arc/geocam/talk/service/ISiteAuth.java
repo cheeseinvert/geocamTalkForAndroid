@@ -32,7 +32,7 @@ public interface ISiteAuth {
 	public void logoutAndUnregister()
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
-	public void login(String username, String password)
+	public void login()
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
 	public boolean isLoggedIn();

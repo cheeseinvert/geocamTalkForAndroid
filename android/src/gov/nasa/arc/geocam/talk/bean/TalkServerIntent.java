@@ -11,6 +11,10 @@ public enum TalkServerIntent {
 	
 	INTENT_PUSHED_MESSAGE("gov.nasa.arc.geocam.talk.pushed_message"),
 	
+	INTENT_LOGIN_FAILED("gov.nasa.arc.geocam.talk.login_failed"),
+
+	INTENT_LOGIN("gov.nasa.arc.geocam.talk.login"),
+	
 	EXTRA_MESSAGE_ID("message_id"),
 	
 	EXTRA_REGISTRATION_ID("registration_id");

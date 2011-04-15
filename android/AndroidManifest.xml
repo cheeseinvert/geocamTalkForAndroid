@@ -17,19 +17,20 @@
                  android:theme="@style/default_style">
         <activity android:name="gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity"
                   android:label="@string/app_name">
-        </activity>
-        
-        <activity android:name="gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity"
-        android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:name=".activity.GeoCamTalkLogon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>        
         </activity>
         
+        <activity android:name="gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity"
+        android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".activity.GeoCamTalkLogon">
+        </activity>
         
+        
+                
         
         <receiver android:name=".service.C2DMReciever" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>

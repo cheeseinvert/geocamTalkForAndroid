@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
-import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,7 +26,7 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
-public class GeoCamTalkCreateActivity extends RoboActivity {
+public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 
 	@Inject
 	GeoCamTalkRoboApplication appState;
