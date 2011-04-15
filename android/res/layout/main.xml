@@ -13,7 +13,7 @@
         		android:layout_alignParentLeft="true"
         		android:layout_alignParentTop="true"
         		android:layout_alignParentBottom="true"            
-        		android:onClick="onGoHomeClick" />
+        		android:onClick="onGoHomeClick"/>
 		<Button android:id="@+id/title_create_button"
         		android:text="Create"
         		android:layout_width="@dimen/title_height"

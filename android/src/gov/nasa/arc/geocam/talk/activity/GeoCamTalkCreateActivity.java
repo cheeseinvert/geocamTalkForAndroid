@@ -87,7 +87,6 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 	}
 
 	public void onRecordClick(View v) {
-		// TODO: add this to call the Audio service
 
 		if (recorder.isRecording()) {
 			Log.i("TALKCREATE", "STOP recording now.");
@@ -97,6 +96,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 			try {
 				player.playBeepA();
 				recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, stopImage, null);
+				recordButton.setText("Recording...");
 				recorder.startRecording(this.getFilesDir().toString() + "/audio_recording.mp4");
 				// recorder.toggleRecordingStatus();
 				Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
@@ -112,6 +112,7 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 		try {
 			player.playBeepB();
 			recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, recordImage, null);
+			recordButton.setText("Record Audio");
 			filename = recorder.stopRecording();
 			Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
 			player.startPlaying(filename);
@@ -178,7 +179,9 @@ public class GeoCamTalkCreateActivity extends RoboActivity {
 	
 	@Override
 	protected void onPause() {
-		stopRecording();
+		if (recorder.isRecording()) {
+			stopRecording();
+		}
 		super.onPause();
 	}
 }
