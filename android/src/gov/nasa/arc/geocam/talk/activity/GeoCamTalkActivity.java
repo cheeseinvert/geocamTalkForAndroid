@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,11 +68,16 @@ public class GeoCamTalkActivity extends RoboActivity {
 			}
 		}
 	};
+	
+	private PowerManager.WakeLock wakeLock;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "DimScreenALittle");
+		
 	}
 
 	private void populateListView() {
@@ -131,6 +137,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		wakeLock.acquire();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
 		registerReceiver(receiver, filter);
@@ -158,6 +165,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 	@Override
 	protected void onPause() {
 		unregisterReceiver(receiver);
+		wakeLock.release();
 		super.onPause();
 	}
 }
