@@ -12,12 +12,16 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
 
 import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
 import roboguice.service.RoboIntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.util.Log;
 
 import com.google.inject.Inject;
@@ -39,6 +43,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	@InjectResource(R.string.url_message_format)
 	String urlMessageFormatString;
 
+	@InjectResource(R.string.pref_auto_play_on_push)
+	String prefAutoPlayOnPush;
+
 	@Inject
 	ISiteAuth siteAuth;
 
@@ -53,6 +60,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
+	
+	@Inject SharedPreferences sharedPrefs;
 
 	public TalkServer() {
 		super("DjangoTalkService");
@@ -69,16 +78,13 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		String url = String.format(urlMessageList, maxMessageId);
 
 		ServerResponse sr = siteAuth.get(url, null);
-		
-		if(sr.getResponseCode() == 200)
-		{
+
+		if (sr.getResponseCode() == 200) {
 			jsonString = sr.getContent();
-			List<GeoCamTalkMessage> newMessages = jsonConverter
-					.deserializeList(jsonString);
-			List<GeoCamTalkMessage> existingMessages = messageStore
-					.getAllMessages();
+			List<GeoCamTalkMessage> newMessages = jsonConverter.deserializeList(jsonString);
+			List<GeoCamTalkMessage> existingMessages = messageStore.getAllMessages();
 			newMessages.removeAll(existingMessages);
-	
+
 			if (newMessages.size() > 0) {
 				for (GeoCamTalkMessage message : newMessages) {
 					message.setSynchronized(true);
@@ -86,33 +92,28 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 				messageStore.addMessage(newMessages);
 				intentHelper.BroadcastNewMessages();
 			}
-		}
-		else
-		{
+		} else {
 			Log.e("Talk", "Could not get messages, invalid response");
 		}
-		
+
 		maxMessageId = messageStore.getNewestMessageId();
 		Log.i("Talk", "MaxMessageIdNow:" + maxMessageId);
 	}
 
-	public void createTalkMessage(GeoCamTalkMessage message)
-			throws ClientProtocolException, AuthenticationFailedException,
-			IOException, SQLException {
+	public void createTalkMessage(GeoCamTalkMessage message) throws ClientProtocolException,
+			AuthenticationFailedException, IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("message", jsonConverter.serialize(message));
 		message.setSynchronized(true);
 		messageStore.updateMessage(message);
-		ServerResponse sr = siteAuth.post(urlCreateMessage, map,
-				message.getAudio());
+		ServerResponse sr = siteAuth.post(urlCreateMessage, map, message.getAudio());
 		if (sr.getResponseCode() == 401) {
 			siteAuth.reAuthenticate();
 			sr = siteAuth.post(urlCreateMessage, map, message.getAudio());
 		}
 		if (sr.getResponseCode() == 200) {
 			// read content to string
-			Map<String, String> result = jsonConverter.createMap(sr
-					.getContent());
+			Map<String, String> result = jsonConverter.createMap(sr.getContent());
 			try {
 				message.setMessageId(Integer.parseInt(result.get("messageId")));
 				message.setAuthorFullname(result.get("authorFullname"));
@@ -128,31 +129,25 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		} else {
 			message.setSynchronized(false);
 			messageStore.updateMessage(message);
-			throw new ClientProtocolException(
-					"Message could not be created (HTTP error "
-							+ sr.getResponseCode() + ")");
+			throw new ClientProtocolException("Message could not be created (HTTP error "
+					+ sr.getResponseCode() + ")");
 		}
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		if (intent.getAction().contentEquals(
-				TalkServerIntent.INTENT_SYNCHRONIZE.toString())) {
+		if (intent.getAction().contentEquals(TalkServerIntent.INTENT_SYNCHRONIZE.toString())) {
 			handleSynchronizeIntent();
 		} else if (intent.getAction().contentEquals(
 				TalkServerIntent.INTENT_STORE_C2DM_ID.toString())) {
-			String registrationId = intent
-					.getStringExtra(TalkServerIntent.EXTRA_REGISTRATION_ID
-							.toString());
+			String registrationId = intent.getStringExtra(TalkServerIntent.EXTRA_REGISTRATION_ID
+					.toString());
 			handleStoreRegistrationIdIntent(registrationId);
 		} else if (intent.getAction().contentEquals(
 				TalkServerIntent.INTENT_PUSHED_MESSAGE.toString())) {
-			String messageId = intent
-					.getStringExtra(TalkServerIntent.EXTRA_MESSAGE_ID
-							.toString());
+			String messageId = intent.getStringExtra(TalkServerIntent.EXTRA_MESSAGE_ID.toString());
 			handlePushedMessageIntent(messageId);
-		} else if (intent.getAction().contentEquals(
-				TalkServerIntent.INTENT_LOGIN.toString())) {
+		} else if (intent.getAction().contentEquals(TalkServerIntent.INTENT_LOGIN.toString())) {
 			handleLogin();
 		}
 
@@ -166,7 +161,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		} catch (Exception e) {
 			Log.e("Talk", "Comm error while logging in.", e);
 		}
-		
+
 	}
 
 	private void handleSynchronizeIntent() {
@@ -189,8 +184,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 																			// not
 																			// null
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(TalkServerIntent.EXTRA_REGISTRATION_ID.toString(),
-				registrationId);
+		params.put(TalkServerIntent.EXTRA_REGISTRATION_ID.toString(), registrationId);
 		try {
 			siteAuth.post(urlRegistration, params);
 		} catch (AuthenticationFailedException e) {
@@ -213,8 +207,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 				sr = siteAuth.get(url, null);
 			}
 			jsonString = sr.getContent();
-			GeoCamTalkMessage pushedMessage = jsonConverter
-					.deserialize(jsonString);
+			GeoCamTalkMessage pushedMessage = jsonConverter.deserialize(jsonString);
 			// TODO: We're assuming all is well, may need to check for existing
 			// message id first
 
@@ -222,9 +215,10 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if
 													// avaialable
 
-			UIUtils.playAudio(getApplicationContext(), pushedMessage,
-						audioPlayer, siteAuth);
-			
+			if (sharedPrefs.getBoolean(prefAutoPlayOnPush, false)) {
+				UIUtils.playAudio(getApplicationContext(), pushedMessage, audioPlayer, siteAuth);
+			}
+
 			intentHelper.BroadcastNewMessages();
 		} catch (AuthenticationFailedException e) {
 			intentHelper.LoginFailed();

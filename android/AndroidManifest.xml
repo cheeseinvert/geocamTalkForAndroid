@@ -26,6 +26,7 @@
         <activity android:name="gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity"
         android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity android:name=".activity.SettingsActivity"></activity>
         <activity android:name=".activity.GeoCamTalkLogon">
         </activity>
         

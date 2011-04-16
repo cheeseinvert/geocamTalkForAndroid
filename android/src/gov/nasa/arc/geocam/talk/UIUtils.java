@@ -1,20 +1,23 @@
 package gov.nasa.arc.geocam.talk;
 
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkLogon;
+import gov.nasa.arc.geocam.talk.activity.SettingsActivity;
+import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
+import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 
-import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
-import gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity;
-import gov.nasa.arc.geocam.talk.activity.GeoCamTalkLogon;
-import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
-import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
-import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
-import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -59,9 +62,15 @@ public class UIUtils {
     {	
     	String intro = "Message from " + msg.getAuthorFullname() + ", " + msg.getContent();
     	String audioUrl = msg.getAudioUrl();
+    	
+    	boolean useTTS = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("prefUseTts", false);
+    	
 		//No audio recorded with message
     	if (msg.getAudio() == null && audioUrl == null) {
-    		player.speak(intro);	
+    		if(useTTS)
+    		{
+    			player.speak(intro);	
+    		}
     		return;
     	}
     	//We have audio, but not locally
@@ -77,11 +86,21 @@ public class UIUtils {
     		fis.read(audioBytes, 0, length);
     		msg.setAudio(audioBytes);
     	}
-    	player.startPlayingWithTtsIntro(intro, msg.getAudio());
+    	if(useTTS){
+    		player.startPlayingWithTtsIntro(intro, msg.getAudio());
+    	}else{
+    		player.startPlaying(msg.getAudio());
+    	}
     }
     
     public static void logout(ISiteAuth siteAuth)throws ClientProtocolException, AuthenticationFailedException, IOException
     {
     	siteAuth.logoutAndUnregister();
     }
+
+	public static void goToSettings(Context context) {
+        final Intent intent = new Intent(context, SettingsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+	}
 }

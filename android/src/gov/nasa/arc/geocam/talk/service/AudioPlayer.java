@@ -14,11 +14,12 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
 
 import com.google.inject.Inject;
 
-public class AudioPlayer implements IAudioPlayer, OnInitListener{
+public class AudioPlayer implements IAudioPlayer, OnInitListener, OnUtteranceCompletedListener{
 
 	Context context;
 	MediaPlayer player = new MediaPlayer();
@@ -88,16 +89,23 @@ public class AudioPlayer implements IAudioPlayer, OnInitListener{
 	
 	@Override
 	public void startPlayingWithTtsIntro(String intro, String filename) {
+		Log.i("Talk", "Tts followed by " + filename);
 		HashMap<String, String> alarm = new HashMap<String, String>();
 		alarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
 		        String.valueOf(AudioManager.STREAM_ALARM));
 		alarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
 				filename);		
+		mTts.setOnUtteranceCompletedListener(this);
 		mTts.speak(intro, TextToSpeech.QUEUE_FLUSH, alarm);
 	}
 	
-	public void onUtteranceCompleted(String filename) throws IllegalArgumentException, IllegalStateException, IOException {
-		startPlaying(filename);
+	public void onUtteranceCompleted(String filename) {
+		try {
+			startPlaying(filename);
+		} catch (Exception e) {
+			Log.e("Talk", "Could not play audio");
+		}
+		Log.i("Talk", "Utterance receieved");
 	}
 
 	@Override

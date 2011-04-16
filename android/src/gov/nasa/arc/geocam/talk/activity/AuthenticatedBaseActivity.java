@@ -60,19 +60,29 @@ public class AuthenticatedBaseActivity extends RoboActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 
-		case R.id.logout_menu_button:
-			try {
-				UIUtils.logout(siteAuth);
-
-				this.startActivity(new Intent(this, GeoCamTalkLogon.class));
-				// unregisterReceiver(receiver);
-			} catch (Exception e) {
-				UIUtils.displayException(getApplicationContext(), e, "You're screwed");
-			}
-			return false;
-		default:
-			Log.i("Talk", "NO BUTTON!!!");
-			return super.onOptionsItemSelected(item);
+			case R.id.logout_menu_button:
+				try {
+					Log.i("Talk", "Logout Menu Item");
+					UIUtils.logout(siteAuth);
+					this.startActivity(new Intent(this, GeoCamTalkLogon.class));
+				} catch (Exception e) {
+					UIUtils.displayException(getApplicationContext(), e, "You're screwed");
+				}
+				return false;
+			case R.id.create_message_button:
+				Log.i("Talk", "Create Message Menu Item");
+				UIUtils.createTalkMessage(this);
+				return false;
+			case R.id.message_list_button:
+				UIUtils.goHome(this);
+				return false;
+			case R.id.settings_button:
+				UIUtils.goToSettings(this);
+				Log.i("Talk", "Settings Menu Item");
+				return false;
+			default:
+				Log.i("Talk", "NO BUTTON!!!");
+				return super.onOptionsItemSelected(item);
 		}
 	}
 

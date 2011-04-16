@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:key="rootSettings">
+	<CheckBoxPreference android:key="@string/pref_auto_play_on_push"
+		android:title="Auto play on push" />
+	<CheckBoxPreference android:key="@string/pref_use_tts"
+		android:title="Use Text-to-Speech" />
+</PreferenceScreen>

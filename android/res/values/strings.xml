@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, GeoCamTalk!</string>
-    <string name="app_name">GeoCam Talk</string>
-    <string name="webapp_password_title">Password</string>
-    <string name="webapp_user_title">Username</string>
-    <string name="default_username">root</string>
-    <string name="default_password">geocam</string>
-    <string name="settings_menu_button_title">Settings</string>
-    <string name="message_list_button_title">Messages</string>
-    <string name="create_message_button_title">New</string>
-    <string name="sqlite_database_name">geocamTalk.db</string>
-    <string name="django_talk_service_name">DjangoTalkService</string>
-    <string name="c2dm_sender_address">geocamtalk@gmail.com</string>
-    
-<string name="logout_menu_button_title">Logout</string>
-    
-<string name="logon_username_label">Username</string>
-    
-<string name="logon_password_label">Password</string>
+	<string name="hello">Hello World, GeoCamTalk!</string>
+	<string name="app_name">GeoCam Talk</string>
+	<string name="webapp_password_title">Password</string>
+	<string name="webapp_user_title">Username</string>
+	<string name="default_username">root</string>
+	<string name="default_password">geocam</string>
+	<string name="settings_menu_button_title">Settings</string>
+	<string name="message_list_button_title">Messages</string>
+	<string name="create_message_button_title">New</string>
+	<string name="sqlite_database_name">geocamTalk.db</string>
+	<string name="django_talk_service_name">DjangoTalkService</string>
+	<string name="c2dm_sender_address">geocamtalk@gmail.com</string>
+
+	<string name="logout_menu_button_title">Logout</string>
+
+	<string name="logon_username_label">Username</string>
+
+	<string name="logon_password_label">Password</string>
+	
+	<string name="pref_auto_play_on_push">prefAutoPlayPush</string>	
+	<string name="pref_use_tts">prefUseTts</string>	
 </resources>
