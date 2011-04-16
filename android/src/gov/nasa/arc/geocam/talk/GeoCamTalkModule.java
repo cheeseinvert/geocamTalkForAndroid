@@ -2,6 +2,7 @@ package gov.nasa.arc.geocam.talk;
 
 import gov.nasa.arc.geocam.talk.service.AudioPlayer;
 import gov.nasa.arc.geocam.talk.service.AudioRecorder;
+import gov.nasa.arc.geocam.talk.service.C2DMReciever;
 import gov.nasa.arc.geocam.talk.service.DatabaseHelper;
 import gov.nasa.arc.geocam.talk.service.TalkServer;
 import gov.nasa.arc.geocam.talk.service.TalkJsonConverter;
@@ -33,6 +34,7 @@ public class GeoCamTalkModule extends AbstractAndroidModule {
 		bind(ITalkJsonConverter.class).to(TalkJsonConverter.class);
 		bind(ISiteAuth.class).to(SiteAuthCookie.class).in(Scopes.SINGLETON);
 		bind(IIntentHelper.class).to(IntentHelper.class);
+		bind(C2DMReciever.class).toInstance(new C2DMReciever());
 		bind(IGeoCamSynchronizationTimerTask.class).to(
 				GeoCamSynchronizationTimerTask.class).in(Scopes.SINGLETON);
 	}

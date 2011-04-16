@@ -5,6 +5,7 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
+import gov.nasa.arc.geocam.talk.service.C2DMReciever;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
@@ -56,6 +57,7 @@ public class GeoCamTalkActivity extends RoboActivity {
 
 	@Inject
 	IIntentHelper intentHelper;
+
 
 	List<GeoCamTalkMessage> talkMessages;
 
@@ -126,10 +128,9 @@ public class GeoCamTalkActivity extends RoboActivity {
 	}
 	
 	public void onExitClick(View v) {
-		intentHelper.StopServices();
-		intentHelper.UnregisterC2dm();
-		((GeoCamTalkRoboApplication) getApplication()).stopTimer();
+		((GeoCamTalkRoboApplication) getApplication()).stopThreads();
 		finish();
+		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
 	public void newMessages() {
