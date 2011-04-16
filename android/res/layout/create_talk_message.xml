@@ -30,15 +30,6 @@
 	   	android:drawableRight="@drawable/record"     		           
 	   	android:onClick="onRecordClick" 
 	   	android:textSize="30dp"/>  
-	     <!-- <Button android:id="@+id/playback_button"
-	    	android:text="Playback Audio"
-	     	android:layout_width="wrap_content"
-	     	android:layout_height="wrap_content"
-	     	android:layout_alignWithParentIfMissing="true"
-	     	android:layout_alignParentLeft="true"
-	     	android:layout_alignParentTop="true"
-	     	android:layout_alignParentBottom="true"     		           
-	     	android:onClick="onPlaybackClick" /> -->
 	<Button android:id="@+id/send_button"
 		android:text="Send"
 	    android:layout_width="fill_parent"

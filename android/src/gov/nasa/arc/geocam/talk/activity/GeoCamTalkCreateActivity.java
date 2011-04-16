@@ -66,7 +66,7 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		stopImage = getApplicationContext().getResources().getDrawable(R.drawable.stop);
 	}
 
-	public void onHomeClick(View v) {
+	public void onGoHomeClick(View v) {
 		UIUtils.goHome(this);
 	}
 

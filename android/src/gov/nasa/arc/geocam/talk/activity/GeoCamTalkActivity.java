@@ -1,9 +1,11 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
+import gov.nasa.arc.geocam.talk.service.C2DMReciever;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
@@ -52,6 +54,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 	SharedPreferences prefs;
 	@Inject
 	IIntentHelper intentHelper;
+
 
 	List<GeoCamTalkMessage> talkMessages;
 	private EditText username;
@@ -106,6 +109,12 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 
 	public void onCreateTalkClick(View v) {
 		UIUtils.createTalkMessage(this);
+	}
+	
+	public void onExitClick(View v) {
+		((GeoCamTalkRoboApplication) getApplication()).stopThreads();
+		finish();
+		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
 	public void newMessages() {

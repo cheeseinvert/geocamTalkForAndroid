@@ -7,11 +7,16 @@ public interface IIntentHelper {
 
 	void RegisterC2dm(); // Register with google servers
 
+	void UnregisterC2dm();
+
 	void StoreC2dmRegistrationId(String registrationId); // forward registration
 															// on to our server
 	void PushedMessage(String messageId);
 
-	void LoginFailed();
+	void Login(); // Attempt to login to the django server
 
-	void Login();
+	void LoginFailed(); // alert listeners of a failed login
+
+	void StopServices();
+
 }

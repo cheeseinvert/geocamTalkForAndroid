@@ -28,5 +28,10 @@ public class GeoCamSynchronizationTimerTask implements IGeoCamSynchronizationTim
 		this.handler.removeCallbacks(this);
 		this.handler.postDelayed(this, period);
 	}
+	
+	@Override
+	public void stopTimer() {
+		this.handler.removeCallbacks(this);
+	}
 
 }
