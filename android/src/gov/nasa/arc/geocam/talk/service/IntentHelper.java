@@ -1,11 +1,15 @@
 package gov.nasa.arc.geocam.talk.service;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
 import roboguice.inject.InjectResource;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.inject.Inject;
 
@@ -36,9 +40,16 @@ public class IntentHelper implements IIntentHelper {
 	@Override
 	public void RegisterC2dm() {
 		Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
-        registrationIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), 0)); // boilerplate
+        registrationIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), 0)); 
         registrationIntent.putExtra("sender", c2dmSenderAddress);
-        context.startService(registrationIntent);	
+        context.startService(registrationIntent);
+	}
+	
+	@Override
+	public void UnregisterC2dm() {
+		Intent unregIntent = new Intent("com.google.android.c2dm.intent.UNREGISTER");
+		unregIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+		context.startService(unregIntent);
 	}
 
 	@Override
@@ -59,5 +70,11 @@ public class IntentHelper implements IIntentHelper {
 				TalkServerIntent.EXTRA_MESSAGE_ID.toString(),
 				messageId);
 		context.startService(pushedMessageIntent);
+	}
+
+	@Override
+	public void StopServices() {
+		Intent i = new Intent(this.context, TalkServer.class);
+		context.stopService(i);
 	}
 }

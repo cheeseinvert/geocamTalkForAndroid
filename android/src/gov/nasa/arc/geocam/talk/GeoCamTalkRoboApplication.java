@@ -17,6 +17,7 @@ import com.google.inject.Module;
 
 public class GeoCamTalkRoboApplication extends RoboApplication{
 	private GeoLocationListener listener;
+	private IGeoCamSynchronizationTimerTask timerTask;
 	
 	private Module module = new GeoCamTalkModule();
 
@@ -28,7 +29,7 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
 		LocationManager locationManager = injector.getInstance(LocationManager.class);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, listener);		
 		
-		IGeoCamSynchronizationTimerTask timerTask = injector.getInstance(IGeoCamSynchronizationTimerTask.class);
+		timerTask = injector.getInstance(IGeoCamSynchronizationTimerTask.class);
 		IIntentHelper intentHelper = injector.getInstance(IIntentHelper.class);
 		intentHelper.RegisterC2dm();
 		
@@ -36,6 +37,10 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
 
 		setDefaultSettings();
         super.onCreate();
+	}
+	
+	public void stopTimer() {
+		timerTask.stopTimer();
 	}
     
 	protected void addApplicationModules(List<Module> modules) {

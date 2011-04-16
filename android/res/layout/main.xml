@@ -23,6 +23,15 @@
         		android:layout_alignParentTop="true"
         		android:layout_alignParentBottom="true"             
         		android:onClick="onCreateTalkClick" />
+        <Button android:id="@+id/exit_button"
+        		android:text="Exit"
+        		android:layout_width="@dimen/title_height"
+        		android:layout_height="fill_parent"
+        		android:layout_alignWithParentIfMissing="true"
+        		android:layout_alignParentRight="true"
+        		android:layout_alignParentTop="true"
+        		android:layout_alignParentBottom="true"             
+        		android:onClick="onExitClick" />
     </LinearLayout>
 	
 	<ListView android:id="@+id/TalkListView" android:layout_width="wrap_content"

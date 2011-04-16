@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
@@ -122,6 +123,13 @@ public class GeoCamTalkActivity extends RoboActivity {
 
 	public void onCreateTalkClick(View v) {
 		UIUtils.createTalkMessage(this);
+	}
+	
+	public void onExitClick(View v) {
+		intentHelper.StopServices();
+		intentHelper.UnregisterC2dm();
+		((GeoCamTalkRoboApplication) getApplication()).stopTimer();
+		finish();
 	}
 
 	public void newMessages() {
