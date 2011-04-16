@@ -20,6 +20,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -65,11 +66,15 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 			}
 		}
 	};
+	
+	private PowerManager.WakeLock wakeLock;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "DimScreenALittle");
 		setUsername();
 	}
 
@@ -110,6 +115,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		wakeLock.acquire();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());
 		registerReceiver(receiver, filter);
@@ -141,6 +147,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 	@Override
 	protected void onPause() {
 		unregisterReceiver(receiver);
+		wakeLock.release();
 		super.onPause();
 	}
 }

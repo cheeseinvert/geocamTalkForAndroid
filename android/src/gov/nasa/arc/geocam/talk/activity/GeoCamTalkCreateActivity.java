@@ -17,10 +17,12 @@ import java.util.Date;
 
 import roboguice.inject.InjectView;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +35,8 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 
 	@InjectView(R.id.newTalkTextInput)
 	EditText newTalkTextView;
+	@InjectView(R.id.record_button)
+	Button recordButton;
 
 	@Inject
 	IAudioRecorder recorder;
@@ -49,6 +53,8 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 	SharedPreferences sharedPreferences;
 
 	private String filename = null;
+	private Drawable recordImage = null;
+	private Drawable stopImage = null;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -56,6 +62,8 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.create_talk_message);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		recordImage = getApplicationContext().getResources().getDrawable(R.drawable.record);
+		stopImage = getApplicationContext().getResources().getDrawable(R.drawable.stop);
 	}
 
 	public void onHomeClick(View v) {
@@ -77,24 +85,16 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 	}
 
 	public void onRecordClick(View v) {
-		// TODO: add this to call the Audio service
 
 		if (recorder.isRecording()) {
 			Log.i("TALKCREATE", "STOP recording now.");
-			try {
-				player.playBeepB();
-				filename = recorder.stopRecording();
-				Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
-				player.startPlaying(filename);
-				// recorder.toggleRecordingStatus();
-			} catch (Exception e) {
-				Log.e("TALKCREATE", "Exception: " + e.getMessage());
-				Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-			}
+			stopRecording();
 		} else {
 			Log.i("TALKCREATE", "START recording now.");
 			try {
 				player.playBeepA();
+				recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, stopImage, null);
+				recordButton.setText("Recording...");
 				recorder.startRecording(this.getFilesDir().toString() + "/audio_recording.mp4");
 				// recorder.toggleRecordingStatus();
 				Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show();
@@ -104,9 +104,31 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 				recorder.stopRecording();
 			}
 		}
+	} 
+	
+	private void stopRecording() {
+		try {
+			player.playBeepB();
+			recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, recordImage, null);
+			recordButton.setText("Record Audio");
+			filename = recorder.stopRecording();
+			Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
+			player.startPlaying(filename);
+			// recorder.toggleRecordingStatus();
+		} catch (Exception e) {
+			Log.e("TALKCREATE", "Exception: " + e.getMessage());
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public void onSendClick(View v) {
+		
+		//If for some reason we are still recording, stop now
+		if (recorder.isRecording())
+		{
+			filename = recorder.stopRecording();
+		}
+		
 		GeoCamTalkMessage message = new GeoCamTalkMessage();
 		message.setContent(newTalkTextView.getText().toString());
 		message.setContentTimestamp(new Date());
@@ -151,5 +173,13 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		}
 
 		return audioBytes;
+	}
+	
+	@Override
+	protected void onPause() {
+		if (recorder.isRecording()) {
+			stopRecording();
+		}
+		super.onPause();
 	}
 }
