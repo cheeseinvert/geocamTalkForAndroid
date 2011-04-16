@@ -222,10 +222,8 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if
 													// avaialable
 
-			if (pushedMessage.hasAudio()) {
-				UIUtils.playAudio(getApplicationContext(), pushedMessage,
+			UIUtils.playAudio(getApplicationContext(), pushedMessage,
 						audioPlayer, siteAuth);
-			}
 			
 			intentHelper.BroadcastNewMessages();
 		} catch (AuthenticationFailedException e) {

@@ -29,12 +29,6 @@
         <activity android:name=".activity.GeoCamTalkLogon">
         </activity>
         
-        
-                
-        
-        <receiver android:name=".service.C2DMReciever" android:permission="com.google.android.c2dm.permission.SEND">
-        </receiver>     
-        
         <service android:name=".service.TalkServer" />
     </application>
     <uses-sdk android:minSdkVersion="8" />

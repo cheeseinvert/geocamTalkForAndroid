@@ -57,14 +57,15 @@ public class UIUtils {
     
     public static void playAudio(Context context, GeoCamTalkMessage msg, IAudioPlayer player, ISiteAuth siteAuth) throws ClientProtocolException, AuthenticationFailedException, IOException
     {	
+    	String intro = "Message from " + msg.getAuthorFullname() + ", " + msg.getContent();
     	String audioUrl = msg.getAudioUrl();
 		//No audio recorded with message
-    	if (msg.getAudio() == null && audioUrl.equals("")) {
-    		Toast.makeText(context, "This message has no audio",
-					Toast.LENGTH_SHORT).show();	
+    	if (msg.getAudio() == null && audioUrl == null) {
+    		player.speak(intro);	
+    		return;
     	}
     	//We have audio, but not locally
-    	else if (msg.getAudio() == null && !audioUrl.equals(""))
+    	else if (msg.getAudio() == null && audioUrl != null)
     	{
     		String localFileName = siteAuth.getAudioFile(audioUrl, null);
     		player.startPlaying(localFileName);
@@ -76,11 +77,7 @@ public class UIUtils {
     		fis.read(audioBytes, 0, length);
     		msg.setAudio(audioBytes);
     	}
-    	// We have audio locally
-    	else
-    	{
-    		player.startPlaying(msg.getAudio());
-    	}
+    	player.startPlayingWithTtsIntro(intro, msg.getAudio());
     }
     
     public static void logout(ISiteAuth siteAuth)throws ClientProtocolException, AuthenticationFailedException, IOException
