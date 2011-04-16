@@ -6,10 +6,13 @@
 	<item android:id="@+id/create_message_button"
 		  android:title="@string/create_message_button_title"
 		  android:icon="@android:drawable/ic_menu_add"></item>
-	<item android:id="@+id/logout_menu_button" 
-		  android:title="@string/logout_menu_button_title" 
-		  android:icon="@android:drawable/ic_menu_delete"></item>
 	<item android:id="@+id/settings_button"
 		  android:title="@string/settings_menu_button_title"
 		  android:icon="@android:drawable/ic_menu_preferences"></item>
+	<item android:id="@+id/logout_menu_button" 
+		  android:title="@string/logout_menu_button_title" 
+		  android:icon="@android:drawable/ic_menu_delete"></item>
+	<item android:id="@+id/exit_menu_button" 
+		  android:title="@string/exit_menu_button_title"></item>
+
 </menu>

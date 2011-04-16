@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
@@ -76,6 +77,11 @@ public class AuthenticatedBaseActivity extends RoboActivity {
 			case R.id.message_list_button:
 				UIUtils.goHome(this);
 				return false;
+			case R.id.exit_menu_button:
+				((GeoCamTalkRoboApplication) getApplication()).stopThreads();
+				finish();
+				android.os.Process.killProcess(android.os.Process.myPid());
+				return false;				
 			case R.id.settings_button:
 				UIUtils.goToSettings(this);
 				Log.i("Talk", "Settings Menu Item");

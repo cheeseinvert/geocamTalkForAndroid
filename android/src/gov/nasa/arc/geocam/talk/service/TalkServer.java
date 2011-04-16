@@ -1,5 +1,6 @@
 package gov.nasa.arc.geocam.talk.service;
 
+import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
@@ -19,9 +20,11 @@ import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
 import roboguice.service.RoboIntentService;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.inject.Inject;
@@ -61,7 +64,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 	
-	@Inject SharedPreferences sharedPrefs;
+	SharedPreferences sharedPrefs;
 
 	public TalkServer() {
 		super("DjangoTalkService");
@@ -136,6 +139,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
 		if (intent.getAction().contentEquals(TalkServerIntent.INTENT_SYNCHRONIZE.toString())) {
 			handleSynchronizeIntent();
 		} else if (intent.getAction().contentEquals(
@@ -194,8 +198,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		}
 	}
 
-	private void handlePushedMessageIntent(String messageId) { // assumed this
-																// is not null
+	private void handlePushedMessageIntent(String messageId) {
+			
+		
 		Log.i("Talk", "Received notification for message:" + messageId);
 		String url = String.format(urlMessageFormatString, messageId);
 
@@ -215,7 +220,11 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 			messageStore.addMessage(pushedMessage); // TODO: go get audio if
 													// avaialable
 
-			if (sharedPrefs.getBoolean(prefAutoPlayOnPush, false)) {
+			Log.i("Talk", "audio_blocked:" + (sharedPrefs.getBoolean("audio_blocked", false) ? "true" : "false"));
+			Log.i("Talk", "prefAutoPlayOnPush:" + (sharedPrefs.getBoolean(prefAutoPlayOnPush, false) ? "true" : "false"));
+			
+			if (sharedPrefs.getBoolean(prefAutoPlayOnPush, false) && !sharedPrefs.getBoolean("audio_blocked", false)) {
+				Log.i("Talk", "Playing push message");
 				UIUtils.playAudio(getApplicationContext(), pushedMessage, audioPlayer, siteAuth);
 			}
 
