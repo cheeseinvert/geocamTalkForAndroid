@@ -64,7 +64,7 @@ public class TalkServerTest extends GeoCamTestCase {
 	@Test
 	public void shouldEnsureCreateTalkMessagePostsTalkMessage() throws Exception
 	{
-		ITalkServer talkImpl = new TalkServer();
+		TalkServer talkImpl = new TalkServer();
 
 		ITalkJsonConverter jsonConv = mock(TalkJsonConverter.class);
 		

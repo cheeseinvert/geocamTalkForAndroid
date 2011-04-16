@@ -60,7 +60,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	private static int maxMessageId = 0;
 
-	private void getTalkMessages() throws SQLException, ClientProtocolException,
+	public void getTalkMessages() throws SQLException, ClientProtocolException,
 			AuthenticationFailedException, IOException {
 
 		// let's check the server and add any new messages to the database
@@ -96,7 +96,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		Log.i("Talk", "MaxMessageIdNow:" + maxMessageId);
 	}
 
-	private void createTalkMessage(GeoCamTalkMessage message)
+	public void createTalkMessage(GeoCamTalkMessage message)
 			throws ClientProtocolException, AuthenticationFailedException,
 			IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
