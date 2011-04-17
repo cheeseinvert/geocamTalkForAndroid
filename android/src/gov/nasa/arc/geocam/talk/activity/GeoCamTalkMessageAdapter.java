@@ -58,8 +58,16 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 		ImageView geolocationImageView = (ImageView) row.findViewById(R.id.hasGeoLocation);
 		ImageButton audioImageButton = (ImageButton) row.findViewById(R.id.hasAudio);
 		audioImageButton.setFocusable(false);
-		audioImageButton.setTag(position);
-		
+
+//		contentTextView.setClickable(true);
+//		contentTextView.setFocusable(true);
+//		fullnameTextView.setClickable(true);
+//		fullnameTextView.setFocusable(true);
+//		contentTimestampTextView.setClickable(true);
+//		contentTimestampTextView.setFocusable(true);
+//		geolocationImageView.setClickable(true);
+//		geolocationImageView.setFocusable(true);
+								
 		GeoCamTalkMessage msg = getItem(position);
 
 		contentTextView.setText(msg.getContent());
@@ -80,6 +88,7 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 		} else {
 			audioImageButton.setVisibility(View.GONE);
 		}
+		audioImageButton.setTag(msg);
 		
 		//row.setClickable(true);
 		//row.setFocusable(true);

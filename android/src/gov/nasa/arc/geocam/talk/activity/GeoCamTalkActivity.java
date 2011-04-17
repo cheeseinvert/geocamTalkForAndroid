@@ -24,9 +24,12 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.inject.Inject;
@@ -131,7 +134,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 
 		populateListView();
 		setUsername();
-		talkListView.setItemsCanFocus(true);
+				
 		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parentView,
@@ -141,7 +144,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 						
 						if (msg.hasGeolocation()) {
 							UIUtils.showMapView(childView.getContext(), msg);
-						}											
+						}
 					}
 				});
 	}
@@ -153,9 +156,8 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		super.onPause();
 	}
 	
-	public void audioButtonClickHandler(View v) {
-		int position = (Integer) v.getTag();
-		GeoCamTalkMessage msg = adapter.getTalkMessage(position);		
+	public void audioButtonClickHandler(View v) {		
+		GeoCamTalkMessage msg = (GeoCamTalkMessage)v.getTag();		
 		if (msg.hasAudio()) {
 			try {
 				UIUtils.playAudio(getApplicationContext(), msg,	player, siteAuth);
