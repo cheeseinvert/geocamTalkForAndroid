@@ -9,9 +9,11 @@ import java.util.List;
 
 import roboguice.adapter.IterableAdapter;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,9 +75,13 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 		if (msg.hasAudio()) {
 			audioImageView.setVisibility(View.VISIBLE);
 		} else {
-			audioImageView.setVisibility(View.INVISIBLE);
+			audioImageView.setVisibility(View.GONE);
 		}
-
+		
+		
+		//row.setClickable(true);
+		//row.setFocusable(true);
+		
 		return row;
 	}
 }

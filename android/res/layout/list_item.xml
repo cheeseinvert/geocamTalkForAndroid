@@ -39,6 +39,7 @@
         	android:layout_width="50px"
         	android:layout_height="50px"
         	android:src="@drawable/play"
+        	android:focusable="false"
         	android:visibility="visible" />		
     </LinearLayout>
 </LinearLayout>

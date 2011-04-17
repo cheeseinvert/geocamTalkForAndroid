@@ -9,6 +9,7 @@ import org.apache.http.client.ClientProtocolException;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkActivity;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkCreateActivity;
 import gov.nasa.arc.geocam.talk.activity.GeoCamTalkLogon;
+import gov.nasa.arc.geocam.talk.activity.GeoCamTalkMapActivity;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
@@ -81,6 +82,15 @@ public class UIUtils {
     	{
     		player.startPlaying(msg.getAudio());
     	}
+    }
+    
+    public static void showMapView(Context context, GeoCamTalkMessage talkMessage) {
+    	final Intent intent = new Intent(context, GeoCamTalkMapActivity.class);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	intent.putExtra(context.getString(R.string.latitude), talkMessage.getLatitude());
+    	intent.putExtra(context.getString(R.string.longitude), talkMessage.getLongitude());
+    	intent.putExtra(context.getString(R.string.accuracy), talkMessage.getAccuracy());
+    	context.startActivity(intent);    	
     }
     
     public static void logout(ISiteAuth siteAuth)throws ClientProtocolException, AuthenticationFailedException, IOException

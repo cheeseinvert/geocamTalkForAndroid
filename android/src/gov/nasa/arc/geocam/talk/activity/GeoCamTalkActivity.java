@@ -131,24 +131,30 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 
 		populateListView();
 		setUsername();
-
-		talkListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		talkListView.setItemsCanFocus(true);
+		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parentView,
 							View childView, int position, long id) {
-						GeoCamTalkMessage msg = adapter
-								.getTalkMessage(position);
+						Log.i("OnItemClick", "Position: " + position + ", ID:" + id);
+						GeoCamTalkMessage msg = adapter.getTalkMessage(position);
+						
+						if (msg.hasGeolocation()) {
+							UIUtils.showMapView(childView.getContext(), msg);
+						}
+						
+						/*
 						if (msg.hasAudio()) {
 							try {
-								UIUtils.playAudio(getApplicationContext(), msg,
-										player, siteAuth);
+								//UIUtils.playAudio(getApplicationContext(), msg,
+								//		player, siteAuth);
 							} catch (Exception e) {
 								UIUtils.displayException(
 										getApplicationContext(), e,
 										"Cannot retrieve audio");
 							}
 						}
+						*/
 					}
 				});
 	}
