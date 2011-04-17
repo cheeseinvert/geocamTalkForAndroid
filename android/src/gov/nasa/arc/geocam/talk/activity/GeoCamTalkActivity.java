@@ -141,20 +141,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 						
 						if (msg.hasGeolocation()) {
 							UIUtils.showMapView(childView.getContext(), msg);
-						}
-						
-						/*
-						if (msg.hasAudio()) {
-							try {
-								//UIUtils.playAudio(getApplicationContext(), msg,
-								//		player, siteAuth);
-							} catch (Exception e) {
-								UIUtils.displayException(
-										getApplicationContext(), e,
-										"Cannot retrieve audio");
-							}
-						}
-						*/
+						}											
 					}
 				});
 	}
@@ -164,5 +151,17 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		unregisterReceiver(receiver);
 		wakeLock.release();
 		super.onPause();
+	}
+	
+	public void audioButtonClickHandler(View v) {
+		int position = (Integer) v.getTag();
+		GeoCamTalkMessage msg = adapter.getTalkMessage(position);		
+		if (msg.hasAudio()) {
+			try {
+				UIUtils.playAudio(getApplicationContext(), msg,	player, siteAuth);
+			} catch (Exception e) {
+				UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
+			}
+		}		
 	}
 }

@@ -40,6 +40,7 @@
         	android:layout_height="50px"
         	android:src="@drawable/play"
         	android:focusable="false"
+        	android:onClick="audioButtonClickHandler"
         	android:visibility="visible" />		
     </LinearLayout>
 </LinearLayout>
