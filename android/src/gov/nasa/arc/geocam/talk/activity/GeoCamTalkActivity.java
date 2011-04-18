@@ -5,7 +5,6 @@ import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.bean.TalkServerIntent;
-import gov.nasa.arc.geocam.talk.service.C2DMReciever;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.IIntentHelper;
 import gov.nasa.arc.geocam.talk.service.IMessageStore;
@@ -24,12 +23,8 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.inject.Inject;
@@ -134,19 +129,6 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 
 		populateListView();
 		setUsername();
-				
-		talkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parentView,
-							View childView, int position, long id) {
-						Log.i("OnItemClick", "Position: " + position + ", ID:" + id);
-						GeoCamTalkMessage msg = adapter.getTalkMessage(position);
-						
-						if (msg.hasGeolocation()) {
-							UIUtils.showMapView(childView.getContext(), msg);
-						}
-					}
-				});
 	}
 
 	@Override

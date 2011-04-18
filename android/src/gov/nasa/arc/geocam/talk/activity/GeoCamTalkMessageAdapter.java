@@ -1,7 +1,10 @@
 package gov.nasa.arc.geocam.talk.activity;
 
 import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
+import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
+import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,11 +12,10 @@ import java.util.List;
 
 import roboguice.adapter.IterableAdapter;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +27,12 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 	@Inject
 	LayoutInflater mInflater;
 
+	@Inject
+	IAudioPlayer player;
+	
+	@Inject
+	ISiteAuth siteAuth;
+	
 	@Inject
 	public GeoCamTalkMessageAdapter(Context context) {
 		super(context, R.layout.list_item);
@@ -57,16 +65,9 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 		TextView contentTimestampTextView = (TextView) row.findViewById(R.id.content_timestamp);
 		ImageView geolocationImageView = (ImageView) row.findViewById(R.id.hasGeoLocation);
 		ImageButton audioImageButton = (ImageButton) row.findViewById(R.id.hasAudio);
+		
+		audioImageButton.setSelected(false);                                                                                                                                                   
 		audioImageButton.setFocusable(false);
-
-//		contentTextView.setClickable(true);
-//		contentTextView.setFocusable(true);
-//		fullnameTextView.setClickable(true);
-//		fullnameTextView.setFocusable(true);
-//		contentTimestampTextView.setClickable(true);
-//		contentTimestampTextView.setFocusable(true);
-//		geolocationImageView.setClickable(true);
-//		geolocationImageView.setFocusable(true);
 								
 		GeoCamTalkMessage msg = getItem(position);
 
@@ -90,8 +91,16 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 		}
 		audioImageButton.setTag(msg);
 		
-		//row.setClickable(true);
-		//row.setFocusable(true);
+		row.setTag(msg);
+		row.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				GeoCamTalkMessage msg = (GeoCamTalkMessage)v.getTag();				
+				if (msg.hasGeolocation()) {
+					UIUtils.showMapView(v.getContext(), msg);
+				}				
+			}			
+		});
 		
 		return row;
 	}

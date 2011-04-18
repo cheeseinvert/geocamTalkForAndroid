@@ -5,6 +5,7 @@ import gov.nasa.arc.geocam.talk.service.TalkMapOverlay;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -51,6 +52,8 @@ public class GeoCamTalkMapActivity extends RoboMapActivity{
 		sb.append(longitudeStr + ": " + longitude + "\n");	
 		sb.append(accuracyStr + ":  " + accuracy);
 		textView.setText(sb.toString());
+		textView.setBackgroundColor(Color.BLACK);
+		textView.setTextColor(Color.LTGRAY);
 				
 		mapView.setBuiltInZoomControls(true);
 		mapOverlays = mapView.getOverlays();
