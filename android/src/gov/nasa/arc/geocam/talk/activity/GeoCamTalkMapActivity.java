@@ -1,9 +1,14 @@
 package gov.nasa.arc.geocam.talk.activity;
 
+import gov.nasa.arc.geocam.talk.R;
+import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.service.TalkMapOverlay;
 
 import java.util.List;
 
+import roboguice.activity.RoboMapActivity;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -16,12 +21,6 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-
-import gov.nasa.arc.geocam.talk.R;
-import gov.nasa.arc.geocam.talk.UIUtils;
-import roboguice.activity.RoboMapActivity;
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
 
 public class GeoCamTalkMapActivity extends RoboMapActivity{
 

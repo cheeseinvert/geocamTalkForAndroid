@@ -28,7 +28,7 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
 	private Module module = new GeoCamTalkModule();
 	
 	@Inject
-	C2DMReciever cd2mReciever;
+	C2DMReciever c2dmreceiver;
 	
 	@Override
 	public void onCreate() {
@@ -52,15 +52,16 @@ public class GeoCamTalkRoboApplication extends RoboApplication{
 	public void startThreads() {
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("com.google.android.c2dm.intent.RECEIVE");
+		intentFilter.addCategory("gov.nasa.arc.geocam.talk");
 		intentFilter.addAction("com.google.android.c2dm.intent.REGISTRATION");
 		intentFilter.addCategory("gov.nasa.arc.geocam.talk");
-		registerReceiver(cd2mReciever, intentFilter); 
+		registerReceiver(c2dmreceiver, intentFilter, "com.google.android.c2dm.permission.SEND", null); 
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 1, listener);
 		timerTask.run();
 	}
 	
 	public void stopThreads() {
-		unregisterReceiver(cd2mReciever);
+		unregisterReceiver(c2dmreceiver);
 		intentHelper.StopServices();
 		intentHelper.UnregisterC2dm();
 		timerTask.stopTimer();

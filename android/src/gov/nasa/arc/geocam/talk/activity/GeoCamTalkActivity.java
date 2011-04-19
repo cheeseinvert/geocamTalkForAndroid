@@ -108,12 +108,6 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 	public void onCreateTalkClick(View v) {
 		UIUtils.createTalkMessage(this);
 	}
-	
-	public void onExitClick(View v) {
-		((GeoCamTalkRoboApplication) getApplication()).stopThreads();
-		finish();
-		android.os.Process.killProcess(android.os.Process.myPid());
-	}
 
 	public void newMessages() {
 		populateListView();
@@ -122,6 +116,8 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		prefs.edit().putBoolean("audio_blocked", false).commit();
 		wakeLock.acquire();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(TalkServerIntent.INTENT_NEW_MESSAGES.toString());

@@ -85,7 +85,7 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 	}
 
 	public void onRecordClick(View v) {
-
+		sharedPreferences.edit().putBoolean("audio_blocked", true).commit();
 		if (recorder.isRecording()) {
 			Log.i("TALKCREATE", "STOP recording now.");
 			stopRecording();
@@ -107,6 +107,7 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 	} 
 	
 	private void stopRecording() {
+		sharedPreferences.edit().putBoolean("audio_blocked", false).commit();
 		try {
 			player.playBeepB();
 			recordButton.setCompoundDrawablesWithIntrinsicBounds(null, null, recordImage, null);
@@ -180,6 +181,7 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		if (recorder.isRecording()) {
 			stopRecording();
 		}
+		sharedPreferences.edit().putBoolean("audio_blocked", false).commit();
 		super.onPause();
 	}
 }
