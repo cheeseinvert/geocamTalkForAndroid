@@ -138,7 +138,7 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		GeoCamTalkMessage msg = (GeoCamTalkMessage)v.getTag();		
 		if (msg.hasAudio()) {
 			try {
-				UIUtils.playAudio(getApplicationContext(), msg,	player, siteAuth);
+				UIUtils.playAudio(this, msg,	player, siteAuth);
 			} catch (Exception e) {
 				UIUtils.displayException(getApplicationContext(), e, "Cannot retrieve audio");
 			}

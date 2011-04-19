@@ -79,8 +79,8 @@ public class AuthenticatedBaseActivity extends RoboActivity {
 				return false;
 			case R.id.exit_menu_button:
 				((GeoCamTalkRoboApplication) getApplication()).stopThreads();
-				finish();
-				android.os.Process.killProcess(android.os.Process.myPid());
+				
+				System.exit(0);
 				return false;				
 			case R.id.settings_button:
 				UIUtils.goToSettings(this);

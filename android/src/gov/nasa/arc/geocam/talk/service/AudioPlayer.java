@@ -22,14 +22,15 @@ import com.google.inject.Inject;
 public class AudioPlayer implements IAudioPlayer, OnInitListener, OnUtteranceCompletedListener{
 
 	Context context;
-	MediaPlayer player = new MediaPlayer();
-	TextToSpeech mTts;
-	boolean textToSpeechOk = false;
+	MediaPlayer player;
+	//TextToSpeech mTts;
+	//boolean textToSpeechOk = false;
 	
 	@Inject
 	public AudioPlayer(Context context)
 	{
-		mTts = new TextToSpeech(context, this);
+		//mTts = new TextToSpeech(context, this);
+		player = new MediaPlayer();
 		this.context = context;
 	}
 	
@@ -89,14 +90,19 @@ public class AudioPlayer implements IAudioPlayer, OnInitListener, OnUtteranceCom
 	
 	@Override
 	public void startPlayingWithTtsIntro(String intro, String filename) {
-		Log.i("Talk", "Tts followed by " + filename);
+		/*Log.i("Talk", "Tts followed by " + filename);
 		HashMap<String, String> alarm = new HashMap<String, String>();
 		alarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
 		        String.valueOf(AudioManager.STREAM_ALARM));
 		alarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
 				filename);		
 		mTts.setOnUtteranceCompletedListener(this);
-		mTts.speak(intro, TextToSpeech.QUEUE_FLUSH, alarm);
+		mTts.speak(intro, TextToSpeech.QUEUE_FLUSH, alarm);*/
+		try {
+			startPlaying(filename);
+		} catch (Exception e) {
+			Log.e("Talk", "Could not play audio");
+		}
 	}
 	
 	public void onUtteranceCompleted(String filename) {
@@ -112,12 +118,12 @@ public class AudioPlayer implements IAudioPlayer, OnInitListener, OnUtteranceCom
 	public void onInit(int status) {
 		if(status == TextToSpeech.SUCCESS)
 		{
-			textToSpeechOk = true;
+			//textToSpeechOk = true;
 		}
 	}
 
 	@Override
 	public void speak(String text) {
-		mTts.speak(text, TextToSpeech.QUEUE_FLUSH, null);		
+		//mTts.speak(text, TextToSpeech.QUEUE_FLUSH, null);		
 	}
 }
