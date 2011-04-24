@@ -24,7 +24,17 @@ import android.media.MediaPlayer;
 
 import com.google.inject.Scopes;
 
+/**
+ * The Class GeoCamTalkModule. Used to bind implementations to interfaces via
+ * robolectric.
+ */
 public class GeoCamTalkModule extends AbstractAndroidModule {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.google.inject.AbstractModule#configure()
+	 */
 	@Override
 	protected void configure() {
 		bind(ITalkServer.class).to(TalkServer.class);

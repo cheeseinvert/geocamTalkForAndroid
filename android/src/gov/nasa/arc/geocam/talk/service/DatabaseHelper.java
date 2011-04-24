@@ -14,6 +14,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Database helper class used to manage the creation and upgrading of your
  * database. This class also usually provides the DAOs used by the other
@@ -25,15 +26,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabase
 	// appropriate for your app
 	// TODO: Will this work? @InjectResource(R.string.sqlite_database_name)
 	// public static final String DATABASE_NAME;
+	/** The Constant DATABASE_NAME. */
 	private static final String DATABASE_NAME = "geocamTalk.db";
 
 	// any time you make changes to your database objects, you may have to
 	// increase the database version
+	/** The Constant DATABASE_VERSION. */
 	private static final int DATABASE_VERSION = 6;
 
 	// the DAO object we use to access the SimpleData table
+	/** The simple dao. */
 	private Dao<GeoCamTalkMessage, Integer> simpleDao = null;
 
+	/**
+	 * Instantiates a new database helper.
+	 *
+	 * @param context the context
+	 */
 	@Inject
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,6 +52,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabase
 	 * This is called when the database is first created. Usually you should
 	 * call createTable statements here to create the tables that will store
 	 * your data.
+	 *
+	 * @param db the db
+	 * @param connectionSource the connection source
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
@@ -59,6 +71,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabase
 	 * This is called when your application is upgraded and it has a higher
 	 * version number. This allows you to adjust the various data to match the
 	 * new version number.
+	 *
+	 * @param db the db
+	 * @param connectionSource the connection source
+	 * @param oldVersion the old version
+	 * @param newVersion the new version
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion,
@@ -77,7 +94,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabase
 	/**
 	 * Returns the Database Access Object (DAO) for our SimpleData class. It
 	 * will create it or just give the cached value.
+	 *
+	 * @return the geo cam talk message dao
+	 * @throws SQLException the sQL exception
 	 */
+	@Override
 	public Dao<GeoCamTalkMessage, Integer> getGeoCamTalkMessageDao() throws SQLException {
 		if (simpleDao == null) {
 			simpleDao = getDao(GeoCamTalkMessage.class);

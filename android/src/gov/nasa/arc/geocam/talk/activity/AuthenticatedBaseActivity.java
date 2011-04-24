@@ -18,11 +18,16 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
+/**
+ * A base activity for activities protected by authentication.
+ */
 public class AuthenticatedBaseActivity extends RoboActivity {
 
+	/** The site auth. */
 	@Inject
 	ISiteAuth siteAuth;
 
+	/** The {@link BroadcastReceiver} that will receive login failed intents. */
 	protected BroadcastReceiver login_failed_receiver = new BroadcastReceiver() {
 
 		@Override
@@ -36,6 +41,9 @@ public class AuthenticatedBaseActivity extends RoboActivity {
 		}
 	};
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -43,6 +51,9 @@ public class AuthenticatedBaseActivity extends RoboActivity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see roboguice.activity.RoboActivity#onResume()
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -51,11 +62,18 @@ public class AuthenticatedBaseActivity extends RoboActivity {
 		registerReceiver(login_failed_receiver, filter);
 	}
 	
+	/* (non-Javadoc)
+	 * @see roboguice.activity.RoboActivity#onPause()
+	 */
+	@Override
 	protected void onPause() {
 		unregisterReceiver(login_failed_receiver);
 		super.onPause();
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection

@@ -1,6 +1,5 @@
 package gov.nasa.arc.geocam.talk.activity;
 
-import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
@@ -29,34 +28,51 @@ import android.widget.ListView;
 
 import com.google.inject.Inject;
 
+/**
+ * The "home" activity for the application. Displays the message list to the user.
+ */
 public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 
+	/** The {@link ITalkServer} implemenation to use. */
 	@Inject
 	ITalkServer djangoTalk;
 
+	/** The talk list view. */
 	@InjectView(R.id.TalkListView)
 	ListView talkListView;
 
+	/** The server root url. */
 	@InjectResource(R.string.url_server_root)
 	String serverRootUrl;
 
+	/** The message list adapter. */
 	@Inject
 	GeoCamTalkMessageAdapter adapter;
 
+	/** The message store. */
 	@Inject
 	IMessageStore messageStore;
 
+	/** The player. */
 	@Inject
 	IAudioPlayer player;
+	
+	/** The shared prefs. */
 	@Inject
 	SharedPreferences prefs;
+	
+	/** The intent helper. */
 	@Inject
 	IIntentHelper intentHelper;
 
 
-	List<GeoCamTalkMessage> talkMessages;
+	/** The talk messages. */
+	private List<GeoCamTalkMessage> talkMessages;
+	
+	/** The username. */
 	private EditText username;
 
+	/** The {@link BroadcastReceiver} used to receive a NEW_MESSAGES intent. */
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 
 		@Override
@@ -68,8 +84,12 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		}
 	};
 	
+	/** The wake lock. */
 	private PowerManager.WakeLock wakeLock;
 
+	/* (non-Javadoc)
+	 * @see roboguice.activity.RoboActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,6 +99,9 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		setUsername();
 	}
 
+	/**
+	 * Sets the current username.
+	 */
 	private void setUsername() {
 		username = (EditText) findViewById(R.id.username_label);
 		Editor editor = prefs.edit();
@@ -88,6 +111,9 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		}
 	}
 
+	/**
+	 * Populate list view.
+	 */
 	private void populateListView() {
 		try {
 			talkMessages = messageStore.getAllMessages();
@@ -101,18 +127,34 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		}
 	}
 
+	/**
+	 * On go home button click.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void onGoHomeClick(View v) {
 		populateListView();
 	}
 
+	/**
+	 * On create talk click.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void onCreateTalkClick(View v) {
 		UIUtils.createTalkMessage(this);
 	}
 
+	/**
+	 * Act on a new messages intent receipt
+	 */
 	public void newMessages() {
 		populateListView();
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.activity.AuthenticatedBaseActivity#onResume()
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -127,6 +169,9 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		setUsername();
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.activity.AuthenticatedBaseActivity#onPause()
+	 */
 	@Override
 	protected void onPause() {
 		unregisterReceiver(receiver);
@@ -134,6 +179,11 @@ public class GeoCamTalkActivity extends AuthenticatedBaseActivity {
 		super.onPause();
 	}
 	
+	/**
+	 * Audio button click handler.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void audioButtonClickHandler(View v) {		
 		GeoCamTalkMessage msg = (GeoCamTalkMessage)v.getTag();		
 		if (msg.hasAudio()) {

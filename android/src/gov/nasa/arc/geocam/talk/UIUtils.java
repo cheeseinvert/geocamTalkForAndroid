@@ -7,6 +7,7 @@ import gov.nasa.arc.geocam.talk.activity.GeoCamTalkMapActivity;
 import gov.nasa.arc.geocam.talk.activity.SettingsActivity;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
+import gov.nasa.arc.geocam.talk.service.GeoCamSynchronizationTimerTask;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 
@@ -18,12 +19,21 @@ import org.apache.http.client.ClientProtocolException;
 
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * The Class UIUtils.
+ */
 public class UIUtils {
 	
+    /**
+     * Display an exception at the log and to the user via {@link Toast}.
+     *
+     * @param context the context
+     * @param e the e
+     * @param additionalMessage the additional message
+     */
     public static void displayException(Context context, Exception e, String additionalMessage)
     {
     	Log.e("Talk", additionalMessage, e);
@@ -38,6 +48,12 @@ public class UIUtils {
     	Toast.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
     }
     
+    /**
+     * Show the {@link GeoCamTalkMapActivity} for a given message.
+     *
+     * @param context the current activity context
+     * @param talkMessage The {@link GeoCamTalkMessage} that the map activity will display
+     */
     public static void showMapView(Context context, GeoCamTalkMessage talkMessage) {
     	final Intent intent = new Intent(context, GeoCamTalkMapActivity.class);
     	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -47,13 +63,23 @@ public class UIUtils {
     	context.startActivity(intent);    	
     }
     
+    /**
+     * Logout the currently logged in user.
+     *
+     * @param siteAuth A {@link ISiteAuth} instance which is managing authorization.
+     * @throws ClientProtocolException the client protocol exception
+     * @throws AuthenticationFailedException the authentication failed exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void logout(ISiteAuth siteAuth)throws ClientProtocolException, AuthenticationFailedException, IOException
     {
     	siteAuth.logoutAndUnregister();
     }
 
 	/**
-	 * Invoke "home" action, returning to {@link GeoCamMemoHomeActivity}.
+	 * Invoke "home" action, returning to {@link GeoCamTalkActivity}.
+	 *
+	 * @param context The activity context to send the intent from.
 	 */
 	public static void goHome(Context context) {
 		final Intent intent = new Intent(context, GeoCamTalkActivity.class);
@@ -61,33 +87,47 @@ public class UIUtils {
 		context.startActivity(intent);
 	}
 
+	/**
+	 * Go to the {@link GeoCamTalkLogon} activity.
+	 *
+	 * @param context The activity context to send the intent from.
+	 */
 	public static void goToLogin(Context context) {
 		final Intent intent = new Intent(context, GeoCamTalkLogon.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
 
+	/**
+	 * Go to the {@link GeoCamTalkCreateActivity} activity.
+	 *
+	 * @param context The activity context to send the intent from.
+	 */
 	public static void createTalkMessage(Context context) {
 		final Intent intent = new Intent(context, GeoCamTalkCreateActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
 
+	/**
+	 * Play the audio of a {@link GeoCamTalkMessage} if available.
+	 *
+	 * @param context The activity context to send the intent from.
+	 * @param msg The {@link GeoCamTalkMessage} to play audio of.
+	 * @param player An instance of an {@link IAudioPlayer}
+	 * @param siteAuth The {@link ISiteAuth} to use to get attain audio from if not local
+	 * @throws ClientProtocolException the client protocol exception
+	 * @throws AuthenticationFailedException the authentication failed exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void playAudio(Context context, GeoCamTalkMessage msg, IAudioPlayer player,
 			ISiteAuth siteAuth) throws ClientProtocolException, AuthenticationFailedException,
 			IOException {
 
-		String intro = "Message from " + msg.getAuthorFullname() + ", " + msg.getContent();
 		String audioUrl = msg.getAudioUrl();
-
-		boolean useTTS = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
-				"prefUseTts", false);
 
 		// No audio recorded with message
 		if (msg.getAudio() == null && audioUrl == null) {
-			if (useTTS) {
-				player.speak(intro);
-			}
 			return;
 		}
 		// We have audio, but not locally
@@ -96,19 +136,20 @@ public class UIUtils {
 			player.startPlaying(localFileName);
 			File audioFile = new File(localFileName);
 			int length = (int) audioFile.length();
-			byte[] audioBytes = new byte[(int) length];
+			byte[] audioBytes = new byte[length];
 
 			FileInputStream fis = new FileInputStream(audioFile);
 			fis.read(audioBytes, 0, length);
 			msg.setAudio(audioBytes);
 		}
-		if (useTTS) {
-			player.startPlayingWithTtsIntro(intro, msg.getAudio());
-		} else {
-			player.startPlaying(msg.getAudio());
-		}
+		player.startPlaying(msg.getAudio());
 	}
 
+	/**
+	 * Go to the {@link SettingsActivity} activity.
+	 *
+	 * @param context the context
+	 */
 	public static void goToSettings(Context context) {
 		final Intent intent = new Intent(context, SettingsActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

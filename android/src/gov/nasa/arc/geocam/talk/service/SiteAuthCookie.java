@@ -36,36 +36,63 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SiteAuthCookie.
+ */
 public class SiteAuthCookie implements ISiteAuth {
 
+	/** The server root url. */
 	@InjectResource(R.string.url_server_root)
 	String serverRootUrl;
 	
+	/** The app path. */
 	@InjectResource(R.string.url_relative_app)
 	String appPath;
 	
+	/** The shared preferences. */
 	@Inject SharedPreferences sharedPreferences;
 
+	/** The http client. */
 	private DefaultHttpClient httpClient;
+	
+	/** The session id cookie. */
 	private Cookie sessionIdCookie;
+	
+	/** The context. */
 	private Context context;
 	
+	/** The username. */
 	private String username;
+	
+	/** The password. */
 	private String password;		
 	
+	/** The intent helper. */
 	@Inject IIntentHelper intentHelper;
 	
+	/**
+	 * Instantiates a new site auth cookie.
+	 *
+	 * @param context the context
+	 */
 	@Inject
 	public SiteAuthCookie(Context context) {
 		this.context = context;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#setRoot(java.lang.String)
+	 */
 	@Override
 	public void setRoot(String siteRoot) {
 		serverRootUrl = siteRoot;
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#post(java.lang.String, java.util.Map)
+	 */
 	@Override
 	public ServerResponse post(String relativePath, Map<String, String> params)
 			throws AuthenticationFailedException, IOException, ClientProtocolException,
@@ -73,6 +100,9 @@ public class SiteAuthCookie implements ISiteAuth {
 		return post(relativePath, params, null);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#post(java.lang.String, java.util.Map, byte[])
+	 */
 	@Override
 	public ServerResponse post(String relativePath, Map<String, String> params, byte[] audioBytes)
 			throws AuthenticationFailedException, IOException, ClientProtocolException,
@@ -125,6 +155,9 @@ public class SiteAuthCookie implements ISiteAuth {
 		return sr;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#get(java.lang.String, java.util.Map)
+	 */
 	@Override
 	public ServerResponse get(String relativePath, Map<String, String> params)
 			throws AuthenticationFailedException, IOException, ClientProtocolException {
@@ -148,6 +181,9 @@ public class SiteAuthCookie implements ISiteAuth {
 		return sr;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#getAudioFile(java.lang.String, java.util.Map)
+	 */
 	@Override
 	public String getAudioFile(String relativePath, Map<String, String> params)
 			throws AuthenticationFailedException, IOException, ClientProtocolException {
@@ -177,6 +213,13 @@ public class SiteAuthCookie implements ISiteAuth {
         
 	}
 
+	/**
+	 * Ensure authenticated.
+	 *
+	 * @throws AuthenticationFailedException the authentication failed exception
+	 * @throws ClientProtocolException the client protocol exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void ensureAuthenticated() throws AuthenticationFailedException,
 			ClientProtocolException, IOException {
 		
@@ -204,6 +247,10 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#login()
+	 */
+	@Override
 	public void login() throws ClientProtocolException,
 			IOException, AuthenticationFailedException {
 		
@@ -240,6 +287,10 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#logoutAndUnregister()
+	 */
+	@Override
 	public void logoutAndUnregister()throws AuthenticationFailedException, ClientProtocolException, IOException
 	{
 		httpClient = new DefaultHttpClient();
@@ -275,11 +326,17 @@ public class SiteAuthCookie implements ISiteAuth {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#reAuthenticate()
+	 */
 	@Override
 	public void reAuthenticate() throws ClientProtocolException, AuthenticationFailedException, IOException {
 		sessionIdCookie = null;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ISiteAuth#isLoggedIn()
+	 */
 	@Override
 	public boolean isLoggedIn(){
 		

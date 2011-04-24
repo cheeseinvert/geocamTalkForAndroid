@@ -22,22 +22,39 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GeoCamTalkMessageAdapter.
+ */
 public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage> {
 
+	/** The m inflater. */
 	@Inject
 	LayoutInflater mInflater;
 
+	/** The player. */
 	@Inject
 	IAudioPlayer player;
 	
+	/** The site auth. */
 	@Inject
 	ISiteAuth siteAuth;
 	
+	/**
+	 * Instantiates a new geo cam talk message adapter.
+	 *
+	 * @param context the context
+	 */
 	@Inject
 	public GeoCamTalkMessageAdapter(Context context) {
 		super(context, R.layout.list_item);
 	}
 
+	/**
+	 * Sets the talk messages.
+	 *
+	 * @param talkMessages the new talk messages
+	 */
 	public void setTalkMessages(List<GeoCamTalkMessage> talkMessages) {
 		this.clear();
 		for (GeoCamTalkMessage m : talkMessages) {
@@ -45,11 +62,20 @@ public class GeoCamTalkMessageAdapter extends IterableAdapter<GeoCamTalkMessage>
 		}
 	}
 
+	/**
+	 * Gets the talk message.
+	 *
+	 * @param position the position
+	 * @return the talk message
+	 */
 	public GeoCamTalkMessage getTalkMessage(int position) {
 		GeoCamTalkMessage msg = getItem(position);
 		return msg;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row;

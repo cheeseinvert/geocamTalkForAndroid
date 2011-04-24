@@ -9,14 +9,19 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
+// TODO: Auto-generated Javadoc
 /**
  * This BroadcastReciever is filtered to only receive c2dm-related messages and
  * delegate them to the appropriate activity / service.
  */
 public class C2DMReciever extends RoboBroadcastReceiver {
 
+	/** The intent helper. */
 	@Inject private IIntentHelper intentHelper;
 
+	/* (non-Javadoc)
+	 * @see roboguice.receiver.RoboBroadcastReceiver#handleReceive(android.content.Context, android.content.Intent)
+	 */
 	@Override
 	public void handleReceive(Context context, Intent intent) {
 		if (intent.getAction().equals("com.google.android.c2dm.intent.REGISTRATION")) {
@@ -29,6 +34,12 @@ public class C2DMReciever extends RoboBroadcastReceiver {
 		setResult(Activity.RESULT_OK, null /* data */, null /* extra */);
 	}
 
+	/**
+	 * Handle registration.
+	 *
+	 * @param context the context
+	 * @param intent the intent
+	 */
 	private void handleRegistration(Context context, Intent intent) {
 		String registration = intent.getStringExtra(TalkServerIntent.EXTRA_REGISTRATION_ID
 				.toString());
@@ -44,6 +55,12 @@ public class C2DMReciever extends RoboBroadcastReceiver {
 		}
 	}
 
+	/**
+	 * Handle message.
+	 *
+	 * @param context the context
+	 * @param intent the intent
+	 */
 	private void handleMessage(Context context, Intent intent) {
 		String messageId = intent.getStringExtra(TalkServerIntent.EXTRA_MESSAGE_ID.toString());
 		if (messageId != null) {

@@ -28,35 +28,56 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 
+/**
+ * The Class GeoCamTalkCreateActivity.
+ */
 public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 
+	/** The app state. */
 	@Inject
 	GeoCamTalkRoboApplication appState;
 
+	/** The new talk text view. */
 	@InjectView(R.id.newTalkTextInput)
 	EditText newTalkTextView;
+	
+	/** The record button. */
 	@InjectView(R.id.record_button)
 	Button recordButton;
 
+	/** The recorder. */
 	@Inject
 	IAudioRecorder recorder;
 
+	/** The player. */
 	@Inject
 	IAudioPlayer player;
 
+	/** The message store. */
 	@Inject
 	IMessageStore messageStore;
 
+	/** The intent helper. */
 	@Inject
 	IIntentHelper intentHelper;
 	
+	/** The shared preferences. */
 	SharedPreferences sharedPreferences;
 
+	/** The filename. */
 	private String filename = null;
+	
+	/** The record image. */
 	private Drawable recordImage = null;
+	
+	/** The stop image. */
 	private Drawable stopImage = null;
 
-	/** Called when the activity is first created. */
+	/**
+	 * Called when the activity is first created.
+	 *
+	 * @param savedInstanceState the saved instance state
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,10 +87,20 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		stopImage = getApplicationContext().getResources().getDrawable(R.drawable.stop);
 	}
 
+	/**
+	 * On go home click.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void onGoHomeClick(View v) {
 		UIUtils.goHome(this);
 	}
 
+	/**
+	 * On playback click.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void onPlaybackClick(View v) {
 		// TODO: add this to call the Audio service
 
@@ -84,6 +115,11 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		}
 	}
 
+	/**
+	 * On record click.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void onRecordClick(View v) {
 		sharedPreferences.edit().putBoolean("audio_blocked", true).commit();
 		if (recorder.isRecording()) {
@@ -106,6 +142,9 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		}
 	} 
 	
+	/**
+	 * Stop recording.
+	 */
 	private void stopRecording() {
 		sharedPreferences.edit().putBoolean("audio_blocked", false).commit();
 		try {
@@ -122,6 +161,11 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		}
 	}
 
+	/**
+	 * On send click.
+	 *
+	 * @param v the View from which the click was initiated
+	 */
 	public void onSendClick(View v) {
 		
 		//If for some reason we are still recording, stop now
@@ -154,19 +198,23 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		}
 	}
 
+	/**
+	 * Creates the byte array for a recorded audio message.
+	 *
+	 * @return the byte[]
+	 */
 	private byte[] createByteArray() {
 		byte[] audioBytes = null;
 
 		try {
 			File audioFile = new File(filename);
 			int length = (int) audioFile.length();
-			audioBytes = new byte[(int) length];
+			audioBytes = new byte[length];
 
 			FileInputStream fis;
 
 			fis = new FileInputStream(audioFile);
-			fis.read(audioBytes, 0, length); // TODO GHETTO we should be better
-												// about big files
+			fis.read(audioBytes, 0, length);
 		} catch (FileNotFoundException e) {
 			UIUtils.displayException(this, e, "Could not find audio file");
 		} catch (IOException e) {
@@ -176,6 +224,9 @@ public class GeoCamTalkCreateActivity extends AuthenticatedBaseActivity {
 		return audioBytes;
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.activity.AuthenticatedBaseActivity#onPause()
+	 */
 	@Override
 	protected void onPause() {
 		if (recorder.isRecording()) {

@@ -7,17 +7,37 @@ import java.io.InputStreamReader;
 
 import org.apache.http.HttpResponse;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ServerResponse.
+ */
 public class ServerResponse {
 	
+	/** The response code. */
 	private int responseCode;
+	
+	/** The content. */
 	private String content;
 	
+	/**
+	 * Instantiates a new server response.
+	 *
+	 * @param responseCode the response code
+	 * @param content the content
+	 */
 	public ServerResponse(int responseCode, String content)
 	{
 		this.responseCode = responseCode;
 		this.content = content;
 	}
 	
+	/**
+	 * Instantiates a new server response.
+	 *
+	 * @param httpResponse the http response
+	 * @throws IllegalStateException the illegal state exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public ServerResponse(HttpResponse httpResponse) throws IllegalStateException, IOException
 	{
 		this.responseCode = httpResponse.getStatusLine().getStatusCode();
@@ -32,9 +52,20 @@ public class ServerResponse {
 		this.content = sb.toString();
 	}
 	
+	/**
+	 * Gets the response code.
+	 *
+	 * @return the response code
+	 */
 	public int getResponseCode() {
 		return responseCode;
 	}
+	
+	/**
+	 * Gets the content.
+	 *
+	 * @return the content
+	 */
 	public String getContent() {
 		return content;
 	}

@@ -18,11 +18,24 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MessageStore.
+ */
 public class MessageStore implements IMessageStore {
 
+	/** The dao. */
 	private Dao<GeoCamTalkMessage, Integer> dao;
+	
+	/** The intent helper. */
 	private IIntentHelper intentHelper;
 	
+	/**
+	 * Instantiates a new message store.
+	 *
+	 * @param dbHelper the db helper
+	 * @param intentHelper the intent helper
+	 */
 	@Inject
 	public MessageStore(IDatabaseHelper dbHelper, IIntentHelper intentHelper)
 	{
@@ -35,11 +48,17 @@ public class MessageStore implements IMessageStore {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#synchronize()
+	 */
 	@Override
 	public void synchronize() {
 		this.intentHelper.Synchronize();
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#getAllLocalMessages()
+	 */
 	@Override
 	public List<GeoCamTalkMessage> getAllLocalMessages() throws SQLException {
 		QueryBuilder<GeoCamTalkMessage, Integer> qb = dao.queryBuilder();
@@ -52,6 +71,9 @@ public class MessageStore implements IMessageStore {
 		return new ArrayList<GeoCamTalkMessage>(hash);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#getAllMessages()
+	 */
 	@Override
 	public List<GeoCamTalkMessage> getAllMessages() throws SQLException {
 		SortedSet<GeoCamTalkMessage> hash = 
@@ -60,6 +82,9 @@ public class MessageStore implements IMessageStore {
 		return new ArrayList<GeoCamTalkMessage>(hash);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#getMessagesSince(java.util.Date)
+	 */
 	@Override
 	public List<GeoCamTalkMessage> getMessagesSince(Date sinceDate) throws SQLException{
 		QueryBuilder<GeoCamTalkMessage, Integer> qb = dao.queryBuilder();
@@ -71,6 +96,9 @@ public class MessageStore implements IMessageStore {
 		return list;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#addMessage(java.util.List)
+	 */
 	@Override
 	public void addMessage(List<GeoCamTalkMessage> messages) throws SQLException{
 		List<GeoCamTalkMessage> existingMessages = getAllMessages();
@@ -82,6 +110,9 @@ public class MessageStore implements IMessageStore {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#addMessage(gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage)
+	 */
 	@Override
 	public void addMessage(GeoCamTalkMessage message) throws SQLException {
 		List<GeoCamTalkMessage> singleItemList = new ArrayList<GeoCamTalkMessage>();
@@ -89,16 +120,25 @@ public class MessageStore implements IMessageStore {
 		addMessage(singleItemList);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#removeMessage(gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage)
+	 */
 	@Override
 	public void removeMessage(GeoCamTalkMessage message) throws SQLException {
 		dao.delete(message);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#updateMessage(gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage)
+	 */
 	@Override
 	public void updateMessage(GeoCamTalkMessage message) throws SQLException {
 		dao.update(message);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.IMessageStore#getNewestMessageId()
+	 */
 	@Override
 	public int getNewestMessageId() throws SQLException, NotFoundException {
 		QueryBuilder<GeoCamTalkMessage, Integer> qb = dao.queryBuilder();

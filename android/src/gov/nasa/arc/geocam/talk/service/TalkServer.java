@@ -1,6 +1,5 @@
 package gov.nasa.arc.geocam.talk.service;
 
-import gov.nasa.arc.geocam.talk.GeoCamTalkRoboApplication;
 import gov.nasa.arc.geocam.talk.R;
 import gov.nasa.arc.geocam.talk.UIUtils;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
@@ -13,65 +12,90 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
 
 import org.apache.http.client.ClientProtocolException;
 
 import roboguice.inject.InjectResource;
 import roboguice.service.RoboIntentService;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.inject.Inject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TalkServer.
+ */
 public class TalkServer extends RoboIntentService implements ITalkServer {
 
+	/** The json converter. */
 	@Inject
 	ITalkJsonConverter jsonConverter;
 
+	/** The url message list. */
 	@InjectResource(R.string.url_message_list)
 	String urlMessageList;
 
+	/** The url create message. */
 	@InjectResource(R.string.url_create_message)
 	String urlCreateMessage;
 
+	/** The url registration. */
 	@InjectResource(R.string.url_registration)
 	String urlRegistration;
 
+	/** The url message format string. */
 	@InjectResource(R.string.url_message_format)
 	String urlMessageFormatString;
 
+	/** The pref auto play on push. */
 	@InjectResource(R.string.pref_auto_play_on_push)
 	String prefAutoPlayOnPush;
 
+	/** The site auth. */
 	@Inject
 	ISiteAuth siteAuth;
 
+	/** The message store. */
 	@Inject
 	IMessageStore messageStore;
 
+	/** The intent helper. */
 	@Inject
 	IIntentHelper intentHelper;
 
+	/** The audio player. */
 	@Inject
 	IAudioPlayer audioPlayer;
 
+	/** The geo cam synchronization timer task. */
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 	
+	/** The shared prefs. */
 	SharedPreferences sharedPrefs;
 
+	/**
+	 * Instantiates a new talk server.
+	 */
 	public TalkServer() {
 		super("DjangoTalkService");
 	}
 
+	/** The max message id. */
 	private static int maxMessageId = 0;
 
+	/**
+	 * Gets the talk messages.
+	 *
+	 * @return the talk messages
+	 * @throws SQLException the sQL exception
+	 * @throws ClientProtocolException the client protocol exception
+	 * @throws AuthenticationFailedException the authentication failed exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void getTalkMessages() throws SQLException, ClientProtocolException,
 			AuthenticationFailedException, IOException {
 
@@ -103,6 +127,15 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		Log.i("Talk", "MaxMessageIdNow:" + maxMessageId);
 	}
 
+	/**
+	 * Creates the talk message.
+	 *
+	 * @param message the message
+	 * @throws ClientProtocolException the client protocol exception
+	 * @throws AuthenticationFailedException the authentication failed exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SQLException the sQL exception
+	 */
 	public void createTalkMessage(GeoCamTalkMessage message) throws ClientProtocolException,
 			AuthenticationFailedException, IOException, SQLException {
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -137,6 +170,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.IntentService#onHandleIntent(android.content.Intent)
+	 */
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
@@ -157,6 +193,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	}
 
+	/**
+	 * Handle login.
+	 */
 	private void handleLogin() {
 		try {
 			siteAuth.login();
@@ -168,6 +207,9 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 
 	}
 
+	/**
+	 * Handle synchronize intent.
+	 */
 	private void handleSynchronizeIntent() {
 		try {
 			this.getTalkMessages();
@@ -182,6 +224,11 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		}
 	}
 
+	/**
+	 * Handle store registration id intent.
+	 *
+	 * @param registrationId the registration id
+	 */
 	private void handleStoreRegistrationIdIntent(String registrationId) { // assumed
 																			// this
 																			// is
@@ -198,6 +245,11 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		}
 	}
 
+	/**
+	 * Handle pushed message intent.
+	 *
+	 * @param messageId the message id
+	 */
 	private void handlePushedMessageIntent(String messageId) {
 			
 		

@@ -14,9 +14,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TalkJsonConverter.
+ */
 public class TalkJsonConverter
     implements ITalkJsonConverter {
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ITalkJsonConverter#deserializeList(java.lang.String)
+	 */
 	@Override
 	public List<GeoCamTalkMessage> deserializeList(String jsonString) {
 		JsonParser parser = new JsonParser();
@@ -33,6 +40,10 @@ public class TalkJsonConverter
 		return gson.fromJson(jsonMessages, listType);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ITalkJsonConverter#deserialize(java.lang.String)
+	 */
+	@Override
 	public GeoCamTalkMessage deserialize(String jsonString) {
 		GsonBuilder builder = new GsonBuilder();
 		builder.setDateFormat("MM/dd/yy HH:mm:ss");
@@ -42,6 +53,9 @@ public class TalkJsonConverter
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ITalkJsonConverter#serialize(gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage)
+	 */
 	@Override
 	public String serialize(GeoCamTalkMessage message) {
 		GsonBuilder builder = new GsonBuilder();
@@ -53,17 +67,32 @@ public class TalkJsonConverter
 		return ret;
 	}
 	
+	/**
+	 * The Class TalkMessageExclusionStrategy.
+	 */
 	public class TalkMessageExclusionStrategy implements ExclusionStrategy {
-        public boolean shouldSkipField(FieldAttributes f) {
+        
+        /* (non-Javadoc)
+         * @see com.google.gson.ExclusionStrategy#shouldSkipField(com.google.gson.FieldAttributes)
+         */
+        @Override
+		public boolean shouldSkipField(FieldAttributes f) {
             return (f.getName().equals("audio"));
         }
 
+		/* (non-Javadoc)
+		 * @see com.google.gson.ExclusionStrategy#shouldSkipClass(java.lang.Class)
+		 */
+		@Override
 		public boolean shouldSkipClass(Class<?> arg0) {
 			return false;
 		}
 
     }
 
+	/* (non-Javadoc)
+	 * @see gov.nasa.arc.geocam.talk.service.ITalkJsonConverter#createMap(java.lang.String)
+	 */
 	@Override
 	public Map<String, String> createMap(String jsonString) {
 		Gson gson = new Gson();
