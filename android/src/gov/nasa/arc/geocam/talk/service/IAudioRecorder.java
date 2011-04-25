@@ -11,12 +11,12 @@ public interface IAudioRecorder {
 	/**
 	 * Stop recording.
 	 *
-	 * @return the string
+	 * @return the string which is the filename of the audio file just recorded
 	 */
 	public String stopRecording();
 	
 	/**
-	 * Checks if is recording.
+	 * Checks if there is an active recording going on.
 	 *
 	 * @return true, if is recording
 	 */
@@ -25,7 +25,7 @@ public interface IAudioRecorder {
 	/**
 	 * Start recording.
 	 *
-	 * @param filename the filename
+	 * @param filename the filename of the recording audio
 	 * @throws IllegalStateException the illegal state exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */

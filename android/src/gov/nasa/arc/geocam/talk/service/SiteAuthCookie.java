@@ -214,7 +214,7 @@ public class SiteAuthCookie implements ISiteAuth {
 	}
 
 	/**
-	 * Ensure authenticated.
+	 * Ensure that the user is currently logged in.
 	 *
 	 * @throws AuthenticationFailedException the authentication failed exception
 	 * @throws ClientProtocolException the client protocol exception

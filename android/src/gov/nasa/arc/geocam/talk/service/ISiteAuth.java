@@ -23,7 +23,8 @@ public interface ISiteAuth {
 	public void setRoot(String siteRoot);
 
 	/**
-	 * Post.
+	 * Post the message to the server if no audio file is present if the 
+	 * user is logged in.
 	 *
 	 * @param relativePath the relative path
 	 * @param params the params
@@ -38,7 +39,8 @@ public interface ISiteAuth {
 			InvalidParameterException;
 
 	/**
-	 * Post.
+	 * Post the message to the server if there is an audio file present and we are currently 
+	 * logged in.
 	 *
 	 * @param relativePath the relative path
 	 * @param params the params
@@ -54,7 +56,7 @@ public interface ISiteAuth {
 			InvalidParameterException;
 
 	/**
-	 * Gets the.
+	 * Creates a HTTP get call to retrieve information from the server.
 	 *
 	 * @param relativePath the relative path
 	 * @param params the params
@@ -67,11 +69,11 @@ public interface ISiteAuth {
 			throws AuthenticationFailedException, IOException, ClientProtocolException;
 
     /**
-     * Gets the audio file.
+     * Gets the audio file from a message on the server.
      *
      * @param relativePath the relative path
      * @param params the params
-     * @return the audio file
+     * @return The filename of the audio retrieved from the server
      * @throws AuthenticationFailedException the authentication failed exception
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws ClientProtocolException the client protocol exception
@@ -80,7 +82,7 @@ public interface ISiteAuth {
 			throws AuthenticationFailedException, IOException, ClientProtocolException;	
 	
 	/**
-	 * Re authenticate.
+	 * Set the session cookie to null and force a new login.
 	 *
 	 * @throws ClientProtocolException the client protocol exception
 	 * @throws AuthenticationFailedException the authentication failed exception
@@ -90,7 +92,7 @@ public interface ISiteAuth {
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
 	/**
-	 * Logout and unregister.
+	 * Logout the user from the server and unregister from the C2DM.
 	 *
 	 * @throws ClientProtocolException the client protocol exception
 	 * @throws AuthenticationFailedException the authentication failed exception
@@ -100,7 +102,7 @@ public interface ISiteAuth {
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
 	/**
-	 * Login.
+	 * Login to the server with the supplied username and password.
 	 *
 	 * @throws ClientProtocolException the client protocol exception
 	 * @throws AuthenticationFailedException the authentication failed exception
@@ -110,9 +112,9 @@ public interface ISiteAuth {
 			throws ClientProtocolException, AuthenticationFailedException, IOException;
 	
 	/**
-	 * Checks if is logged in.
+	 * Checks if the user logged in.
 	 *
-	 * @return true, if is logged in
+	 * @return true, if the user is logged in
 	 */
 	public boolean isLoggedIn();
 }

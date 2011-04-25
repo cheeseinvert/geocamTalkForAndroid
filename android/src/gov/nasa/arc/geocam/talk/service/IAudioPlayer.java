@@ -9,7 +9,7 @@ import java.io.IOException;
 public interface IAudioPlayer {
 	
 	/**
-	 * Start playing.
+	 * Start playing the audio from the binary audio bytes.
 	 *
 	 * @param soundByte the sound byte
 	 * @throws IllegalArgumentException the illegal argument exception
@@ -19,7 +19,7 @@ public interface IAudioPlayer {
 	public void startPlaying(byte[] soundByte) throws IllegalArgumentException, IllegalStateException, IOException;
 	
 	/**
-	 * Start playing.
+	 * Start playing the audio from the file locations.
 	 *
 	 * @param filename the filename
 	 * @throws IllegalArgumentException the illegal argument exception
@@ -52,17 +52,17 @@ public interface IAudioPlayer {
 	public void speak(String text);
 	
 	/**
-	 * Stop playing.
+	 * Stop playing any audio that is currently playing.
 	 */
 	void stopPlaying();
 	
 	/**
-	 * Play beep a.
+	 * Play beep a to signify that the recording has started..
 	 */
 	void playBeepA();
 	
 	/**
-	 * Play beep b.
+	 * Play beep b to signify that the recording has stopped.
 	 */
 	void playBeepB();
 }

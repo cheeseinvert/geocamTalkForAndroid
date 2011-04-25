@@ -7,7 +7,6 @@ import gov.nasa.arc.geocam.talk.activity.GeoCamTalkMapActivity;
 import gov.nasa.arc.geocam.talk.activity.SettingsActivity;
 import gov.nasa.arc.geocam.talk.bean.GeoCamTalkMessage;
 import gov.nasa.arc.geocam.talk.exception.AuthenticationFailedException;
-import gov.nasa.arc.geocam.talk.service.GeoCamSynchronizationTimerTask;
 import gov.nasa.arc.geocam.talk.service.IAudioPlayer;
 import gov.nasa.arc.geocam.talk.service.ISiteAuth;
 
@@ -23,7 +22,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * The Class UIUtils.
+ * The Class UIUtils.  Provides an interface to complete global UI functions and begin new activities.
  */
 public class UIUtils {
 	
@@ -51,7 +50,7 @@ public class UIUtils {
     /**
      * Show the {@link GeoCamTalkMapActivity} for a given message.
      *
-     * @param context the current activity context
+     * @param context The current activity context
      * @param talkMessage The {@link GeoCamTalkMessage} that the map activity will display
      */
     public static void showMapView(Context context, GeoCamTalkMessage talkMessage) {
@@ -99,7 +98,7 @@ public class UIUtils {
 	}
 
 	/**
-	 * Go to the {@link GeoCamTalkCreateActivity} activity.
+	 * Go to the {@link GeoCamTalkCreateActivity} activity to create a new GeoCam Talk Message.
 	 *
 	 * @param context The activity context to send the intent from.
 	 */

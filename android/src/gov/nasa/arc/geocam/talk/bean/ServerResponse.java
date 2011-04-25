@@ -9,14 +9,16 @@ import org.apache.http.HttpResponse;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ServerResponse.
+ * The Class ServerResponse is an object which provides 
+ * easy access to the HTTP response code and content 
+ * from a HTTP response.
  */
 public class ServerResponse {
 	
-	/** The response code. */
+	/** The response code for the HTTP call. */
 	private int responseCode;
 	
-	/** The content. */
+	/** The content of the HTTP call. */
 	private String content;
 	
 	/**
@@ -32,7 +34,7 @@ public class ServerResponse {
 	}
 	
 	/**
-	 * Instantiates a new server response.
+	 * Instantiates a new server response from the httpResponse passed in.
 	 *
 	 * @param httpResponse the http response
 	 * @throws IllegalStateException the illegal state exception
@@ -53,7 +55,7 @@ public class ServerResponse {
 	}
 	
 	/**
-	 * Gets the response code.
+	 * Gets the response code value from the ServerResponse object.
 	 *
 	 * @return the response code
 	 */
@@ -62,7 +64,7 @@ public class ServerResponse {
 	}
 	
 	/**
-	 * Gets the content.
+	 * Gets the content value from the ServerResponse object.
 	 *
 	 * @return the content
 	 */

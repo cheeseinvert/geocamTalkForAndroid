@@ -246,7 +246,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	}
 
 	/**
-	 * Handle pushed message intent.
+	 * Handle the pushed mess.
 	 *
 	 * @param messageId the message id
 	 */

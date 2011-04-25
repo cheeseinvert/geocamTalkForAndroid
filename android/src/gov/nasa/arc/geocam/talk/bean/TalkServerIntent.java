@@ -7,28 +7,28 @@ package gov.nasa.arc.geocam.talk.bean;
 public enum TalkServerIntent {
 	
 	
-	/** The INTEN t_ ne w_ messages. */
+	/** The INTENT_new_messages. */
 	INTENT_NEW_MESSAGES("gov.nasa.arc.geocam.talk.NEW_MESSAGE"),
 
-	/** The INTEN t_ synchronize. */
+	/** The INTENT_synchronize. */
 	INTENT_SYNCHRONIZE("gov.nasa.arc.geocam.talk.syncrhonize"),
 
-	/** The INTEN t_ stor e_ c2 d m_ id. */
+	/** The INTENT_store_c2dm_id. */
 	INTENT_STORE_C2DM_ID("gov.nasa.arc.geocam.talk.c2dm_id_store"),
 	
-	/** The INTEN t_ pushe d_ message. */
+	/** The INTENT_pushed_message. */
 	INTENT_PUSHED_MESSAGE("gov.nasa.arc.geocam.talk.pushed_message"),
 	
-	/** The INTEN t_ logi n_ failed. */
+	/** The INTENT_login_failed. */
 	INTENT_LOGIN_FAILED("gov.nasa.arc.geocam.talk.login_failed"),
 
-	/** The INTEN t_ login. */
+	/** The INTENT_login. */
 	INTENT_LOGIN("gov.nasa.arc.geocam.talk.login"),
 	
-	/** The EXTR a_ messag e_ id. */
+	/** The EXTRA message_id. */
 	EXTRA_MESSAGE_ID("message_id"),
 	
-	/** The EXTR a_ registratio n_ id. */
+	/** The EXTRa_registration_id. */
 	EXTRA_REGISTRATION_ID("registration_id");
 
 	/** The value. */

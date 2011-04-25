@@ -2,7 +2,8 @@ package gov.nasa.arc.geocam.talk.exception;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class AuthenticationFailedException.
+ * The Class AuthenticationFailedException which is thrown when we can't log 
+ * into the server because of a bad username and password combination.
  */
 public class AuthenticationFailedException extends Exception {
 	
@@ -12,7 +13,7 @@ public class AuthenticationFailedException extends Exception {
 	/**
 	 * Instantiates a new authentication failed exception.
 	 *
-	 * @param error the error
+	 * @param error The exception text
 	 */
 	public AuthenticationFailedException(String error)
 	{
