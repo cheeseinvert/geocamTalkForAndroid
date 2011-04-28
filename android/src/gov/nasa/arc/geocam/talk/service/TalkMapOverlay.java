@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class TalkMapOverlay which creates a marker on the 
  * Talk map where the Talk Message was sent from..

@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 
 import org.apache.http.HttpResponse;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ServerResponse is an object which provides 
  * easy access to the HTTP response code and content 

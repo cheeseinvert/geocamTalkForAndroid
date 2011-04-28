@@ -4,7 +4,6 @@ import android.os.Handler;
 
 import com.google.inject.Inject;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GeoCamSynchronizationTimerTask.
  */

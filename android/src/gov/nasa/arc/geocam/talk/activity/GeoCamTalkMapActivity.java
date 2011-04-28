@@ -22,7 +22,6 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GeoCamTalkMapActivity.
  */

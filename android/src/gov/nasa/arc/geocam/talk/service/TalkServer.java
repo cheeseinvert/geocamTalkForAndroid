@@ -24,7 +24,7 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class TalkServer.
  */
@@ -70,7 +70,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	@Inject
 	IAudioPlayer audioPlayer;
 
-	/** The geo cam synchronization timer task. */
+	/** The geo cam synchronization timer task responsible for periodically forcing a synch with the server. */
 	@Inject
 	IGeoCamSynchronizationTimerTask geoCamSynchronizationTimerTask;
 	
@@ -84,13 +84,13 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 		super("DjangoTalkService");
 	}
 
-	/** The max message id. */
+	/** The largest message id that this instance is aware of existing on the server. */
 	private static int maxMessageId = 0;
 
 	/**
-	 * Gets the talk messages.
+	 * Gets the talk messages from the server.
 	 *
-	 * @return the talk messages
+	 * @return the talk messages found on the server
 	 * @throws SQLException the sQL exception
 	 * @throws ClientProtocolException the client protocol exception
 	 * @throws AuthenticationFailedException the authentication failed exception
@@ -128,7 +128,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	}
 
 	/**
-	 * Creates the talk message.
+	 * Creates a talk message on the server
 	 *
 	 * @param message the message
 	 * @throws ClientProtocolException the client protocol exception
@@ -194,7 +194,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	}
 
 	/**
-	 * Handle login.
+	 * Handle login intent.
 	 */
 	private void handleLogin() {
 		try {
@@ -246,7 +246,7 @@ public class TalkServer extends RoboIntentService implements ITalkServer {
 	}
 
 	/**
-	 * Handle the pushed mess.
+	 * Handle the pushed message intent
 	 *
 	 * @param messageId the message id
 	 */

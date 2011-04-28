@@ -36,7 +36,6 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SiteAuthCookie.
  */
