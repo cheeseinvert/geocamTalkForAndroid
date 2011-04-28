@@ -4,19 +4,18 @@ import java.io.IOException;
 
 import android.media.MediaRecorder;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AudioRecorder.
+ * The AudioRecorder class that implements the {@link IAudioRecorder} interface.
  */
 public class AudioRecorder implements IAudioRecorder {
 
-	/** The is recording. */
+	/** The current recording state of the object.*/
 	public boolean isRecording = false;
 	
-	/** The recorder. */
+	/** The Android {@link MediaRecorder} class responsible for recording streaming audio. */
 	private MediaRecorder recorder;
 	
-	/** The filename. */
+	/** The filename to which audio should be recorded. */
 	public String filename;
  
 	/* (non-Javadoc)

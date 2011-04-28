@@ -14,7 +14,6 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * Database helper class used to manage the creation and upgrading of your
  * database. This class also usually provides the DAOs used by the other
@@ -22,20 +21,14 @@ import com.j256.ormlite.table.TableUtils;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper implements IDatabaseHelper {
 
-	// name of the database file for your application -- change to something
-	// appropriate for your app
-	// TODO: Will this work? @InjectResource(R.string.sqlite_database_name)
-	// public static final String DATABASE_NAME;
-	/** The Constant DATABASE_NAME. */
+	/** name of the database file for your application */
 	private static final String DATABASE_NAME = "geocamTalk.db";
 
-	// any time you make changes to your database objects, you may have to
-	// increase the database version
-	/** The Constant DATABASE_VERSION. */
+	/** any time you make changes to your database objects, you may have to
+	increase the database version */
 	private static final int DATABASE_VERSION = 6;
-
-	// the DAO object we use to access the SimpleData table
-	/** The simple dao. */
+	
+	/** the DAO object we use to access the SimpleData table */
 	private Dao<GeoCamTalkMessage, Integer> simpleDao = null;
 
 	/**

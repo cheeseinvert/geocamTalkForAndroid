@@ -1,6 +1,5 @@
 package gov.nasa.arc.geocam.talk.exception;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AuthenticationFailedException which is thrown when we can't log 
  * into the server because of a bad username and password combination.

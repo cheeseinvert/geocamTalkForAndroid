@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
-// TODO: Auto-generated Javadoc
 /**
  * This BroadcastReciever is filtered to only receive c2dm-related messages and
  * delegate them to the appropriate activity / service.
@@ -35,7 +34,7 @@ public class C2DMReciever extends RoboBroadcastReceiver {
 	}
 
 	/**
-	 * Handle registration.
+	 * Handle a registration intent sent by the Google servers.
 	 *
 	 * @param context the context
 	 * @param intent the intent
@@ -56,7 +55,7 @@ public class C2DMReciever extends RoboBroadcastReceiver {
 	}
 
 	/**
-	 * Handle message.
+	 * Handle a push notification intent sent by the Google servers.
 	 *
 	 * @param context the context
 	 * @param intent the intent
